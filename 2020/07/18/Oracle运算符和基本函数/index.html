@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="Oracle算术运算符Oracle算术运算符包括+、-、*、&#x2F;四个，其中&#x2F;获得的结果是浮点数 12345select b.coursename, sum(a.score) &#x2F; count(1)  from score a, course b where a.courseid &#x3D; b.courseid   and a.courseid &#x3D; &#39;R20180101&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle运算符和基本字符函数">
+<meta property="og:url" content="https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="Oracle算术运算符Oracle算术运算符包括+、-、*、&#x2F;四个，其中&#x2F;获得的结果是浮点数 12345select b.coursename, sum(a.score) &#x2F; count(1)  from score a, course b where a.courseid &#x3D; b.courseid   and a.courseid &#x3D; &#39;R20180101&amp;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/image-20200718234041328.png">
+<meta property="article:published_time" content="2020-07-18T15:31:52.000Z">
+<meta property="article:modified_time" content="2020-07-18T15:50:23.000Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="Oracle">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/image-20200718234041328.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Oracle运算符和基本字符函数</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../../19/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E6%B3%95%E9%A2%98/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../JVM-1-Jvm%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&text=Oracle运算符和基本字符函数"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&title=Oracle运算符和基本字符函数"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&is_video=false&description=Oracle运算符和基本字符函数"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Oracle运算符和基本字符函数&body=Check out this article: https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&title=Oracle运算符和基本字符函数"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&title=Oracle运算符和基本字符函数"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&title=Oracle运算符和基本字符函数"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&title=Oracle运算符和基本字符函数"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&name=Oracle运算符和基本字符函数&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&t=Oracle运算符和基本字符函数"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Oracle%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.</span> <span class="toc-text">Oracle算术运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Oracle%E5%85%B3%E7%B3%BB%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">2.</span> <span class="toc-text">Oracle关系运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Oracle%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">3.</span> <span class="toc-text">Oracle逻辑运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Oracle%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BF%9E%E6%8E%A5%E7%AC%A6"><span class="toc-number">4.</span> <span class="toc-text">Oracle字符串连接符||</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Oracle-DISTINCT"><span class="toc-number">5.</span> <span class="toc-text">Oracle DISTINCT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Oracle%E5%AD%97%E7%AC%A6%E5%9E%8B%E5%87%BD%E6%95%B0"><span class="toc-number">6.</span> <span class="toc-text">Oracle字符型函数</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Oracle运算符和基本字符函数
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-07-18T15:31:52.000Z" itemprop="datePublished">2020-07-18</time>
+        
+        (Updated: <time datetime="2020-07-18T15:50:23.000Z" itemprop="dateModified">2020-07-18</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/Oracle/" rel="tag">Oracle</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="Oracle算术运算符"><a href="#Oracle算术运算符" class="headerlink" title="Oracle算术运算符"></a>Oracle算术运算符</h3><p>Oracle算术运算符包括+、-、*、/四个，其中/获得的结果是浮点数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select b.coursename, sum(a.score) &#x2F; count(1)</span><br><span class="line">  from score a, course b</span><br><span class="line"> where a.courseid &#x3D; b.courseid</span><br><span class="line">   and a.courseid &#x3D; &#39;R20180101&#39;</span><br><span class="line"> group by b.coursename;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Oracle关系运算符"><a href="#Oracle关系运算符" class="headerlink" title="Oracle关系运算符"></a>Oracle关系运算符</h3><p>Oracle关系运算符在where条件语句当中经常使用到，常用的关系如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">符号</th>
+<th align="center">解释</th>
+<th align="center">符号</th>
+<th align="center">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">=</td>
+<td align="center">等于</td>
+<td align="center">&lt;&gt;或者!=</td>
+<td align="center">不等于</td>
+</tr>
+<tr>
+<td align="center">&gt;</td>
+<td align="center">大于</td>
+<td align="center">&gt;=</td>
+<td align="center">大于或者等于</td>
+</tr>
+<tr>
+<td align="center">&lt;</td>
+<td align="center">小于</td>
+<td align="center">&lt;=</td>
+<td align="center">小于或者等于</td>
+</tr>
+</tbody></table>
+<h3 id="Oracle逻辑运算符"><a href="#Oracle逻辑运算符" class="headerlink" title="Oracle逻辑运算符"></a>Oracle逻辑运算符</h3><p>Oracle的逻辑运算符有三个：AND、OR、NOT</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">select a.*, b.coursename, c.stuname</span><br><span class="line">  from score a, course b, stuinfo c</span><br><span class="line"> where a.courseid &#x3D; b.courseid</span><br><span class="line">   and a.stuid &#x3D; c.stuid</span><br><span class="line">   and a.score &gt;&#x3D; &#39;85&#39;</span><br><span class="line">   and a.score &lt;&#x3D; &#39;95&#39;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Oracle字符串连接符"><a href="#Oracle字符串连接符" class="headerlink" title="Oracle字符串连接符||"></a>Oracle字符串连接符||</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select &#39;姓名：&#39; || c.stuname || &#39;, 课程：&#39; || b.coursename || &#39;, 成绩：&#39; || a.score || &#39;分。&#39; as sxcj</span><br><span class="line">  from score a, course b, stuinfo c</span><br><span class="line"> where a.courseid &#x3D; b.courseid</span><br><span class="line">   and a.stuid &#x3D; c.stuid</span><br></pre></td></tr></table></figure>
+
+<p><img src="image-20200718234041328.png" alt="image-20200718234041328"></p>
+<h3 id="Oracle-DISTINCT"><a href="#Oracle-DISTINCT" class="headerlink" title="Oracle DISTINCT"></a>Oracle DISTINCT</h3><p>DISTINCT语法结构:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT&#96; &#96;DISTINCT&#96; &#96;列1,列2,列3... &#96;&#96;from&#96; &#96;表名;</span><br></pre></td></tr></table></figure>
+
+<p>当关键字DISTINCT后面只有一个列1时，表示的是单个字段查询结果的不重复数据，当后面跟着多个列值时，表示的是多个字段组成的查询结果的所有唯一值，进行的是多个字段的分组消除</p>
+<h3 id="Oracle字符型函数"><a href="#Oracle字符型函数" class="headerlink" title="Oracle字符型函数"></a>Oracle字符型函数</h3><table>
+<thead>
+<tr>
+<th align="center">函数</th>
+<th align="center">说明</th>
+<th align="center">案例</th>
+<th align="center">结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">ASCII(X)</td>
+<td align="center">求字符X的ASCII码</td>
+<td align="center">select ASCII(‘A’) FROM DUAL;</td>
+<td align="center">65</td>
+</tr>
+<tr>
+<td align="center">CHR(X)</td>
+<td align="center">求ASCII码对应的字符</td>
+<td align="center">select CHR(65) FROM DUAL;</td>
+<td align="center">‘A’</td>
+</tr>
+<tr>
+<td align="center">LENGTH(X)</td>
+<td align="center">求字符串X的长度</td>
+<td align="center">select LENGTH(‘ORACLE技术圈’)from DUAL;</td>
+<td align="center">9</td>
+</tr>
+<tr>
+<td align="center">CONCATA(X,Y)</td>
+<td align="center">返回连接两个字符串X和Y的结果</td>
+<td align="center">select CONCAT(‘ORACLE’,’技术圈’) from DUAL;</td>
+<td align="center">ORACLE技术圈</td>
+</tr>
+<tr>
+<td align="center">INSTR(X,Y[,START])</td>
+<td align="center">查找字符串X中字符串Y的位置，可以指定从Start位置开始搜索，不填默认从头开始</td>
+<td align="center">SELECT INSTR(‘ORACLE技术圈’,’技术’) FROM DUAL;</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">LOWER(X)</td>
+<td align="center">把字符串X中大写字母转换为小写</td>
+<td align="center">SELECT LOWER(‘ORACLE技术圈’) FROM DUAL;</td>
+<td align="center">oracle技术圈</td>
+</tr>
+<tr>
+<td align="center">UPPER(X)</td>
+<td align="center">把字符串X中小写字母转换为大写</td>
+<td align="center">SELECT UPPER(‘Oracle技术圈’) FROM DUAL;</td>
+<td align="center">ORACLE技术圈</td>
+</tr>
+<tr>
+<td align="center">INITCAP(X)</td>
+<td align="center">把字符串X中所有单词首字母转换为大写，其余小写。</td>
+<td align="center">SELECT INITCAP(‘ORACLE is good ‘) FROM DUAL;</td>
+<td align="center">Oracle Is Good</td>
+</tr>
+<tr>
+<td align="center">LTRIM(X[,Y])</td>
+<td align="center">去掉字符串X左边的Y字符串，Y不填时，默认的是字符串X左边去空格</td>
+<td align="center">SELECT LTRIM(‘–ORACLE技术圈’,’-‘) FROM DUAL;</td>
+<td align="center">ORACLE技术圈</td>
+</tr>
+<tr>
+<td align="center">RTRIM(X[,Y])</td>
+<td align="center">去掉字符串X右边的Y字符串，Y不填时，默认的是字符串X右边去空格</td>
+<td align="center">SELECT RTRIM(‘ORACLE技术圈–’,’-‘) FROM DUAL;</td>
+<td align="center">ORACLE技术圈</td>
+</tr>
+<tr>
+<td align="center">TRIM(X[,Y])</td>
+<td align="center">去掉字符串X两边的Y字符串，Y不填时，默认的是字符串X左右去空格</td>
+<td align="center">SELECT TRIM(‘–ORACLE技术圈–’,’-‘) FROM DUAL;</td>
+<td align="center">ORACLE技术圈</td>
+</tr>
+<tr>
+<td align="center">REPLACE(X,old,new）</td>
+<td align="center">查找字符串X中old字符，并利用new字符替换</td>
+<td align="center">SELECT REPLACE(‘ORACLE技术圈’,’技术圈’,’技术交流’) FROM DUAL;</td>
+<td align="center">ORACLE技术交流</td>
+</tr>
+<tr>
+<td align="center">SUBSTR(X,start[,length])</td>
+<td align="center">截取字符串X，从start位置（其中start是从1开始）开始截取长度为length的字符串，length不填默认为截取到字符串X末尾</td>
+<td align="center">SELECT SUBSTR(‘ORACLE技术圈’,1,6) FROM DUAL;</td>
+<td align="center">ORACLE</td>
+</tr>
+<tr>
+<td align="center">RPAD(X,length[,Y])</td>
+<td align="center">对字符串X进行右补字符Y使字符串长度达到length长度</td>
+<td align="center">SELECT RPAD(‘ORACLE’,9,’-‘) from DUAL;</td>
+<td align="center">ORACLE—</td>
+</tr>
+<tr>
+<td align="center">LPAD(X,length[,Y])</td>
+<td align="center">对字符串X进行左补字符Y使字符串长度达到length长度</td>
+<td align="center">SELECT LPAD(‘ORACLE’,9,’-‘) from DUAL;</td>
+<td align="center">—ORACLE</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Oracle%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.</span> <span class="toc-text">Oracle算术运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Oracle%E5%85%B3%E7%B3%BB%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">2.</span> <span class="toc-text">Oracle关系运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Oracle%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">3.</span> <span class="toc-text">Oracle逻辑运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Oracle%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BF%9E%E6%8E%A5%E7%AC%A6"><span class="toc-number">4.</span> <span class="toc-text">Oracle字符串连接符||</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Oracle-DISTINCT"><span class="toc-number">5.</span> <span class="toc-text">Oracle DISTINCT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Oracle%E5%AD%97%E7%AC%A6%E5%9E%8B%E5%87%BD%E6%95%B0"><span class="toc-number">6.</span> <span class="toc-text">Oracle字符型函数</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&text=Oracle运算符和基本字符函数"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&title=Oracle运算符和基本字符函数"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&is_video=false&description=Oracle运算符和基本字符函数"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Oracle运算符和基本字符函数&body=Check out this article: https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&title=Oracle运算符和基本字符函数"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&title=Oracle运算符和基本字符函数"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&title=Oracle运算符和基本字符函数"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&title=Oracle运算符和基本字符函数"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&name=Oracle运算符和基本字符函数&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/&t=Oracle运算符和基本字符函数"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

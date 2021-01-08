@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="进程间的通信在多进程程序中，如果多个进程之间需要协作完成任务，那么进程间通信的方式就是需要重点考虑的事项之一。这种通信常被叫做IPC(Inter-Process Communication)。不同版本操作系统所支持的IPC方法都不尽相同，而且针对IPC制定的标准也不止一个。因此为了简单统一，我们以Linux系统的IPC方法为例。 Linux可以使用的IPC方法有多种。从处理机制的角度看，它们可以分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="并发编程-1-并发中的基本概念">
+<meta property="og:url" content="https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="进程间的通信在多进程程序中，如果多个进程之间需要协作完成任务，那么进程间通信的方式就是需要重点考虑的事项之一。这种通信常被叫做IPC(Inter-Process Communication)。不同版本操作系统所支持的IPC方法都不尽相同，而且针对IPC制定的标准也不止一个。因此为了简单统一，我们以Linux系统的IPC方法为例。 Linux可以使用的IPC方法有多种。从处理机制的角度看，它们可以分">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20200712231712730.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20200712231946628.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20200713105044962.png">
+<meta property="article:published_time" content="2020-07-12T14:59:42.000Z">
+<meta property="article:modified_time" content="2020-08-09T02:56:56.082Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="并发编程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/image-20200712231712730.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>并发编程-1-并发中的基本概念</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../../13/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&text=并发编程-1-并发中的基本概念"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&title=并发编程-1-并发中的基本概念"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&is_video=false&description=并发编程-1-并发中的基本概念"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=并发编程-1-并发中的基本概念&body=Check out this article: https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&title=并发编程-1-并发中的基本概念"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&title=并发编程-1-并发中的基本概念"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&title=并发编程-1-并发中的基本概念"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&title=并发编程-1-并发中的基本概念"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&name=并发编程-1-并发中的基本概念&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&t=并发编程-1-并发中的基本概念"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1"><span class="toc-number">1.</span> <span class="toc-text">进程间的通信</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">进程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.1.</span> <span class="toc-text">进程的定义</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E8%A1%8D%E7%94%9F"><span class="toc-number">1.1.2.</span> <span class="toc-text">进程的衍生</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5%E5%92%8C%E5%BC%82%E6%AD%A5"><span class="toc-number">2.</span> <span class="toc-text">同步和异步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E5%92%8C%E5%B9%B6%E8%A1%8C"><span class="toc-number">3.</span> <span class="toc-text">并发和并行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%B4%E7%95%8C%E5%8C%BA"><span class="toc-number">4.</span> <span class="toc-text">临界区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%BB%E5%A1%9E%E5%92%8C%E9%9D%9E%E9%98%BB%E5%A1%9E"><span class="toc-number">5.</span> <span class="toc-text">阻塞和非阻塞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%BB%E9%94%81%E3%80%81%E9%A5%A5%E9%A5%BF%E3%80%81%E6%B4%BB%E9%94%81"><span class="toc-number">6.</span> <span class="toc-text">死锁、饥饿、活锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E7%BA%A7%E5%88%AB"><span class="toc-number">7.</span> <span class="toc-text">并发级别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%98%BB%E5%A1%9E"><span class="toc-number">7.1.</span> <span class="toc-text">阻塞</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E9%A5%A5%E9%A5%BF"><span class="toc-number">7.2.</span> <span class="toc-text">无饥饿</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E9%9A%9C%E7%A2%8D"><span class="toc-number">7.3.</span> <span class="toc-text">无障碍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E9%94%81"><span class="toc-number">7.4.</span> <span class="toc-text">无锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E7%AD%89%E5%BE%85"><span class="toc-number">7.5.</span> <span class="toc-text">无等待</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        并发编程-1-并发中的基本概念
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-07-12T14:59:42.000Z" itemprop="datePublished">2020-07-12</time>
+        
+        (Updated: <time datetime="2020-08-09T02:56:56.082Z" itemprop="dateModified">2020-08-09</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/java/">java</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="tag">并发编程</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="进程间的通信"><a href="#进程间的通信" class="headerlink" title="进程间的通信"></a>进程间的通信</h3><p>在多进程程序中，如果多个进程之间需要协作完成任务，那么进程间通信的方式就是需要重点考虑的事项之一。这种通信常被叫做IPC(Inter-Process Communication)。不同版本操作系统所支持的IPC方法都不尽相同，而且针对IPC制定的标准也不止一个。因此为了简单统一，我们以Linux系统的IPC方法为例。</p>
+<p>Linux可以使用的IPC方法有多种。从处理机制的角度看，它们可以分为三类：</p>
+<ul>
+<li>基于通信的IPC方法</li>
+<li>基于信号的IPC方法</li>
+<li>基于同步的IPC方法</li>
+</ul>
+<h4 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h4><h5 id="进程的定义"><a href="#进程的定义" class="headerlink" title="进程的定义"></a>进程的定义</h5><p>进程是Unix及其衍生操作系统(包括Linux)的根本，因为所有代码都是在进程中执行的。通常我们把一个程序的执行称为一个进程。反过来讲，进程用于描述程序的执行过程。因此，程序和进程是一对概念，它们分别描述了一个程序的静态形式和动态特征。除此之外，进程还是操作系统进行资源分配的一个基本单位。</p>
+<h5 id="进程的衍生"><a href="#进程的衍生" class="headerlink" title="进程的衍生"></a>进程的衍生</h5><h3 id="同步和异步"><a href="#同步和异步" class="headerlink" title="同步和异步"></a>同步和异步</h3><p>同步和异步通常用来形容一次方法调用。</p>
+<p>同步方法调用一旦开始，调用者必须等到方法调用返回后，才能继续后续的行为。</p>
+<p>异步方法调用更像一个消息传递，一旦开始，方法调用就会立即返回，调用者就可以继续后续的操作。</p>
+<p>异步方法通常会在另外一个线程中“真实”地执行。整个过程不会阻碍调用者的工作。</p>
+<p><img src="image-20200712231712730.png" alt="image-20200712231712730"></p>
+<h3 id="并发和并行"><a href="#并发和并行" class="headerlink" title="并发和并行"></a>并发和并行</h3><p><img src="image-20200712231946628.png" alt="image-20200712231946628"></p>
+<p>如果系统内只有一个CPU，而使用多进程或者多线程任务，那么真实环境中这些任务不可能是真实并行的，毕竟一个CPU一次只能执行一条指令，这种情况下多进程或者多线程是并发的，而不是并行的。真实的并行也只可能出现在拥有多个CPU的系统中。</p>
+<h3 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h3><p>临界区是用来表示一种公共资源或者说是共享数据，可以被多个线程使用。但是每一次，只能由一个线程使用它，一旦临界区资源被占用，其他线程要想使用整个资源，就必须等待。</p>
+<h3 id="阻塞和非阻塞"><a href="#阻塞和非阻塞" class="headerlink" title="阻塞和非阻塞"></a>阻塞和非阻塞</h3><p>阻塞和非阻塞通常用来形容多线程间的相互影响</p>
+<h3 id="死锁、饥饿、活锁"><a href="#死锁、饥饿、活锁" class="headerlink" title="死锁、饥饿、活锁"></a>死锁、饥饿、活锁</h3><p>死锁、饥饿和活锁都属于多线程的活跃性问题，当出现上面这几种情况时，相关的线程就不再活跃，也就是说它可能很难再继续往下执行。</p>
+<p><strong>死锁</strong>是最糟糕的一种情况，死锁的模型如下</p>
+<p><img src="image-20200713105044962.png" alt="image-20200713105044962"></p>
+<p>A、B、C、D四辆小车在这种情况下无法继续行驶。它们彼此之间相互占用了其他车辆的车道，如果大家都不愿意释放自己的车道，那么这个状态永远维持下去，谁也不可能通过。死锁不能在代码层次解决，只能通过代码设计去改善。</p>
+<p><strong>饥饿</strong>是指某一个或者多个线程因为种种原因无法获得所需要的资源，导致一致无法执行。与死锁的区别是饥饿有可能在未来一段时间内操作系统自己解决，而死锁却是操作系统无法解决的。</p>
+<p><strong>活锁</strong>的概念可以类比我们在马路人行道上让路，当我们在马路人行道上行走，迎面有一辆自行车过来，我们都希望尽快地避开对方，避免撞上，于是都向左转，结果要撞上了，意识到这个问题后，我们都调整策略，然后同时右转。不过介于人类的智能，我相信这个转向的动作重复几次之后，我们就可以顺利避开对方。</p>
+<p>然而两个线程并没有我们人类这个聪明。它们可能会一直这么僵持下去。</p>
+<p>其实线程的死锁、饥饿、活锁这几种模型就是对我们现实生活的一种抽象。</p>
+<h3 id="并发级别"><a href="#并发级别" class="headerlink" title="并发级别"></a>并发级别</h3><p>由于临界区的存在，多线程之间的并发必须受到控制。根据控制并发的策略，我们可以把并发的级别进行分类，大致可以分为阻塞、无饥饿、无障碍、无锁、无等待几种。</p>
+<h4 id="阻塞"><a href="#阻塞" class="headerlink" title="阻塞"></a>阻塞</h4><p>一个线程是阻塞的，那么在其他线程释放资源之前，当前线程无法继续执行。当我们使用synchronized关键字，或者重入锁时，我们得到的就是阻塞线程。</p>
+<h4 id="无饥饿"><a href="#无饥饿" class="headerlink" title="无饥饿"></a>无饥饿</h4><p>如果线程之间是有优先级的，那么线程调度的时候总是倾向于满足高优先级的线程。也就是说，对于同一资源的分配，是不公平的！这会导致优先级低的线程产生饥饿。但是如果锁是公平的，满足先来后到，那么饥饿就不会产生。</p>
+<h4 id="无障碍"><a href="#无障碍" class="headerlink" title="无障碍"></a>无障碍</h4><p>无障碍是一种最弱的非阻塞调度。两个线程如果无障碍的执行，那么他们不会因为临界区的问题导致一方被挂起。无障碍的多线程程序并不一定能够顺畅的运行。因为当临界区中存在严重的冲突时，所有的线程可能都会不断地回滚自己的操作，而没有一个线程可以走出临界区。</p>
+<p>一种可行的无障碍实现可以依赖一个“一致性标记”来实现。线程在操作之前，先读取并保存这个标识，在操作完成后，再次读取，检查这个标识是否被更改过，如果两者是一致的则说明资源访问没有冲突。可以类比ArrayList里的modCount字段。</p>
+<h4 id="无锁"><a href="#无锁" class="headerlink" title="无锁"></a>无锁</h4><p>无锁的并行都是无障碍的。在无锁的情况下，所有的线程都能尝试对临界区进行访问，但不同的是，无锁的并发保证必然有一个线程能够在有限步内完成操作离开临界区。</p>
+<h4 id="无等待"><a href="#无等待" class="headerlink" title="无等待"></a>无等待</h4><p>无锁只要求有一个线程可以在有限步内完成操作，而无等待则是在无锁的基础上更进一步进行拓展。它要求所有的线程都必须在有限步内完成，这样就不会引起饥饿问题。</p>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1"><span class="toc-number">1.</span> <span class="toc-text">进程间的通信</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">进程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.1.</span> <span class="toc-text">进程的定义</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E7%9A%84%E8%A1%8D%E7%94%9F"><span class="toc-number">1.1.2.</span> <span class="toc-text">进程的衍生</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5%E5%92%8C%E5%BC%82%E6%AD%A5"><span class="toc-number">2.</span> <span class="toc-text">同步和异步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E5%92%8C%E5%B9%B6%E8%A1%8C"><span class="toc-number">3.</span> <span class="toc-text">并发和并行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%B4%E7%95%8C%E5%8C%BA"><span class="toc-number">4.</span> <span class="toc-text">临界区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%BB%E5%A1%9E%E5%92%8C%E9%9D%9E%E9%98%BB%E5%A1%9E"><span class="toc-number">5.</span> <span class="toc-text">阻塞和非阻塞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%BB%E9%94%81%E3%80%81%E9%A5%A5%E9%A5%BF%E3%80%81%E6%B4%BB%E9%94%81"><span class="toc-number">6.</span> <span class="toc-text">死锁、饥饿、活锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E7%BA%A7%E5%88%AB"><span class="toc-number">7.</span> <span class="toc-text">并发级别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%98%BB%E5%A1%9E"><span class="toc-number">7.1.</span> <span class="toc-text">阻塞</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E9%A5%A5%E9%A5%BF"><span class="toc-number">7.2.</span> <span class="toc-text">无饥饿</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E9%9A%9C%E7%A2%8D"><span class="toc-number">7.3.</span> <span class="toc-text">无障碍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E9%94%81"><span class="toc-number">7.4.</span> <span class="toc-text">无锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E7%AD%89%E5%BE%85"><span class="toc-number">7.5.</span> <span class="toc-text">无等待</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&text=并发编程-1-并发中的基本概念"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&title=并发编程-1-并发中的基本概念"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&is_video=false&description=并发编程-1-并发中的基本概念"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=并发编程-1-并发中的基本概念&body=Check out this article: https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&title=并发编程-1-并发中的基本概念"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&title=并发编程-1-并发中的基本概念"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&title=并发编程-1-并发中的基本概念"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&title=并发编程-1-并发中的基本概念"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&name=并发编程-1-并发中的基本概念&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/07/12/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-%E5%B9%B6%E5%8F%91%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/&t=并发编程-1-并发中的基本概念"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="Common Lisp2.1 形式12&gt; (+ 2 3)5  在表达式 (+ 2 3) 里， + 称为操作符，而数字 2 跟 3 称为实参。 12&gt; (+ 2 3 4 5)14  ​    表示 2+3+4+5 由于操作符可接受不定数量的实参，我们需要用括号来标明表达式的开始与结束。 表达式可以嵌套。即表达式里的实参，可以是另一个复杂的表达式： 12&gt; (&#x2F; (- 7">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Common Lisp基础">
+<meta property="og:url" content="https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="Common Lisp2.1 形式12&gt; (+ 2 3)5  在表达式 (+ 2 3) 里， + 称为操作符，而数字 2 跟 3 称为实参。 12&gt; (+ 2 3 4 5)14  ​    表示 2+3+4+5 由于操作符可接受不定数量的实参，我们需要用括号来标明表达式的开始与结束。 表达式可以嵌套。即表达式里的实参，可以是另一个复杂的表达式： 12&gt; (&#x2F; (- 7">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-30T05:35:00.000Z">
+<meta property="article:modified_time" content="2019-12-30T05:35:50.000Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="Common Lisp">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Common Lisp基础</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../%E6%A0%91%E4%B8%AD%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../Netty%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&text=Common Lisp基础"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&title=Common Lisp基础"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&is_video=false&description=Common Lisp基础"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Common Lisp基础&body=Check out this article: https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&title=Common Lisp基础"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&title=Common Lisp基础"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&title=Common Lisp基础"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&title=Common Lisp基础"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&name=Common Lisp基础&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&t=Common Lisp基础"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Common-Lisp"><span class="toc-number">1.</span> <span class="toc-text">Common Lisp</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-%E5%BD%A2%E5%BC%8F"><span class="toc-number">1.0.0.0.1.</span> <span class="toc-text">2.1 形式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-%E6%B1%82%E5%80%BC"><span class="toc-number">1.0.0.0.2.</span> <span class="toc-text">2.2 求值</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-%E6%95%B0%E6%8D%AE"><span class="toc-number">1.0.0.0.3.</span> <span class="toc-text">2.3 数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-4-%E5%88%97%E8%A1%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">1.0.0.0.4.</span> <span class="toc-text">2.4 列表操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-5-%E7%9C%9F%E4%B8%8E%E5%81%87"><span class="toc-number">1.0.0.0.5.</span> <span class="toc-text">2.5 真与假</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-6-%E5%87%BD%E6%95%B0"><span class="toc-number">1.0.0.0.6.</span> <span class="toc-text">2.6 函数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-7-%E9%80%92%E5%BD%92"><span class="toc-number">1.0.0.0.7.</span> <span class="toc-text">2.7 递归</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-9-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA"><span class="toc-number">1.0.0.0.8.</span> <span class="toc-text">2.9 输入输出</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-10-%E5%8F%98%E9%87%8F"><span class="toc-number">1.0.0.0.9.</span> <span class="toc-text">2.10 变量</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Common Lisp基础
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2019-12-30T05:35:00.000Z" itemprop="datePublished">2019-12-30</time>
+        
+        (Updated: <time datetime="2019-12-30T05:35:50.000Z" itemprop="dateModified">2019-12-30</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/Lisp/">Lisp</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/Common-Lisp/" rel="tag">Common Lisp</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="Common-Lisp"><a href="#Common-Lisp" class="headerlink" title="Common Lisp"></a>Common Lisp</h1><h5 id="2-1-形式"><a href="#2-1-形式" class="headerlink" title="2.1 形式"></a>2.1 形式</h5><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>)</span><br><span class="line"><span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<p>在表达式 <code>(+ 2 3)</code> 里， <code>+</code> 称为操作符，而数字 <code>2</code> 跟 <code>3</code> 称为实参。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (+ 2 3 4 5)</span><br><span class="line">14</span><br></pre></td></tr></table></figure>
+
+<p>​    表示 2+3+4+5</p>
+<p>由于操作符可接受不定数量的实参，我们需要用括号来标明表达式的开始与结束。</p>
+<p>表达式可以嵌套。即表达式里的实参，可以是另一个复杂的表达式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (&#x2F; (- 7 1) (- 4 2))</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+
+<p>表示   <code>(七减一) 除以 (四减二)</code></p>
+<h5 id="2-2-求值"><a href="#2-2-求值" class="headerlink" title="2.2 求值"></a>2.2 求值</h5><p>在 Lisp 里， <code>+</code> 是函数，然而如 <code>(+ 2 3)</code> 的表达式，是函数调用。</p>
+<p>当 Lisp 对函数调用求值时，它做下列两个步骤：</p>
+<blockquote>
+<ol>
+<li>首先从左至右对实参求值。在这个例子当中，实参对自身求值，所以实参的值分别是 <code>2</code> 跟 <code>3</code> 。</li>
+<li>实参的值传入以操作符命名的函数。在这个例子当中，将 <code>2</code> 跟 <code>3</code> 传给 <code>+</code> 函数，返回 <code>5</code> 。</li>
+</ol>
+</blockquote>
+<p>如果实参本身是函数调用的话，上述规则同样适用。以下是当 <code>(/ (- 7 1) (- 4 2))</code> 表达式被求值时的情形：</p>
+<blockquote>
+<ol>
+<li>Lisp 对 <code>(- 7 1)</code> 求值: <code>7</code> 求值为 <code>7</code> ， <code>1</code> 求值为 <code>1</code> ，它们被传给函数 <code>-</code> ，返回 <code>6</code> 。</li>
+<li>Lisp 对 <code>(- 4 2)</code> 求值: <code>4</code> 求值为 <code>4</code> ， <code>2</code> 求值为 <code>2</code> ，它们被传给函数 <code>-</code> ，返回 <code>2</code> 。</li>
+<li>数值 <code>6</code> 与 <code>2</code> 被传入函数 <code>/</code> ，返回 <code>3</code> 。</li>
+</ol>
+</blockquote>
+<p>但不是所有的 Common Lisp 操作符都是函数，不过大部分是。函数调用都是这么求值。由左至右对实参求值，将它们的数值传入函数，来返回整个表达式的值。这称为 Common Lisp 的求值规则。</p>
+<h5 id="2-3-数据"><a href="#2-3-数据" class="headerlink" title="2.3 数据"></a>2.3 数据</h5><p>有两个通常在别的语言所找不到的 Lisp 数据类型是<em>符号</em>（symbol）与<em>列表</em>（lists），<em>符号</em>是英语的单词 (words)。无论你怎么输入，通常会被转换为大写：</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="symbol">&#x27;Artichoke</span></span><br><span class="line">ARTICHOKE</span><br></pre></td></tr></table></figure>
+
+<p>符号（通常）不对自身求值，所以要是想引用符号，应该像上例那样用 <code>&#39;</code> 引用它。</p>
+<p><em>列表</em>是由被括号包住的零个或多个元素来表示。元素可以是任何类型，包含列表本身。使用列表必须要引用，不然 Lisp 会以为这是个函数调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#39;(my 3 &quot;Sons&quot;)</span><br><span class="line">(MY 3 &quot;Sons&quot;)</span><br><span class="line">&gt; &#39;(the list (a b c) has 3 elements)</span><br><span class="line">(THE LIST (A B C) HAS 3 ELEMENTS)</span><br></pre></td></tr></table></figure>
+
+<p>注意引号保护了整个表达式（包含内部的子表达式）被求值。</p>
+<p>你可以调用 <code>list</code> 来创建列表。由于 <code>list</code> 是函数，所以它的实参会被求值。这里我们看一个在函数 <code>list</code> 调用里面，调用 <code>+</code> 函数的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (list &#39;my (+ 2 1) &quot;Sons&quot;)</span><br><span class="line">(MY 3 &quot;Sons&quot;)</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-4-列表操作"><a href="#2-4-列表操作" class="headerlink" title="2.4 列表操作"></a>2.4 列表操作</h5><p>用函数 <code>cons</code> 来构造列表。如果传入的第二个实参是列表，则返回由两个实参所构成的新列表，新列表为第一个实参加上第二个实参：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (cons &#39;a &#39;(b c d))</span><br><span class="line">(A B C D)</span><br></pre></td></tr></table></figure>
+
+<p>可以通过把新元素建立在空表之上，来构造一个新列表。上一节所看到的函数 <code>list</code> ，不过就是一个把几个元素加到 <code>nil</code> 上的快捷方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; (cons &#39;a (cons &#39;b nil))</span><br><span class="line">(A B)</span><br><span class="line">&gt; (list &#39;a &#39;b)</span><br><span class="line">(A B)</span><br></pre></td></tr></table></figure>
+
+<p>取出列表元素的基本函数是 <code>car</code> 和 <code>cdr</code> 。对列表取 <code>car</code> 返回第一个元素，而对列表取 <code>cdr</code> 返回第一个元素之后的所有元素：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; (car &#39;(a b c))</span><br><span class="line">A</span><br><span class="line">&gt; (cdr &#39;(a b c))</span><br><span class="line">(B C)</span><br></pre></td></tr></table></figure>
+
+<p>你可以把 <code>car</code> 与 <code>cdr</code> 混合使用来取得列表中的任何元素。如果我们想要取得第三个元素，我们可以：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (car (cdr (cdr &#39;(a b c d))))</span><br><span class="line">C</span><br></pre></td></tr></table></figure>
+
+<p>不过，你可以用更简单的 <code>third</code> 来做到同样的事情：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (third &#39;(a b c d))</span><br><span class="line">C</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-5-真与假"><a href="#2-5-真与假" class="headerlink" title="2.5 真与假"></a>2.5 真与假</h5><p>在 Common Lisp 里，符号 <code>t</code> 是表示逻辑 <code>真</code> 的缺省值。与 <code>nil</code> 相同， <code>t</code> 也是对自身求值的。如果实参是一个列表，则函数 <code>listp</code>返回 <code>真</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (listp &#39;(a b c))</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
+
+<p>函数的返回值将会被解释成逻辑 <code>真</code> 或逻辑 <code>假</code> 时，则称此函数为谓词（<em>predicate</em>）。在 Common Lisp 里，谓词的名字通常以 <code>p</code>结尾。</p>
+<p>逻辑 <code>假</code> 在 Common Lisp 里，用 <code>nil</code> ，即空表来表示。如果我们传给 <code>listp</code> 的实参不是列表，则返回 <code>nil</code> 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (listp 27)</span><br><span class="line">NIL</span><br></pre></td></tr></table></figure>
+
+<p>由于 <code>nil</code> 在 Common Lisp 里扮演两个角色，如果实参是一个空表，则函数 <code>null</code> 返回 <code>真</code> 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (null nil)</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
+
+<p>而如果实参是逻辑 <code>假</code> ，则函数 <code>not</code> 返回 <code>真</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (not nil)</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
+
+<p><code>null</code> 与 <code>not</code> 做的是一样的事情。</p>
+<h5 id="2-6-函数"><a href="#2-6-函数" class="headerlink" title="2.6 函数"></a>2.6 函数</h5><p>你可以用 <code>defun</code> 来定义新函数。通常接受三个以上的实参：一个名字，一组用列表表示的实参，以及一个或多个组成函数体的表达式。我们可能会这样定义 <code>third</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; (defun our-third (x)</span><br><span class="line">   (car (cdr (cdr x))))</span><br><span class="line">OUR-THIRD</span><br></pre></td></tr></table></figure>
+
+<p>第一个实参说明此函数的名称将是 <code>our-third</code> 。第二个实参，一个列表 <code>(x)</code> ，说明这个函数会接受一个形参： <code>x</code> 。这样使用的占位符符号叫做<em>变量</em>。当变量代表了传入函数的实参时，如这里的 <code>x</code> ，又被叫做<em>形参</em>。</p>
+<p>定义的剩余部分， <code>(car (cdr (cdr x)))</code> ，即所谓的函数主体。它告诉 Lisp 该怎么计算此函数的返回值。所以调用一个 <code>our-third</code> 函数，对于我们作为实参传入的任何 <code>x</code> ，会返回 <code>(car (cdr (cdr x)))</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (our-third &#39;(a b c d))</span><br><span class="line">C</span><br></pre></td></tr></table></figure>
+
+<p>既然我们已经讨论过了变量，理解符号是什么就更简单了。符号是变量的名字，符号本身就是以对象的方式存在。这也是为什么符号，必须像列表一样被引用。列表必须被引用，不然会被视为代码。符号必须要被引用，不然会被当作变量。</p>
+<p>你可以把函数定义想成广义版的 Lisp 表达式。下面的表达式测试 <code>1</code> 和 <code>4</code> 的和是否大于 <code>3</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (&gt; (+ 1 4) 3)</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
+
+<p>通过将这些数字替换为变量，我们可以写个函数，测试任两数之和是否大于第三个数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; (defun sum-greater (x y z)</span><br><span class="line">   (&gt; (+ x y) z))</span><br><span class="line">SUM-GREATER</span><br><span class="line">&gt; (sum-greater 1 4 3)</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
+
+<p>Lisp 不对程序、过程以及函数作区别。函数做了所有的事情（事实上，函数是语言的主要部分）。如果你想要把你的函数之一作为主函数（<em>main</em> function），可以这么做，但平常你就能在顶层中调用任何函数。这表示当你编程时，你可以把程序拆分成一小块一小块地来做调试。</p>
+<h5 id="2-7-递归"><a href="#2-7-递归" class="headerlink" title="2.7 递归"></a>2.7 递归</h5><p>上一节我们所定义的函数，调用了别的函数来帮它们做事。比如 <code>sum-greater</code> 调用了 <code>+</code> 和 <code>&gt;</code> 。函数可以调用任何函数，包括自己。自己调用自己的函数是<em>递归</em>的。 Common Lisp 函数 <code>member</code> ，测试某个东西是否为列表的成员。下面是定义成递归函数的简化版：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; (defun our-member (obj lst)</span><br><span class="line">   (if (null lst)</span><br><span class="line">       nil</span><br><span class="line">   (if (eql (car lst) obj)</span><br><span class="line">       lst</span><br><span class="line">       (our-member obj (cdr lst)))))</span><br><span class="line">OUR-MEMBER</span><br></pre></td></tr></table></figure>
+
+<p>谓词 <code>eql</code> 测试它的两个实参是否相等；此外，这个定义的所有东西我们之前都学过了。下面是运行的情形：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; (our-member &#39;b &#39;(a b c))</span><br><span class="line">(B C)</span><br><span class="line">&gt; (our-member &#39;z &#39;(a b c))</span><br><span class="line">NIL</span><br></pre></td></tr></table></figure>
+
+<p>下面是 <code>our-member</code> 的定义对应到英语的描述。为了知道一个对象 <code>obj</code> 是否为列表 <code>lst</code> 的成员，我们</p>
+<blockquote>
+<ol>
+<li>首先检查 <code>lst</code> 列表是否为空列表。如果是空列表，那 <code>obj</code> 一定不是它的成员，结束。</li>
+<li>否则，若 <code>obj</code> 是列表的第一个元素时，则它是列表的成员。</li>
+<li>不然只有当 <code>obj</code> 是列表其余部分的元素时，它才是列表的成员。</li>
+</ol>
+</blockquote>
+<h5 id="2-9-输入输出"><a href="#2-9-输入输出" class="headerlink" title="2.9 输入输出"></a>2.9 输入输出</h5><p>最普遍的 Common Lisp 输出函数是 <code>format</code> 。接受两个或两个以上的实参，第一个实参决定输出要打印到哪里，第二个实参是字符串模版，而剩余的实参，通常是要插入到字符串模版，用打印表示法（printed representation）所表示的对象。下面是一个典型的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; (format t &quot;~A plus ~A equals ~A. ~%&quot; 2 3 (+ 2 3))</span><br><span class="line">2 plus 3 equals 5.</span><br><span class="line">NIL</span><br></pre></td></tr></table></figure>
+
+<p>注意到有两个东西被打印出来。第一行是 <code>format</code> 印出来的。第二行是调用 <code>format</code> 函数的返回值，就像平常顶层会打印出来的一样。通常像 <code>format</code> 这种函数不会直接在顶层调用，而是在程序内部里使用，所以返回值不会被看到。</p>
+<p><code>format</code> 的第一个实参 <code>t</code> ，表示输出被送到缺省的地方去。通常是顶层。第二个实参是一个用作输出模版的字符串。在这字符串里，每一个 <code>~A</code> 表示了被填入的位置，而 <code>~%</code> 表示一个换行。这些被填入的位置依序由后面的实参填入。</p>
+<p>标准的输入函数是 <code>read</code> 。当没有实参时，会读取缺省的位置，通常是顶层。下面这个函数，提示使用者输入，并返回任何输入的东西：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(defun askem (string)</span><br><span class="line"> (format t &quot;~A&quot; string)</span><br><span class="line"> (read))</span><br></pre></td></tr></table></figure>
+
+<p>它的行为如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; (askem &quot;How old are you?&quot;)</span><br><span class="line">How old are you?29</span><br><span class="line"></span><br><span class="line">29</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-10-变量"><a href="#2-10-变量" class="headerlink" title="2.10 变量"></a>2.10 变量</h5><p><code>let</code> 是一个最常用的 Common Lisp 的操作符之一，它让你引入新的局部变量（local variable）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; (let ((x 1) (y 2))</span><br><span class="line">     (+ x y))</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+
+<p>一个 <code>let</code> 表达式有两个部分。第一个部分是一组创建新变量的指令，指令的形式为 <em>(variable expression)</em> 。每一个变量会被赋予相对应表达式的值。上述的例子中，我们创造了两个变量， <code>x</code> 和 <code>y</code> ，分别被赋予初始值 <code>1</code> 和 <code>2</code> 。这些变量只在 <code>let</code> 的函数体内有效。</p>
+<p>另外还有一种变量叫做全局变量（global variable），是在任何地方都是可视的。 <a target="_blank" rel="noopener" href="http://acl.readthedocs.org/en/latest/zhCN/ch2-cn.html#id6">[2]</a></p>
+<p>你可以给 <code>defparameter</code> 传入符号和值，来创建一个全局变量：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="quote">&gt; (defparameter <span class="emphasis">*glob*</span> 99)</span></span><br><span class="line"><span class="emphasis">*GLOB*</span></span><br></pre></td></tr></table></figure>
+
+<p>全局变量在任何地方都可以存取，除了在定义了相同名字的区域变量的表达式里。为了避免这种情形发生，通常我们在给全局变量命名时，以星号作开始与结束。刚才我们创造的变量可以念作 “星-glob-星” (star-glob-star)。</p>
+<p>你也可以用 <code>defconstant</code> 来定义一个全局的常量：</p>
+<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defconstant</span> limit (<span class="name"><span class="builtin-name">+</span></span> *glob* <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<p>我们不需要给常量一个独一无二的名字，因为如果有相同名字存在，就会有错误产生 (error)。如果你想要检查某些符号，是否为一个全局变量或常量，使用 <code>boundp</code> 函数：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (<span class="name">boundp</span> &#x27;*glob*)</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
+
+<hr>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Common-Lisp"><span class="toc-number">1.</span> <span class="toc-text">Common Lisp</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-%E5%BD%A2%E5%BC%8F"><span class="toc-number">1.0.0.0.1.</span> <span class="toc-text">2.1 形式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-%E6%B1%82%E5%80%BC"><span class="toc-number">1.0.0.0.2.</span> <span class="toc-text">2.2 求值</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-%E6%95%B0%E6%8D%AE"><span class="toc-number">1.0.0.0.3.</span> <span class="toc-text">2.3 数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-4-%E5%88%97%E8%A1%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">1.0.0.0.4.</span> <span class="toc-text">2.4 列表操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-5-%E7%9C%9F%E4%B8%8E%E5%81%87"><span class="toc-number">1.0.0.0.5.</span> <span class="toc-text">2.5 真与假</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-6-%E5%87%BD%E6%95%B0"><span class="toc-number">1.0.0.0.6.</span> <span class="toc-text">2.6 函数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-7-%E9%80%92%E5%BD%92"><span class="toc-number">1.0.0.0.7.</span> <span class="toc-text">2.7 递归</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-9-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA"><span class="toc-number">1.0.0.0.8.</span> <span class="toc-text">2.9 输入输出</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-10-%E5%8F%98%E9%87%8F"><span class="toc-number">1.0.0.0.9.</span> <span class="toc-text">2.10 变量</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&text=Common Lisp基础"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&title=Common Lisp基础"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&is_video=false&description=Common Lisp基础"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Common Lisp基础&body=Check out this article: https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&title=Common Lisp基础"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&title=Common Lisp基础"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&title=Common Lisp基础"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&title=Common Lisp基础"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&name=Common Lisp基础&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/&t=Common Lisp基础"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="垃圾回收是Java的特色，java的垃圾回收是JVM实现的，在不同的JVM中回收机制有所不同，堆内存的划分方式也是不一样的。 垃圾回收的主要目的是清除不再使用的对象，自动释放内存。 对象死亡判定引用计数算法在对象中添加一个引用计数器，每当有一个地方引用它时，计数器就加一；当引用失效时，计数器值减一；任何时刻计数器为零的对象就是不可能再被使用的。 引用计数法缺点如下 1234567891011121">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM-4-垃圾回收">
+<meta property="og:url" content="https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="垃圾回收是Java的特色，java的垃圾回收是JVM实现的，在不同的JVM中回收机制有所不同，堆内存的划分方式也是不一样的。 垃圾回收的主要目的是清除不再使用的对象，自动释放内存。 对象死亡判定引用计数算法在对象中添加一个引用计数器，每当有一个地方引用它时，计数器就加一；当引用失效时，计数器值减一；任何时刻计数器为零的对象就是不可能再被使用的。 引用计数法缺点如下 1234567891011121">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/image-20200725132537368.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/image-20200727162800358.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/image-20200727162917755.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/image-20200727163006129.png">
+<meta property="article:published_time" content="2020-07-21T14:01:33.000Z">
+<meta property="article:modified_time" content="2020-08-09T03:43:42.135Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="jvm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/image-20200725132537368.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>JVM-4-垃圾回收</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../Java%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E5%92%8C%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../JVM-2-%E5%AF%B9%E8%B1%A1%E7%AE%80%E8%BF%B0/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&text=JVM-4-垃圾回收"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&title=JVM-4-垃圾回收"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&is_video=false&description=JVM-4-垃圾回收"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=JVM-4-垃圾回收&body=Check out this article: https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&title=JVM-4-垃圾回收"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&title=JVM-4-垃圾回收"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&title=JVM-4-垃圾回收"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&title=JVM-4-垃圾回收"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&name=JVM-4-垃圾回收&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&t=JVM-4-垃圾回收"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E6%AD%BB%E4%BA%A1%E5%88%A4%E5%AE%9A"><span class="toc-number">1.</span> <span class="toc-text">对象死亡判定</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E7%AE%97%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">引用计数算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90%E7%AE%97%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">可达性分析算法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">对象引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="toc-number">3.</span> <span class="toc-text">元数据区垃圾回收</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">垃圾回收算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-Garbage-Collector"><span class="toc-number">5.</span> <span class="toc-text">垃圾回收器(Garbage Collector)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E5%8F%82%E6%95%B0%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">垃圾回收器参数总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        JVM-4-垃圾回收
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-07-21T14:01:33.000Z" itemprop="datePublished">2020-07-21</time>
+        
+        (Updated: <time datetime="2020-08-09T03:43:42.135Z" itemprop="dateModified">2020-08-09</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/java/">java</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/jvm/" rel="tag">jvm</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>垃圾回收是Java的特色，java的垃圾回收是JVM实现的，在不同的JVM中回收机制有所不同，堆内存的划分方式也是不一样的。</p>
+<p>垃圾回收的主要目的是清除不再使用的对象，自动释放内存。</p>
+<h3 id="对象死亡判定"><a href="#对象死亡判定" class="headerlink" title="对象死亡判定"></a>对象死亡判定</h3><h4 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h4><p>在对象中添加一个引用计数器，每当有一个地方引用它时，计数器就加一；当引用失效时，计数器值减一；任何时刻计数器为零的对象就是不可能再被使用的。</p>
+<p>引用计数法缺点如下</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReferenceCountingGC</span> &#123;</span></span><br><span class="line">  <span class="keyword">private</span> Object instance = null;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> _1MB = <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">byte</span>[] bigSize = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span> * _1MB];</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testGC</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ReferenceCountingGC objA = <span class="keyword">new</span> ReferenceCountingGC();</span><br><span class="line">    ReferenceCountingGC objB = <span class="keyword">new</span> ReferenceCountingGC();</span><br><span class="line">    objA.instance = objB;</span><br><span class="line">    objB.instance = objA;</span><br><span class="line">    System.gc();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">String</span>[] args)</span> </span>&#123;</span><br><span class="line">    testGC();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>无法解决对象之间相互循环引用的问题，objA和objB这两个对象无任何引用，实际上这两个对象已经不可能在被访问，但是它们因为互相引用着对方，导致引用计数器都不为0，这两个对象也就无法回收。</p>
+<h4 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h4><p>为了判断对象是否存活，JVM引入了GC Roots。如果一个对象与GC Roots之间没有直接或者间接的引用关系，比如某个失去任何引用的对象，或者两个互相环岛状循环引用的对象等，判决这些对象“死缓”，是可以被回收。什么对象可以作为GC Roots呢？比如：静态属性中的引用对象、常量引用对象、虚拟机栈中引用的对象、本地方法栈中引用的对象。</p>
+<p><img src="image-20200725132537368.png" alt="image-20200725132537368"></p>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>引用计数算法</td>
+<td>原理简单，判定效率高</td>
+<td>需要大量额外处理，很难解决对象循环引用问题</td>
+</tr>
+<tr>
+<td>可达性分析算法</td>
+<td>算法成熟灵活，引用范围广泛</td>
+<td>没有明显缺点</td>
+</tr>
+</tbody></table>
+<h3 id="对象引用"><a href="#对象引用" class="headerlink" title="对象引用"></a>对象引用</h3><p>Java中有四种对象引用形式，这四种引用强度依次逐渐减弱如下所示</p>
+<ul>
+<li><p>强引用</p>
+<p>传统的“引用”的定义，类似“Object obj = new Object()”这种引用关系。无论任何情况下，这种强引用的对象都不会被GC回收，即便出现OOM。</p>
+</li>
+<li><p>软引用</p>
+<p>描述的是一些还有用，但是非必须对象。只被软引用关联着的对象，在OOM发生前，会把这些对象列入回收范围中进行第二次回收，如果这次回收还没有足够内存就会抛出OOM</p>
+</li>
+<li><p>弱引用</p>
+<p>描述的是那些非必须的对象，程度比软引用更弱，弱引用对象只能生存到下一次垃圾回收。当垃圾收集器开始工作，无论当前内存是否足够，都会回收掉被弱引用关联的对象。</p>
+</li>
+<li><p>虚引用</p>
+<p>一个对象是否有虚引用完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。为对象设置虚引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。</p>
+</li>
+</ul>
+<h3 id="元数据区垃圾回收"><a href="#元数据区垃圾回收" class="headerlink" title="元数据区垃圾回收"></a>元数据区垃圾回收</h3><p>元数据区垃圾回收两个部分的内容：<strong>废弃的常量</strong>和<strong>不再使用的类型</strong>。</p>
+<p>判定不再使用的类，需要同时满足下面三个条件</p>
+<ul>
+<li>该类的所有实例都已经被回收，也就是java堆中不存在该类及其任何派生子类的实例。</li>
+<li>加载该类的类加载器已经被回收，这个条件除非是经过精心设计的可替换类加载器的场景，如OSGI、JSP的重加载等，否则通常是很难达成的。</li>
+<li>该类对应的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li>
+</ul>
+<p>java虚拟机被允许对满足这三个条件的无用类进行回收，当不是必然被回收</p>
+<h3 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h3><ul>
+<li><p><strong>”标记–清除算法“</strong></p>
+<p>该算法会从每个GC Roots出发，依次标记有引用关系的对象，最后将没有被标记的对象清除。但是这种算法会带来大量的空间碎片，导致需要分配一个较大连续空间时容易触发FGC。为了解决这个问题，又提出了”标记–整理算法“，该算法类似计算机的磁盘整理，首先会从GC Roots出发标记存活的对象，然后将存活对象整理到内存空间的一端，形成连续的已使用空间，最后把已使用空间之外的部分全部清理掉，这样就不会产生空间碎片问题了。</p>
+<p><img src="image-20200727162800358.png" alt="image-20200727162800358"></p>
+<p><strong>缺点</strong>：</p>
+<ol>
+<li>执行效率不稳定</li>
+<li>内存空间的碎片化问题</li>
+</ol>
+</li>
+<li><p><strong>”标记–复制算法“</strong></p>
+<p>为了能够并行地标记和整理将空间分为两块，每次只激活其中一块，垃圾回收时只需要把存活的对象复制到另一块未激活的空间上，将未激活空间标记为已激活，将已激活的标记为未激活，然后清除原空间中的原对象。堆内存空间分为较大的Eden和两块较小的Survivor，每次只使用Eden和Survivor区中的一块。这种情形下的“Mark-Copy”减少了内存空间的浪费。</p>
+<p><img src="image-20200727162917755.png" alt="image-20200727162917755"></p>
+<p><strong>缺点</strong>：</p>
+<ol>
+<li>使内存的空间缩小为原来的一一半，空间浪费比较多</li>
+</ol>
+</li>
+<li><p><strong>标记–整理算法</strong></p>
+<p>标记–复制算法在对象存活率较高时就要进行较多的复制操作，效率就会降低。更关键的是，如果不想浪费50%的空间，就需要有额外的空间进行分配担保，以应对被使用的内存中所有对象都100%存活的极端情况，所以在老年代一般不能直接选用这种算法。</p>
+<p><img src="image-20200727163006129.png" alt="image-20200727163006129"></p>
+</li>
+</ul>
+<h3 id="垃圾回收器-Garbage-Collector"><a href="#垃圾回收器-Garbage-Collector" class="headerlink" title="垃圾回收器(Garbage Collector)"></a>垃圾回收器(Garbage Collector)</h3><p>垃圾回收器是实现垃圾回收算法并应用在JVM环境中的内存空间管理模块。当前实现的垃圾回收器有数十种，例如Serial、CMS、G1等</p>
+<h3 id="垃圾回收器参数总结"><a href="#垃圾回收器参数总结" class="headerlink" title="垃圾回收器参数总结"></a>垃圾回收器参数总结</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>UseSerialGC</td>
+<td>虚拟机运行Client模式下的默认值，打开次开关后，使用Serial+Serial Old的收集器组合进行内存回收</td>
+</tr>
+<tr>
+<td>UseParNewGC</td>
+<td>打开次开关后，使用parNew + Serial Old的收集器组合进行内存回收，在JDK9不再支持</td>
+</tr>
+<tr>
+<td>UseConcMarkSweepGC</td>
+<td>打开次开关后，使用ParNew + CMS + Serial Old的收集器组合进行内存回收。Serial Old收集器将作为CMS收集器出现“Concurrent Mode Failure”失败后的后备收集器使用</td>
+</tr>
+<tr>
+<td>UseParallelGC</td>
+<td>JDK9之前虚拟机运行在Server模式下的默认值，打开此开关后，使用parallel Scavenge + Serial Old (PS MarkSweep)的收集器组合进行内存回收</td>
+</tr>
+<tr>
+<td>UseParallelOldGC</td>
+<td>打开此开关后，使用Parallel Scavenge + Parallel Old的收集器组合进行内存回收</td>
+</tr>
+<tr>
+<td>SurvivorRatio</td>
+<td>新生代中Eden区域与Survivor区域的容量比值，默认为8，代表Eden:Survivor=8:1</td>
+</tr>
+<tr>
+<td>PretenureSizeThreshold</td>
+<td>直接晋升老年代的对象大小，设置整个参数后，大于这个参数的对象将直接在老年代分配</td>
+</tr>
+<tr>
+<td>MaxTenuringThreshold</td>
+<td>晋升到老年代的对象年龄。每个对象在坚持过一次Minor GC之后，年龄就会增加1，当超过这个参数值时就进入老年代</td>
+</tr>
+<tr>
+<td>UseAdaptiveSizePolicy</td>
+<td>动态调整Java堆中各个区域的大小以及进入老年代的年龄</td>
+</tr>
+<tr>
+<td>HandlePromotionFailre</td>
+<td>是否允许分配担保失败，即老年代的剩余空间不足以应付新生代的整个Eden和Survivor区的所有对象都存活的极端情况</td>
+</tr>
+<tr>
+<td>ParallelGCThreads</td>
+<td>设置并行GC进行内存回收的线程数</td>
+</tr>
+<tr>
+<td>GCTimeRatio</td>
+<td>GC时间占总时间的比率，默认值为99，即允许1%的GC时间。仅在使用Parallel Scavenge收集器时生效</td>
+</tr>
+<tr>
+<td>MaxGCPAuseMilis</td>
+<td>设置GC的最大停顿时间，仅在使用Parallel Scavenge收集器时生效</td>
+</tr>
+<tr>
+<td>CMSInitiatingOccupancyFraction</td>
+<td>设置CMS收集器在老年区空间被使用多少后触发垃圾收集。默认值为68%。仅在使用CMS收集器时生效</td>
+</tr>
+<tr>
+<td>UseCMSCompactAtFullCollection</td>
+<td>设置CMS收集器在完成垃圾收集后是否要进行一次内存碎片整理。仅在使用CMS收集器时生效，此参数从JDK9开始废弃</td>
+</tr>
+<tr>
+<td>CMSFullGCsBeforeCompaction</td>
+<td>设置CMS收集器在完成垃圾收集后再启动一次内存碎片整理。仅在使用CMS收集器时生效，此参数从JDK9开始废弃</td>
+</tr>
+<tr>
+<td>UseG1GC</td>
+<td>使用G1收集器，这个是JDK9后的Server模式默认值</td>
+</tr>
+<tr>
+<td>G1HeapRegionsize=n</td>
+<td>设置Region的大小，并非最终值</td>
+</tr>
+<tr>
+<td>MaxGCPauseMillis</td>
+<td>设置G1收集过程目标时间，默认值是200ms，不是硬性条件</td>
+</tr>
+<tr>
+<td>G1NewSizePercent</td>
+<td>新生代最小值，默认是5%</td>
+</tr>
+<tr>
+<td>G1MaxNewSizePercent</td>
+<td>新生代最大值，默认值是60%</td>
+</tr>
+<tr>
+<td>ParallelGCThreads</td>
+<td>用户线程冻结期间并行执行的收集器线程数</td>
+</tr>
+<tr>
+<td>ConcGCThreads=n</td>
+<td>并发标记，并发整理的执行线程数，对不同的收集器，根据其能够并发的阶段，有不同的含义</td>
+</tr>
+<tr>
+<td>InitiatingHeapOccupancyPercent</td>
+<td>设置触发标记周期的Java堆占用率阈值。默认值是45%。这里的java堆占比指的是non_young_capacity_bytes，包括old+humongous</td>
+</tr>
+<tr>
+<td>UseShenandoahGC</td>
+<td>使用shenandoah收集器。这个选项在OracleJDK中不被支持，只能在OpenJDK 12或者某些支持Shenandoah的Backport发行版使用。目前仍然要配合 -XX:+UnlockExperimentalVMOptions使用</td>
+</tr>
+<tr>
+<td>ShenandoahGCHeuristics</td>
+<td>Shenandoah何时启动一次GC过程，其可选值有adaptive、static、compact、passive、aggressive</td>
+</tr>
+<tr>
+<td>UseZGC</td>
+<td>使用ZGC收集器，目前仍然要配合-XX:+UnlockExperimentalVMOptios使用</td>
+</tr>
+<tr>
+<td>UseNUMA</td>
+<td>启用NUMA内存分配支持，目前只有Parallel和ZGC支持，以后G收集器可能也会支持该选项</td>
+</tr>
+</tbody></table>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E6%AD%BB%E4%BA%A1%E5%88%A4%E5%AE%9A"><span class="toc-number">1.</span> <span class="toc-text">对象死亡判定</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E7%AE%97%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">引用计数算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90%E7%AE%97%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">可达性分析算法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">对象引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="toc-number">3.</span> <span class="toc-text">元数据区垃圾回收</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">垃圾回收算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-Garbage-Collector"><span class="toc-number">5.</span> <span class="toc-text">垃圾回收器(Garbage Collector)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E5%8F%82%E6%95%B0%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">垃圾回收器参数总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&text=JVM-4-垃圾回收"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&title=JVM-4-垃圾回收"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&is_video=false&description=JVM-4-垃圾回收"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=JVM-4-垃圾回收&body=Check out this article: https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&title=JVM-4-垃圾回收"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&title=JVM-4-垃圾回收"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&title=JVM-4-垃圾回收"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&title=JVM-4-垃圾回收"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&name=JVM-4-垃圾回收&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/07/21/JVM-4-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/&t=JVM-4-垃圾回收"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

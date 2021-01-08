@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="3、类型Haxe编译器采用丰富的类型系统，该系统有助于在编译时检测程序中与类型相关的错误。 在某些语言中，这种额外的安全性是有代价的，因为程序员被迫将类型显式分配给语法构造： 1MySpecialButton* myButton &#x3D; new MySpecialButton(); &#x2F;&#x2F; C++   1Person person &#x3D; new Person();&#x2F;&#x2F;java  Haxe中不需要显式类型注">
+<meta property="og:type" content="article">
+<meta property="og:title" content="haxe学习-三-类型">
+<meta property="og:url" content="https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="3、类型Haxe编译器采用丰富的类型系统，该系统有助于在编译时检测程序中与类型相关的错误。 在某些语言中，这种额外的安全性是有代价的，因为程序员被迫将类型显式分配给语法构造： 1MySpecialButton* myButton &#x3D; new MySpecialButton(); &#x2F;&#x2F; C++   1Person person &#x3D; new Person();&#x2F;&#x2F;java  Haxe中不需要显式类型注">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-04T05:59:29.000Z">
+<meta property="article:modified_time" content="2020-06-04T06:52:15.000Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="haxe">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>haxe学习-三-类型</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../../03/%E5%8D%95%E9%93%BE%E8%A1%A8/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&text=haxe学习-三-类型"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&title=haxe学习-三-类型"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&is_video=false&description=haxe学习-三-类型"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=haxe学习-三-类型&body=Check out this article: https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&title=haxe学习-三-类型"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&title=haxe学习-三-类型"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&title=haxe学习-三-类型"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&title=haxe学习-三-类型"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&name=haxe学习-三-类型&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&t=haxe学习-三-类型"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">3、类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1%E3%80%81%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">3.1、基本类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-1%E3%80%81%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">3.1.1、数值类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-2%E3%80%81%E6%BA%A2%E5%87%BA"><span class="toc-number">1.1.2.</span> <span class="toc-text">3.1.2、溢出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-3%E3%80%81%E5%B8%83%E5%B0%94"><span class="toc-number">1.1.3.</span> <span class="toc-text">3.1.3、布尔</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-4%E3%80%81void"><span class="toc-number">1.1.4.</span> <span class="toc-text">3.1.4、void</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-4%E3%80%81Null"><span class="toc-number">1.1.5.</span> <span class="toc-text">3.1.4、Null</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2%E3%80%81%E7%B1%BB%E7%9A%84%E5%AE%9E%E4%BE%8B"><span class="toc-number">1.2.</span> <span class="toc-text">3.2、类的实例</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        haxe学习-三-类型
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-06-04T05:59:29.000Z" itemprop="datePublished">2020-06-04</time>
+        
+        (Updated: <time datetime="2020-06-04T06:52:15.000Z" itemprop="dateModified">2020-06-04</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/haxe/">haxe</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/haxe/" rel="tag">haxe</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="3、类型"><a href="#3、类型" class="headerlink" title="3、类型"></a>3、类型</h2><p>Haxe编译器采用丰富的类型系统，该系统有助于在编译时检测程序中与类型相关的错误。</p>
+<p>在某些语言中，这种额外的安全性是有代价的，因为程序员被迫将类型显式分配给语法构造：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MySpecialButton* myButton = <span class="keyword">new</span> MySpecialButton(); <span class="comment">// C++ </span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Person person = <span class="keyword">new</span> Person();<span class="comment">//java</span></span><br></pre></td></tr></table></figure>
+
+<p>Haxe中不需要显式类型注释，因为编译器可以<strong>推断</strong>类型：</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myButton = <span class="keyword">new</span> <span class="type">MySpecialButton</span>(); <span class="comment">// Haxe  </span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>类实例</strong>：给定类或接口的对象</li>
+<li><strong>枚举实例</strong>：Haxe枚举的值</li>
+<li><strong>结构</strong>：匿名结构，即命名字段的集合</li>
+<li><strong>函数</strong>：具有多个参数和一个返回的复合类型</li>
+<li><strong>动态</strong>：通配符类型，与任何其他类型兼容</li>
+<li><strong>摘要</strong>：编译时类型，在运行时由其他类型表示</li>
+<li><strong>Monomorph</strong>：未知类型，以后可能会变成其他类型</li>
+</ul>
+<p>在接下来的章节中，我们将描述每个类型组以及它们之间的相互关系。</p>
+<h3 id="3-1、基本类型"><a href="#3-1、基本类型" class="headerlink" title="3.1、基本类型"></a>3.1、基本类型</h3><p><strong>基本类型</strong>是<code>Bool</code>，<code>Float</code>和<code>Int</code>。它们可以在语法中通过诸如</p>
+<ul>
+<li><code>true</code>而<code>false</code>对于<code>Bool</code>，</li>
+<li><code>1</code>，<code>0</code>，<code>-1</code>和<code>0xFF0000</code>为<code>Int</code>和</li>
+<li><code>1.0</code>，<code>0.0</code>，<code>-1.0</code>，<code>1e10</code>的<code>Float</code>。</li>
+</ul>
+<p>基本类型不是Haxe中的<strong>类</strong>。而是将它们实现为<strong>抽象类型</strong>，并将其与编译器的内部运算符处理联系在一起，如以下各节所述。</p>
+<h4 id="3-1-1、数值类型"><a href="#3-1-1、数值类型" class="headerlink" title="3.1.1、数值类型"></a>3.1.1、数值类型</h4><ul>
+<li><code>Float</code>浮点：<em>表示双精度IEEE 64位浮点数</em>。</li>
+<li><code>Int</code>整型：<em>代表整数。</em></li>
+</ul>
+<p>这里要特别注意，是可以将<code>Int</code>分配给<code>Float</code>的，但是会损失精度</p>
+<h4 id="3-1-2、溢出"><a href="#3-1-2、溢出" class="headerlink" title="3.1.2、溢出"></a>3.1.2、溢出</h4><p>出于性能原因，Haxe编译器不会强制执行任何溢出行为。检查溢出的负担落在目标平台上。</p>
+<h4 id="3-1-3、布尔"><a href="#3-1-3、布尔" class="headerlink" title="3.1.3、布尔"></a>3.1.3、布尔</h4><p><code>Bool</code>布尔：表示只能为true或false中一种的值。</p>
+<h4 id="3-1-4、void"><a href="#3-1-4、void" class="headerlink" title="3.1.4、void"></a>3.1.4、<code>void</code></h4><p><code>void</code>：表示没有类型，通常用于修饰函数。</p>
+<p>在修饰函数的返回值，或者参数，表示没有返回值或没有参数，在写的hello world中就用到过，表示main()方法没有返回值。</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">main</span></span>():<span class="type">Void </span>&#123;</span><br><span class="line">    <span class="built_in">trace</span>(<span class="string">&quot;Hello World&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-1-4、Null"><a href="#3-1-4、Null" class="headerlink" title="3.1.4、Null"></a>3.1.4、Null</h4><p><code>null</code>:表示空的。</p>
+<p>在haxe中一个变量被定义为·<code>null</code>是有效的。</p>
+<p>基本类型有以下的默认值</p>
+<ul>
+<li><code>Int</code>：0</li>
+<li><code>Float</code>：0.0</li>
+<li><code>Bool</code>：false</li>
+</ul>
+<p>haxe不允许null分配给基本类型，为了实现给给基本类型分配null，我们可以将基本类型包装成 <code>Null&lt;T&gt;</code>:</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a:<span class="type">Int </span>= <span class="literal">null</span>; <span class="comment">//这是错的</span></span><br><span class="line"><span class="keyword">var</span> b:<span class="type">Null</span>&lt;<span class="keyword">Int</span>&gt; = <span class="literal">null</span>; <span class="comment">// allowed</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2、类的实例"><a href="#3-2、类的实例" class="headerlink" title="3.2、类的实例"></a>3.2、类的实例</h3><p>与许多面向对象的语言相似，类是Haxe中大多数程序的主要数据结构。每个Haxe类都有一个明确的名称，一个隐含的路径以及零个或多个类字段。在这里，我们将重点关注类的一般结构及其关系，同时将类字段的细节留给<a target="_blank" rel="noopener" href="https://haxe.org/manual/class-field.html">类字段</a>。</p>
+<p>3.2.1、构造器</p>
+<p>3.2.2、继承</p>
+<p>3.2.3、接口</p>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">3、类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1%E3%80%81%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">3.1、基本类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-1%E3%80%81%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">3.1.1、数值类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-2%E3%80%81%E6%BA%A2%E5%87%BA"><span class="toc-number">1.1.2.</span> <span class="toc-text">3.1.2、溢出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-3%E3%80%81%E5%B8%83%E5%B0%94"><span class="toc-number">1.1.3.</span> <span class="toc-text">3.1.3、布尔</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-4%E3%80%81void"><span class="toc-number">1.1.4.</span> <span class="toc-text">3.1.4、void</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-4%E3%80%81Null"><span class="toc-number">1.1.5.</span> <span class="toc-text">3.1.4、Null</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2%E3%80%81%E7%B1%BB%E7%9A%84%E5%AE%9E%E4%BE%8B"><span class="toc-number">1.2.</span> <span class="toc-text">3.2、类的实例</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&text=haxe学习-三-类型"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&title=haxe学习-三-类型"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&is_video=false&description=haxe学习-三-类型"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=haxe学习-三-类型&body=Check out this article: https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&title=haxe学习-三-类型"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&title=haxe学习-三-类型"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&title=haxe学习-三-类型"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&title=haxe学习-三-类型"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&name=haxe学习-三-类型&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/&t=haxe学习-三-类型"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

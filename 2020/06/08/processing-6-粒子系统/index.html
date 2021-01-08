@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="粒子系统实现效果1、单粒子  2、多粒子  3、多种类多粒子  4、受力多粒子  基本分析1、2、3、4是层层递进的，由单粒子到多粒子，到多种类的多粒子，到受外力作用的多粒子，2和4的区别在于4中粒子下落的速度越来越快，更符合现实情况 模型构建由前面的Mover类的学习，现在我们可以比较容易的构建粒子类Particle，分别从粒子类的属性和方法着手 同Mover，粒子也有，位置，速度，加速度，这应">
+<meta property="og:type" content="article">
+<meta property="og:title" content="processing-6-粒子系统">
+<meta property="og:url" content="https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="粒子系统实现效果1、单粒子  2、多粒子  3、多种类多粒子  4、受力多粒子  基本分析1、2、3、4是层层递进的，由单粒子到多粒子，到多种类的多粒子，到受外力作用的多粒子，2和4的区别在于4中粒子下落的速度越来越快，更符合现实情况 模型构建由前面的Mover类的学习，现在我们可以比较容易的构建粒子类Particle，分别从粒子类的属性和方法着手 同Mover，粒子也有，位置，速度，加速度，这应">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/SingleParticle.gif">
+<meta property="og:image" content="https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/multiParticle.gif">
+<meta property="og:image" content="https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/multiPiecesParticle.gif">
+<meta property="og:image" content="https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/multiPiecesParticleForces.gif">
+<meta property="article:published_time" content="2020-06-08T03:01:27.000Z">
+<meta property="article:modified_time" content="2020-06-08T06:15:24.000Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="processing">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/SingleParticle.gif">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>processing-6-粒子系统</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../../09/processing-%E8%BF%9B%E9%98%B6%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-1/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../../06/processing-5-%E6%8C%AF%E5%8A%A8/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&text=processing-6-粒子系统"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&title=processing-6-粒子系统"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&is_video=false&description=processing-6-粒子系统"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=processing-6-粒子系统&body=Check out this article: https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&title=processing-6-粒子系统"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&title=processing-6-粒子系统"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&title=processing-6-粒子系统"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&title=processing-6-粒子系统"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&name=processing-6-粒子系统&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&t=processing-6-粒子系统"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">粒子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%95%88%E6%9E%9C"><span class="toc-number">1.1.</span> <span class="toc-text">实现效果</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E5%8D%95%E7%B2%92%E5%AD%90"><span class="toc-number">1.1.1.</span> <span class="toc-text">1、单粒子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%A4%9A%E7%B2%92%E5%AD%90"><span class="toc-number">1.1.2.</span> <span class="toc-text">2、多粒子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E5%A4%9A%E7%A7%8D%E7%B1%BB%E5%A4%9A%E7%B2%92%E5%AD%90"><span class="toc-number">1.1.3.</span> <span class="toc-text">3、多种类多粒子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E5%8F%97%E5%8A%9B%E5%A4%9A%E7%B2%92%E5%AD%90"><span class="toc-number">1.1.4.</span> <span class="toc-text">4、受力多粒子</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%88%86%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">基本分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA"><span class="toc-number">1.3.</span> <span class="toc-text">模型构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.4.</span> <span class="toc-text">代码实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E7%BB%93%E6%9E%9C"><span class="toc-number">1.5.</span> <span class="toc-text">验证结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text">学习总结</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        processing-6-粒子系统
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-06-08T03:01:27.000Z" itemprop="datePublished">2020-06-08</time>
+        
+        (Updated: <time datetime="2020-06-08T06:15:24.000Z" itemprop="dateModified">2020-06-08</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/processing%E8%BF%9B%E9%98%B6/">processing进阶</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/processing/" rel="tag">processing</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="粒子系统"><a href="#粒子系统" class="headerlink" title="粒子系统"></a>粒子系统</h2><h3 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h3><h4 id="1、单粒子"><a href="#1、单粒子" class="headerlink" title="1、单粒子"></a>1、单粒子</h4><img src="SingleParticle.gif" style="zoom:50%;" />
+
+<h4 id="2、多粒子"><a href="#2、多粒子" class="headerlink" title="2、多粒子"></a>2、多粒子</h4><img src="multiParticle.gif" alt="multiParticle" style="zoom:50%;" />
+
+<h4 id="3、多种类多粒子"><a href="#3、多种类多粒子" class="headerlink" title="3、多种类多粒子"></a>3、多种类多粒子</h4><img src="multiPiecesParticle.gif" alt="multiPiecesParticle" style="zoom:50%;" />
+
+<h4 id="4、受力多粒子"><a href="#4、受力多粒子" class="headerlink" title="4、受力多粒子"></a>4、受力多粒子</h4><img src="multiPiecesParticleForces.gif" style="zoom:50%;" />
+
+<h3 id="基本分析"><a href="#基本分析" class="headerlink" title="基本分析"></a>基本分析</h3><p>1、2、3、4是层层递进的，由单粒子到多粒子，到多种类的多粒子，到受外力作用的多粒子，2和4的区别在于4中粒子下落的速度越来越快，更符合现实情况</p>
+<h3 id="模型构建"><a href="#模型构建" class="headerlink" title="模型构建"></a>模型构建</h3><p>由前面的Mover类的学习，现在我们可以比较容易的构建粒子类Particle，分别从粒子类的属性和方法着手</p>
+<p>同Mover，粒子也有，位置，速度，加速度，这应该算是运动物体的基本属性，不同的是这里的粒子会消失，也就是说还有一个生命周期属性，然后再就是基本的绘制，初始化，生命结束的判断方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Particle</span> </span>&#123;</span><br><span class="line">  PVector position;</span><br><span class="line">  PVector velocity;</span><br><span class="line">  PVector acceleration;</span><br><span class="line">  <span class="keyword">float</span> lifespan;<span class="comment">//多加的生命周期</span></span><br><span class="line"></span><br><span class="line">  Particle(PVector l) &#123;</span><br><span class="line">    acceleration = <span class="keyword">new</span> PVector(<span class="number">0</span>, <span class="number">0.05</span>);</span><br><span class="line">    velocity = <span class="keyword">new</span> PVector(random(-<span class="number">1</span>, <span class="number">1</span>), random(-<span class="number">1</span>, <span class="number">0</span>));<span class="comment">//左右随机移动位置</span></span><br><span class="line">    position = l.get();</span><br><span class="line">    lifespan = <span class="number">255.0</span>;<span class="comment">//这里设置为255是有用意的，因为后面粒子的颜色会随时间而褪色，可以理解为人老头发变白，然后变没</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    update();</span><br><span class="line">    display();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Method to update position</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    velocity.add(acceleration);</span><br><span class="line">    position.add(velocity);</span><br><span class="line">    lifespan -= <span class="number">2.0</span>;<span class="comment">//在更新时生命会减少2个单位时间，如果这里不进行运算，整个生命周期就没有意义</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Method to display</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">display</span><span class="params">()</span> </span>&#123;<span class="comment">//粒子图形的绘制</span></span><br><span class="line">    stroke(<span class="number">0</span>, lifespan);</span><br><span class="line">    strokeWeight(<span class="number">2</span>);</span><br><span class="line">    fill(<span class="number">127</span>, lifespan);<span class="comment">//粒子颜色慢慢褪色，然后最后变成白色</span></span><br><span class="line">    ellipse(position.x, position.y, <span class="number">12</span>, <span class="number">12</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Is the particle still useful?</span></span><br><span class="line">  <span class="function"><span class="keyword">boolean</span> <span class="title">isDead</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (lifespan &lt; <span class="number">0.0</span>) &#123;<span class="comment">//寿命用完</span></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是单粒子模型的设计</p>
+<p>关于多粒子，就和前面学习的多物体一样，我们用一个ArrayList几个来装粒子就可以了</p>
+<p>关键是多种类的粒子的设计，我们已经有个一个基本粒子的模型，我们有必要再重新把代码复制一遍再写一个新的粒子模型吗，而且只是改变里面粒子的形状吗？完全没必要，因为processing的是java写的，作为面向对象语言的代表java支持继承，我们完全可以使用继承，例如我们还要创建一个正方形的粒子RectParticle,我们可以直接这么写</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RectParticle</span> <span class="keyword">extends</span> <span class="title">Particle</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// We could add variables for only Confetti here if we so</span></span><br><span class="line"></span><br><span class="line">  Confetti(PVector l) &#123;<span class="comment">//构造器都是用多个父类的</span></span><br><span class="line">    <span class="keyword">super</span>(l);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Inherits update() from parent</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Override the display method</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">display</span><span class="params">()</span> </span>&#123;<span class="comment">//这里只是重写了Particle的display()方法，其他的行代码都没有写</span></span><br><span class="line">    rectMode(CENTER);</span><br><span class="line">    fill(<span class="number">127</span>,lifespan);</span><br><span class="line">    stroke(<span class="number">0</span>,lifespan);</span><br><span class="line">    strokeWeight(<span class="number">2</span>);</span><br><span class="line">    pushMatrix();</span><br><span class="line">    translate(position.x,position.y);</span><br><span class="line">    <span class="keyword">float</span> theta = map(position.x,<span class="number">0</span>,width,<span class="number">0</span>,TWO_PI*<span class="number">2</span>);</span><br><span class="line">    rotate(theta);</span><br><span class="line">    rect(<span class="number">0</span>,<span class="number">0</span>,<span class="number">12</span>,<span class="number">12</span>);</span><br><span class="line">    popMatrix();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>相较于上面的Particle,我们下面的RectParticle只用了10几行代码就写完了</p>
+<p>粒子的受力，和物体的受力基本一致，我们只需要给粒子添加一个质量的属性，现在我们虽然可以创建多种粒子，但是如果粒子种类变多，例如现在有10种粒子，而且每种粒子都会受到重力，这个好办到，给Particle类添加一个applyForce()方法，嗯，问题解决了。这个时候我们可以记住这些粒子的名字，但是当粒子种类有100种(这里的100只是为了形容很多)的时候，例如一个生态系统种有成百上千的物种，我们已经很难一个一个的数清楚每个物种的名字了，例如地球这样一个生态系统，我们不查阅资料不可能说出所有的物种的名称，还有每个种类的物种都有自己的特性，有些情况，我们已经不能仅仅给Particle添加方法解决了，因为给Particle添加方法和属性会影响所有粒子，还有这些粒子所派生出来的新的粒子，这种影响会产生一个类似蝴蝶效应 的现象，在代码里，就是更改了父类及其所有子类以及继承这些子类的类，这种维护代码的成本是不可想象的，特别是当工程到达一定规模以后，类之间的关系复杂难以一下子理清楚，开发人员换了一批又一批以后。为了减少这种后期维护的成本，我们抽象出一个粒子系统，然后把所有的粒子都放在这个粒子系统中。如果所有粒子都会受到重力作用，我们就给一个作用力给这个系统，再我又突然给这个系统一个水平推力，这个系统中的粒子都会受到这个推力，我们不必再关心系统力到底有多少种粒子，现在要做的就是维护好这个系统就够了。我们的粒子系统可以这么构建，其本质是一个集合容器，用来增删改查粒子的，以及一些其他操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ParticleSystem</span> </span>&#123;</span><br><span class="line">  ArrayList&lt;Particle&gt; particles;<span class="comment">//一个包含粒子的集合，所有继承自Particle的粒子都能放在整个集合中</span></span><br><span class="line">  PVector origin;<span class="comment">//粒子系统的位置</span></span><br><span class="line"></span><br><span class="line">  ParticleSystem(PVector position) &#123;</span><br><span class="line">    origin = position.get();</span><br><span class="line">    particles = <span class="keyword">new</span> ArrayList&lt;Particle&gt;();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">addParticle</span><span class="params">()</span> </span>&#123;<span class="comment">//添加粒子</span></span><br><span class="line">    particles.add(<span class="keyword">new</span> Particle(origin));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// A function to apply a force to all Particles</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">applyForce</span><span class="params">(PVector f)</span> </span>&#123;<span class="comment">//添加受力</span></span><br><span class="line">    <span class="keyword">for</span> (Particle p: particles) &#123;</span><br><span class="line">      p.applyForce(f);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = particles.size()-<span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">      Particle p = particles.get(i);</span><br><span class="line">      p.run();</span><br><span class="line">      <span class="keyword">if</span> (p.isDead()) &#123;</span><br><span class="line">        particles.remove(i);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>对于单个或者多种粒子在主类中我们是这样写的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Particle p;</span><br><span class="line"><span class="comment">//ArrayList&lt;Particle&gt; particles;</span></span><br><span class="line"><span class="comment">//&lt;? extends Particle&gt;这种形式的泛型</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  size(<span class="number">640</span>,<span class="number">360</span>);</span><br><span class="line">  p = <span class="keyword">new</span> Particle(<span class="keyword">new</span> PVector(width/<span class="number">2</span>,<span class="number">20</span>));<span class="comment">//单个粒子</span></span><br><span class="line">  <span class="comment">//particles = new ArrayList&lt;Particle&gt;();//多粒子</span></span><br><span class="line">  background(<span class="number">255</span>);</span><br><span class="line">  smooth();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//单粒子</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  background(<span class="number">255</span>);</span><br><span class="line">  p.run();</span><br><span class="line">  <span class="keyword">if</span> (p.isDead()) &#123;<span class="comment">//这里如果有粒子挂了，我们重新会绘制新的粒子</span></span><br><span class="line">    p = <span class="keyword">new</span> Particle(<span class="keyword">new</span> PVector(width/<span class="number">2</span>,<span class="number">20</span>));<span class="comment">//单粒子是这样的</span></span><br><span class="line">  &#125;</span><br><span class="line">      </span><br><span class="line"> <span class="comment">/*//多粒子主要就是维护整个particles集合，粒子死亡就从结合删除，新生就加入集合，然后遍历集合进行绘制粒子</span></span><br><span class="line"><span class="comment"> void draw() &#123;</span></span><br><span class="line"><span class="comment">  background(255);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">  particles.add(new Particle(new PVector(width/2, 50)));</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">  // Looping through backwards to delete</span></span><br><span class="line"><span class="comment">  for (int i = particles.size()-1; i &gt;= 0; i--) &#123;</span></span><br><span class="line"><span class="comment">    Particle p = particles.get(i);</span></span><br><span class="line"><span class="comment">    p.run();</span></span><br><span class="line"><span class="comment">    if (p.isDead()) &#123;</span></span><br><span class="line"><span class="comment">      particles.remove(i);</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">  &#125;</span></span><br><span class="line"><span class="comment">&#125;*/</span></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于粒子系统我们的代码更简单，逻辑关系更清楚</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">ParticleSystem ps;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  size(<span class="number">640</span>,<span class="number">360</span>);</span><br><span class="line">  ps = <span class="keyword">new</span> ParticleSystem(<span class="keyword">new</span> PVector(width/<span class="number">2</span>,<span class="number">50</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  background(<span class="number">255</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Apply gravity force to all Particles</span></span><br><span class="line">  PVector gravity = <span class="keyword">new</span> PVector(<span class="number">0</span>,<span class="number">0.1</span>);</span><br><span class="line">  ps.applyForce(gravity);<span class="comment">//给粒子系统添加重力</span></span><br><span class="line">  </span><br><span class="line">  ps.addParticle();<span class="comment">//添加新的粒子</span></span><br><span class="line">  ps.run();<span class="comment">//对粒子系统进行绘画更新</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="验证结果"><a href="#验证结果" class="headerlink" title="验证结果"></a>验证结果</h3><p>略了</p>
+<h3 id="学习总结"><a href="#学习总结" class="headerlink" title="学习总结"></a>学习总结</h3><p>我们用对面向对象的思想一步一步对粒子进行抽象，封装，然后再抽象，最后将粒子抽象成粒子系统，由原来对单个粒子的操作，最终变成对粒子系统的操作，随着项目规模的扩大，我们可以利用这种思想创建更多的系统。使代码更加简洁，逻辑更加清晰。</p>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">粒子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%95%88%E6%9E%9C"><span class="toc-number">1.1.</span> <span class="toc-text">实现效果</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E5%8D%95%E7%B2%92%E5%AD%90"><span class="toc-number">1.1.1.</span> <span class="toc-text">1、单粒子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%A4%9A%E7%B2%92%E5%AD%90"><span class="toc-number">1.1.2.</span> <span class="toc-text">2、多粒子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E5%A4%9A%E7%A7%8D%E7%B1%BB%E5%A4%9A%E7%B2%92%E5%AD%90"><span class="toc-number">1.1.3.</span> <span class="toc-text">3、多种类多粒子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E5%8F%97%E5%8A%9B%E5%A4%9A%E7%B2%92%E5%AD%90"><span class="toc-number">1.1.4.</span> <span class="toc-text">4、受力多粒子</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%88%86%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">基本分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA"><span class="toc-number">1.3.</span> <span class="toc-text">模型构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.4.</span> <span class="toc-text">代码实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E7%BB%93%E6%9E%9C"><span class="toc-number">1.5.</span> <span class="toc-text">验证结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93"><span class="toc-number">1.6.</span> <span class="toc-text">学习总结</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&text=processing-6-粒子系统"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&title=processing-6-粒子系统"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&is_video=false&description=processing-6-粒子系统"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=processing-6-粒子系统&body=Check out this article: https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&title=processing-6-粒子系统"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&title=processing-6-粒子系统"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&title=processing-6-粒子系统"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&title=processing-6-粒子系统"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&name=processing-6-粒子系统&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/06/08/processing-6-%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F/&t=processing-6-粒子系统"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="跟踪Spring MVC的请求Spring MVC请求处理流程图  搭建Spring MVC配置DispatcherServlet传统方式DispatcherServlet是配置在web.xml中的 Spring 3.1之后拓展AbstractAnnotationConfigDispatcherServletInitializer 123456789101112131415161718192021">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring-3-构建Spring Web应用程序">
+<meta property="og:url" content="https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="跟踪Spring MVC的请求Spring MVC请求处理流程图  搭建Spring MVC配置DispatcherServlet传统方式DispatcherServlet是配置在web.xml中的 Spring 3.1之后拓展AbstractAnnotationConfigDispatcherServletInitializer 123456789101112131415161718192021">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/image-20200715220132597.png">
+<meta property="article:published_time" content="2020-07-15T13:51:26.000Z">
+<meta property="article:modified_time" content="2020-07-16T16:54:36.000Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/image-20200715220132597.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Spring-3-构建Spring Web应用程序</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../../17/Spring-4-%E6%B8%B2%E6%9F%93Web%E8%A7%86%E5%9B%BE/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../../14/Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&text=Spring-3-构建Spring Web应用程序"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&title=Spring-3-构建Spring Web应用程序"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&is_video=false&description=Spring-3-构建Spring Web应用程序"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Spring-3-构建Spring Web应用程序&body=Check out this article: https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&title=Spring-3-构建Spring Web应用程序"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&title=Spring-3-构建Spring Web应用程序"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&title=Spring-3-构建Spring Web应用程序"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&title=Spring-3-构建Spring Web应用程序"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&name=Spring-3-构建Spring Web应用程序&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&t=Spring-3-构建Spring Web应用程序"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%9F%E8%B8%AASpring-MVC%E7%9A%84%E8%AF%B7%E6%B1%82"><span class="toc-number">1.</span> <span class="toc-text">跟踪Spring MVC的请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%AD%E5%BB%BASpring-MVC"><span class="toc-number">2.</span> <span class="toc-text">搭建Spring MVC</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEDispatcherServlet"><span class="toc-number">2.1.</span> <span class="toc-text">配置DispatcherServlet</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9F%E6%96%B9%E5%BC%8F"><span class="toc-number">2.1.1.</span> <span class="toc-text">传统方式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Spring-3-1%E4%B9%8B%E5%90%8E"><span class="toc-number">2.1.2.</span> <span class="toc-text">Spring 3.1之后</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8Spring-MVC"><span class="toc-number">2.2.</span> <span class="toc-text">启动Spring MVC</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8XML%E9%85%8D%E7%BD%AE"><span class="toc-number">2.2.1.</span> <span class="toc-text">使用XML配置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AE-EnableWebMvc"><span class="toc-number">2.2.2.</span> <span class="toc-text">使用注解配置-@EnableWebMvc</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">3.</span> <span class="toc-text">编写控制器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E8%A7%86%E5%9B%BE%E5%90%8D"><span class="toc-number">3.1.</span> <span class="toc-text">返回视图名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9EList"><span class="toc-number">3.2.</span> <span class="toc-text">返回List</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E5%8F%97%E8%AF%B7%E6%B1%82%E7%9A%84%E8%BE%93%E5%85%A5"><span class="toc-number">4.</span> <span class="toc-text">接受请求的输入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E6%9F%A5%E8%AF%A2%E5%8F%82%E6%95%B0"><span class="toc-number">4.1.</span> <span class="toc-text">处理查询参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E8%B7%AF%E5%BE%84%E5%8F%82%E6%95%B0%E6%8E%A5%E5%8F%97%E8%BE%93%E5%85%A5"><span class="toc-number">4.2.</span> <span class="toc-text">通过路径参数接受输入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A5%E5%8F%97%E8%A1%A8%E5%8D%95%E5%8F%82%E6%95%B0"><span class="toc-number">4.3.</span> <span class="toc-text">接受表单参数</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E7%9A%84%E5%86%99%E6%B3%95"><span class="toc-number">4.3.1.</span> <span class="toc-text">页面的写法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E5%86%99%E6%B3%95"><span class="toc-number">4.3.2.</span> <span class="toc-text">控制器的写法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%A1%A8%E5%8D%95%E6%A0%A1%E9%AA%8C"><span class="toc-number">4.3.3.</span> <span class="toc-text">表单校验</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Form%E4%B8%AD%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B"><span class="toc-number">4.3.3.1.</span> <span class="toc-text">Form中用法示例</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%99%A8%E4%B8%AD%E7%9A%84%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B"><span class="toc-number">4.3.3.2.</span> <span class="toc-text">控制器中的用法示例</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Spring-3-构建Spring Web应用程序
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-07-15T13:51:26.000Z" itemprop="datePublished">2020-07-15</time>
+        
+        (Updated: <time datetime="2020-07-16T16:54:36.000Z" itemprop="dateModified">2020-07-17</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/java/">java</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/Spring/" rel="tag">Spring</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="跟踪Spring-MVC的请求"><a href="#跟踪Spring-MVC的请求" class="headerlink" title="跟踪Spring MVC的请求"></a>跟踪Spring MVC的请求</h3><p>Spring MVC请求处理流程图</p>
+<p><img src="/image-20200715220132597.png" alt="image-20200715220132597"></p>
+<h3 id="搭建Spring-MVC"><a href="#搭建Spring-MVC" class="headerlink" title="搭建Spring MVC"></a>搭建Spring MVC</h3><h4 id="配置DispatcherServlet"><a href="#配置DispatcherServlet" class="headerlink" title="配置DispatcherServlet"></a>配置DispatcherServlet</h4><h5 id="传统方式"><a href="#传统方式" class="headerlink" title="传统方式"></a>传统方式</h5><p>DispatcherServlet是配置在web.xml中的</p>
+<h5 id="Spring-3-1之后"><a href="#Spring-3-1之后" class="headerlink" title="Spring 3.1之后"></a>Spring 3.1之后</h5><p>拓展<code>AbstractAnnotationConfigDispatcherServletInitializer</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> spittr.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> spittr.web.WebConfig;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpitterWebInitializer</span> <span class="keyword">extends</span> <span class="title">AbstractAnnotationConfigDispatcherServletInitializer</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">protected</span> Class&lt;?&gt;[] getRootConfigClasses() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Class&lt;?&gt;[] &#123; RootConfig.class &#125;;//指定配置类</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">protected</span> Class&lt;?&gt;[] getServletConfigClasses() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Class&lt;?&gt;[] &#123; WebConfig.class &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">    </span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">protected</span> String[] getServletMappings() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> String[] &#123; <span class="string">&quot;/&quot;</span> &#125;;<span class="comment">//将DispatcherServlet映射到“/”</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这两种方式的配置DispatcherServlet的区别在于，后者只能部署在Servlet 3.0的服务器中，也就是Tomecat 7之后的版本</p>
+<h4 id="启动Spring-MVC"><a href="#启动Spring-MVC" class="headerlink" title="启动Spring MVC"></a>启动Spring MVC</h4><h5 id="使用XML配置"><a href="#使用XML配置" class="headerlink" title="使用XML配置"></a>使用XML配置</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mvc:annotation-driven</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mvc:annotation-driven</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="使用注解配置-EnableWebMvc"><a href="#使用注解配置-EnableWebMvc" class="headerlink" title="使用注解配置-@EnableWebMvc"></a>使用注解配置-@EnableWebMvc</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableWebMvc</span><span class="comment">//启动Spring MVC</span></span><br><span class="line"><span class="meta">@ComponentScan(&quot;spittr.web&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebConfig</span> <span class="keyword">extends</span> <span class="title">WebMvcConfigurerAdapter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> ViewResolver <span class="title">viewResolver</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    InternalResourceViewResolver resolver = <span class="keyword">new</span> InternalResourceViewResolver();</span><br><span class="line">    resolver.setPrefix(<span class="string">&quot;/WEB-INF/views/&quot;</span>);</span><br><span class="line">    resolver.setSuffix(<span class="string">&quot;.jsp&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> resolver;</span><br><span class="line">  &#125;<span class="comment">//配置JSP视图解析器</span></span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configureDefaultServletHandling</span><span class="params">(DefaultServletHandlerConfigurer configurer)</span> </span>&#123;</span><br><span class="line">    configurer.enable();</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addResourceHandlers</span><span class="params">(ResourceHandlerRegistry registry)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.addResourceHandlers(registry);</span><br><span class="line">  &#125;<span class="comment">//配置静态资源的处理</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="编写控制器"><a href="#编写控制器" class="headerlink" title="编写控制器"></a>编写控制器</h3><h4 id="返回视图名"><a href="#返回视图名" class="headerlink" title="返回视图名"></a>返回视图名</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HomeController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@RequestMapping(method = GET)</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">home</span><span class="params">(Model model)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;home&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">    </span><br><span class="line">  <span class="meta">@RequestMapping(value=&quot;/&#123;username&#125;&quot;, method=GET)</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">showSpitterProfile</span><span class="params">(<span class="meta">@PathVariable</span> String username, Model model)</span> </span>&#123;</span><br><span class="line">    Spitter spitter = spitterRepository.findByUsername(username);</span><br><span class="line">    model.addAttribute(spitter);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;profile&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="返回List"><a href="#返回List" class="headerlink" title="返回List"></a>返回List</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(method=RequestMedhod.GET)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Spittle&gt; <span class="title">spittles</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> spittleRepository.findSpittles(Long.MAX_VALUE, <span class="number">20</span>);   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="接受请求的输入"><a href="#接受请求的输入" class="headerlink" title="接受请求的输入"></a>接受请求的输入</h3><p>Spring MVC允许以多种方式将客户端中的数据传递到控制器</p>
+<ul>
+<li>查询参数</li>
+<li>表单参数</li>
+<li>路径参数</li>
+</ul>
+<h4 id="处理查询参数"><a href="#处理查询参数" class="headerlink" title="处理查询参数"></a>处理查询参数</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(method=RequestMethod.GET)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Spittle&gt; <span class="title">spittles</span><span class="params">(<span class="meta">@RequestParam(value=&quot;max&quot;, defaultValue=MAX_LONG_AS_STRING)</span> <span class="keyword">long</span> max,</span></span></span><br><span class="line"><span class="function"><span class="params">      <span class="meta">@RequestParam(value=&quot;count&quot;, defaultValue=&quot;20&quot;)</span> <span class="keyword">int</span> count)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> spittleRepository.findSpittles(max, count);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="通过路径参数接受输入"><a href="#通过路径参数接受输入" class="headerlink" title="通过路径参数接受输入"></a>通过路径参数接受输入</h4><p>处理“/spittles/12345”形式的请求</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value=&quot;/&#123;spittleId&#125;&quot;, method=RequestMethod.GET)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">spittle</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  <span class="meta">@PathVariable(&quot;spittleId&quot;)</span> <span class="keyword">long</span> spittleId, </span></span></span><br><span class="line"><span class="function"><span class="params">  Model model)</span> </span>&#123;</span><br><span class="line">model.addAttribute(spittleRepository.findOne(spittleId));</span><br><span class="line"><span class="keyword">return</span> <span class="string">&quot;spittle&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="接受表单参数"><a href="#接受表单参数" class="headerlink" title="接受表单参数"></a>接受表单参数</h4><h5 id="页面的写法"><a href="#页面的写法" class="headerlink" title="页面的写法"></a>页面的写法</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;h1&gt;Register&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">  &lt;form method=<span class="string">&quot;POST&quot;</span>&gt;</span><br><span class="line">    First Name: &lt;input type=<span class="string">&quot;text&quot;</span> name=<span class="string">&quot;firstName&quot;</span> /&gt;&lt;br/&gt;</span><br><span class="line">    Last Name: &lt;input type=<span class="string">&quot;text&quot;</span> name=<span class="string">&quot;lastName&quot;</span> /&gt;&lt;br/&gt;</span><br><span class="line">    Email: &lt;input type=<span class="string">&quot;email&quot;</span> name=<span class="string">&quot;email&quot;</span> /&gt;&lt;br/&gt;</span><br><span class="line">    Username: &lt;input type=<span class="string">&quot;text&quot;</span> name=<span class="string">&quot;username&quot;</span> /&gt;&lt;br/&gt;</span><br><span class="line">    Password: &lt;input type=<span class="string">&quot;password&quot;</span> name=<span class="string">&quot;password&quot;</span> /&gt;&lt;br/&gt;</span><br><span class="line">    &lt;input type=<span class="string">&quot;submit&quot;</span> value=<span class="string">&quot;Register&quot;</span> /&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这个表单没有action属性，这个表单提交时，他会提交到于展现时相同的URL路径上也就是提交到“/spitter/register”</p>
+<h5 id="控制器的写法"><a href="#控制器的写法" class="headerlink" title="控制器的写法"></a>控制器的写法</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value=&quot;/register&quot;, method=POST)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">processRegistration</span><span class="params">(<span class="meta">@Valid</span> Spitter spitter, </span></span></span><br><span class="line"><span class="function"><span class="params">  Errors errors)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (errors.hasErrors()) &#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="string">&quot;registerForm&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    spitterRepository.save(spitter);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;redirect:/spitter/&quot;</span> + spitter.getUsername();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="表单校验"><a href="#表单校验" class="headerlink" title="表单校验"></a>表单校验</h5><p>Spring提供了对Java检验API的支持，Java检验API定义了多个注解，所有的注解都位于javax.validation.constraints包中，注解如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">注解</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">@AssertFalse</td>
+<td align="center">所注解的元素必须是Boolean类型，并且值为false</td>
+</tr>
+<tr>
+<td align="center">@AssertTrue</td>
+<td align="center">所注解的元素必须是Boolean类型，并且值为true</td>
+</tr>
+<tr>
+<td align="center">@DecimalMax</td>
+<td align="center">所注解的元素必须是数字，并且它的值要小于或者等于给定的BigDecimalString值</td>
+</tr>
+<tr>
+<td align="center">@DecimalMin</td>
+<td align="center">所注解的元素必须是数字，并且它的值要大于或者等于给定的BigDecimalString值</td>
+</tr>
+<tr>
+<td align="center">@Digits</td>
+<td align="center">所注解的元素必须是数字，并且它的值必须有指定的位数</td>
+</tr>
+<tr>
+<td align="center">@Future</td>
+<td align="center">所注解的元素必须是一个将来的日期</td>
+</tr>
+<tr>
+<td align="center">@Past</td>
+<td align="center">所注解的元素必须是一个过去的日期</td>
+</tr>
+<tr>
+<td align="center">@Max</td>
+<td align="center">所注解的元素必须是数字，并且它的值要小于或者等于给定的值</td>
+</tr>
+<tr>
+<td align="center">@Min</td>
+<td align="center">所注解的元素必须是数字，并且它的值要大于或者等于给定的值</td>
+</tr>
+<tr>
+<td align="center">@NotNull</td>
+<td align="center">所注解元素必须不能为null</td>
+</tr>
+<tr>
+<td align="center">@Null</td>
+<td align="center">所注解的元素必须为null</td>
+</tr>
+<tr>
+<td align="center">@Pattern</td>
+<td align="center">所注解的元素的值必须匹配给定的正则表达式</td>
+</tr>
+<tr>
+<td align="center">@size</td>
+<td align="center">所注解的元素的值必须是String、集合或者数组，并且它的长度要符合给定的范围</td>
+</tr>
+</tbody></table>
+<h6 id="Form中用法示例"><a href="#Form中用法示例" class="headerlink" title="Form中用法示例"></a>Form中用法示例</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RegisterForm</span> </span>&#123;</span><br><span class="line">  <span class="meta">@NotNull</span></span><br><span class="line">  <span class="meta">@Size(min=1, max=20)</span></span><br><span class="line">  <span class="keyword">private</span> String firstName;</span><br><span class="line">  <span class="keyword">private</span> String lastName;</span><br><span class="line">  <span class="keyword">private</span> String username;</span><br><span class="line">  <span class="meta">@NotNull</span></span><br><span class="line">  <span class="meta">@Size(min=1, max=20)</span></span><br><span class="line">  <span class="keyword">private</span> String password;</span><br><span class="line">  <span class="keyword">private</span> String passwordConfirm;</span><br><span class="line">  <span class="meta">@Pattern(regexp = &quot;^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]&#123;2,6&#125;)$&quot;,message = &quot;请输入正确的邮箱&quot;)</span></span><br><span class="line">  <span class="keyword">private</span> String email;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="控制器中的用法示例"><a href="#控制器中的用法示例" class="headerlink" title="控制器中的用法示例"></a>控制器中的用法示例</h6><p>在要校验的Form前使用<code>@Valid</code>注解，具体查看上面的控制器写法</p>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%9F%E8%B8%AASpring-MVC%E7%9A%84%E8%AF%B7%E6%B1%82"><span class="toc-number">1.</span> <span class="toc-text">跟踪Spring MVC的请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%AD%E5%BB%BASpring-MVC"><span class="toc-number">2.</span> <span class="toc-text">搭建Spring MVC</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEDispatcherServlet"><span class="toc-number">2.1.</span> <span class="toc-text">配置DispatcherServlet</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9F%E6%96%B9%E5%BC%8F"><span class="toc-number">2.1.1.</span> <span class="toc-text">传统方式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Spring-3-1%E4%B9%8B%E5%90%8E"><span class="toc-number">2.1.2.</span> <span class="toc-text">Spring 3.1之后</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8Spring-MVC"><span class="toc-number">2.2.</span> <span class="toc-text">启动Spring MVC</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8XML%E9%85%8D%E7%BD%AE"><span class="toc-number">2.2.1.</span> <span class="toc-text">使用XML配置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AE-EnableWebMvc"><span class="toc-number">2.2.2.</span> <span class="toc-text">使用注解配置-@EnableWebMvc</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-number">3.</span> <span class="toc-text">编写控制器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E8%A7%86%E5%9B%BE%E5%90%8D"><span class="toc-number">3.1.</span> <span class="toc-text">返回视图名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%94%E5%9B%9EList"><span class="toc-number">3.2.</span> <span class="toc-text">返回List</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E5%8F%97%E8%AF%B7%E6%B1%82%E7%9A%84%E8%BE%93%E5%85%A5"><span class="toc-number">4.</span> <span class="toc-text">接受请求的输入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E6%9F%A5%E8%AF%A2%E5%8F%82%E6%95%B0"><span class="toc-number">4.1.</span> <span class="toc-text">处理查询参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E8%B7%AF%E5%BE%84%E5%8F%82%E6%95%B0%E6%8E%A5%E5%8F%97%E8%BE%93%E5%85%A5"><span class="toc-number">4.2.</span> <span class="toc-text">通过路径参数接受输入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A5%E5%8F%97%E8%A1%A8%E5%8D%95%E5%8F%82%E6%95%B0"><span class="toc-number">4.3.</span> <span class="toc-text">接受表单参数</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E7%9A%84%E5%86%99%E6%B3%95"><span class="toc-number">4.3.1.</span> <span class="toc-text">页面的写法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%99%A8%E7%9A%84%E5%86%99%E6%B3%95"><span class="toc-number">4.3.2.</span> <span class="toc-text">控制器的写法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%A1%A8%E5%8D%95%E6%A0%A1%E9%AA%8C"><span class="toc-number">4.3.3.</span> <span class="toc-text">表单校验</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Form%E4%B8%AD%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B"><span class="toc-number">4.3.3.1.</span> <span class="toc-text">Form中用法示例</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%99%A8%E4%B8%AD%E7%9A%84%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B"><span class="toc-number">4.3.3.2.</span> <span class="toc-text">控制器中的用法示例</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&text=Spring-3-构建Spring Web应用程序"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&title=Spring-3-构建Spring Web应用程序"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&is_video=false&description=Spring-3-构建Spring Web应用程序"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Spring-3-构建Spring Web应用程序&body=Check out this article: https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&title=Spring-3-构建Spring Web应用程序"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&title=Spring-3-构建Spring Web应用程序"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&title=Spring-3-构建Spring Web应用程序"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&title=Spring-3-构建Spring Web应用程序"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&name=Spring-3-构建Spring Web应用程序&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/07/15/Spring-3-%E6%9E%84%E5%BB%BASpring-Web%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/&t=Spring-3-构建Spring Web应用程序"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

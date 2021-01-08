@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="Maven安装配置 下载  百度搜索 maven   选第二个，第一个是maven仓库  进入maven官网，点击左边的download   页面拉到下面的Files,选择如图的maven免安装压缩包，点击下载即可  这里下载的是最新版的，如果要下载以前版本的，把页面继续下拉，可以看到Previous Releases，可以在下面下载以前版本的     浏览器输入https:&#x2F;&#x2F;maven.apa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Maven安装配置">
+<meta property="og:url" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="Maven安装配置 下载  百度搜索 maven   选第二个，第一个是maven仓库  进入maven官网，点击左边的download   页面拉到下面的Files,选择如图的maven免安装压缩包，点击下载即可  这里下载的是最新版的，如果要下载以前版本的，把页面继续下拉，可以看到Previous Releases，可以在下面下载以前版本的     浏览器输入https:&#x2F;&#x2F;maven.apa">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/image-20200527103622020.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/image-20200527104025110.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/image-20200527104330386.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/image-20200527104649276.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/image-20200527104840807.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/image-20200527105318613.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/image-20200527105512611.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/image-20200527105805224.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/image-20200527110038563.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/image-20200527110231030.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/image-20200527110646523.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/image-20200527110843090.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/image-20200527111537578.png">
+<meta property="article:published_time" content="2020-05-29T12:27:55.000Z">
+<meta property="article:modified_time" content="2020-05-29T12:56:18.000Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/image-20200527103622020.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Maven安装配置</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../%E6%96%B0%E5%AE%89%E8%A3%85IDEA%E7%9A%84%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&text=Maven安装配置"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&title=Maven安装配置"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&is_video=false&description=Maven安装配置"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Maven安装配置&body=Check out this article: https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&title=Maven安装配置"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&title=Maven安装配置"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&title=Maven安装配置"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&title=Maven安装配置"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&name=Maven安装配置&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&t=Maven安装配置"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">Maven安装配置</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Maven安装配置
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-05-29T12:27:55.000Z" itemprop="datePublished">2020-05-29</time>
+        
+        (Updated: <time datetime="2020-05-29T12:56:18.000Z" itemprop="dateModified">2020-05-29</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/java/">java</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/Java/" rel="tag">Java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="Maven安装配置"><a href="#Maven安装配置" class="headerlink" title="Maven安装配置"></a>Maven安装配置</h3><ul>
+<li><p>下载</p>
+<ul>
+<li><p>百度搜索 maven</p>
+<p><img src="image-20200527103622020.png" alt="image-20200527103622020"></p>
+<ol>
+<li><p>选第二个，第一个是maven仓库</p>
+</li>
+<li><p>进入maven官网，点击左边的download</p>
+<p><img src="image-20200527104025110.png" alt="image-20200527104025110"></p>
+</li>
+<li><p>页面拉到下面的Files,选择如图的maven免安装压缩包，点击下载即可</p>
+</li>
+<li><p>这里下载的是最新版的，如果要下载以前版本的，把页面继续下拉，可以看到Previous Releases，可以在下面下载以前版本的</p>
+<p><img src="image-20200527104330386.png" alt="image-20200527104330386"></p>
+</li>
+</ol>
+</li>
+<li><p>浏览器输入<code>https://maven.apache.org/</code>，下载步骤同上</p>
+</li>
+</ul>
+</li>
+<li><p>解压安装</p>
+<ul>
+<li><p><img src="image-20200527104649276.png" alt="image-20200527104649276"></p>
+</li>
+<li><p>预览文件，没有多余的下级目录</p>
+<p><img src="image-20200527104840807.png" alt="image-20200527104840807"></p>
+</li>
+<li><p>解压到一个想要安装的路径下,我选择的是<code>D:\Programs\apache-maven-3.6.3</code></p>
+</li>
+</ul>
+</li>
+<li><p>环境变量配置</p>
+<ul>
+<li><p>在系统或者用户环境变量中新建一个<code>MAVEN_HOME</code>的环境变量，变量值就是解压的MAVEN路径</p>
+<p><img src="image-20200527105318613.png" alt="image-20200527105318613"></p>
+<ul>
+<li>然后在Path里添加<code>%MAVEN_HOME%\bin</code></li>
+</ul>
+<p><img src="image-20200527105512611.png" alt="image-20200527105512611"></p>
+</li>
+<li><p>如图所示，环境变量配置完毕</p>
+</li>
+</ul>
+</li>
+<li><p>验证</p>
+<ul>
+<li><p>打开cmd ,输入<code>mvn -v</code></p>
+</li>
+<li><p>出现如下界面即为配置成功</p>
+<p><img src="image-20200527105805224.png" alt="image-20200527105805224"></p>
+</li>
+</ul>
+</li>
+<li><p>maven配置文件配置</p>
+<ul>
+<li><p>进入到maven安装目录</p>
+<p><img src="image-20200527110038563.png" alt="image-20200527110038563"></p>
+</li>
+<li><p>进入<code>conf</code>目录，即<code>D:\Programs\apache-maven-3.6.3\conf</code>,打开编辑setting.xml文件</p>
+<p><img src="image-20200527110231030.png" alt="image-20200527110231030"></p>
+<p>这个文件也就是我们在idea中配置maven覆盖的那个配置文件</p>
+</li>
+<li><p>添加如下几个配置项</p>
+<ul>
+<li><p>搜索<code>localRepository</code>，添加本地仓库路径</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">localRepository</span>&gt;</span>D:\repository<span class="tag">&lt;/<span class="name">localRepository</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="image-20200527110646523.png" alt="image-20200527110646523"></p>
+</li>
+<li><p>搜索<code>mirrors</code>,添加中央仓库下载地址镜像</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">id</span>&gt;</span>alimaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun maven<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span>        </span><br><span class="line"> <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="image-20200527110843090.png" alt="image-20200527110843090"></p>
+</li>
+<li><p>搜索 <code>profiles</code>,添加maven的jdk环境</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">profile</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>jdk-1.8<span class="tag">&lt;/<span class="name">id</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;<span class="name">activation</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">activeByDefault</span>&gt;</span>true<span class="tag">&lt;/<span class="name">activeByDefault</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">jdk</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">jdk</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;/<span class="name">activation</span>&gt;</span>    </span><br><span class="line">        <span class="tag">&lt;<span class="name">properties</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">maven.compiler.source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">maven.compiler.source</span>&gt;</span>    </span><br><span class="line">            <span class="tag">&lt;<span class="name">maven.compiler.target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">maven.compiler.target</span>&gt;</span>        <span class="tag">&lt;<span class="name">maven.compiler.compilerVersion</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">maven.compiler.compilerVersion</span>&gt;</span>   </span><br><span class="line">        <span class="tag">&lt;/<span class="name">properties</span>&gt;</span>    </span><br><span class="line"><span class="tag">&lt;/<span class="name">profile</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="image-20200527111537578.png" alt="image-20200527111537578"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">Maven安装配置</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&text=Maven安装配置"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&title=Maven安装配置"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&is_video=false&description=Maven安装配置"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Maven安装配置&body=Check out this article: https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&title=Maven安装配置"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&title=Maven安装配置"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&title=Maven安装配置"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&title=Maven安装配置"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&name=Maven安装配置&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/05/29/Maven%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/&t=Maven安装配置"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="这是承接基础7的综合运用第三步也就是part3 这一部分要实现的是点亮方块和取消，大体步骤如下  实现绘制方块(block) 实现在指定位置绘制方块(block) 实现在指定表格(grid)绘制方块(block) 实现再次点击block，block消失  经过前几章的学习，步骤1、2应该很简单，就是在鼠标的点击出绘制block，比价麻烦的是block要正好覆盖一个grid,而不是覆盖两个半个gri">
+<meta property="og:type" content="article">
+<meta property="og:title" content="processing基础8---综合运用-part3">
+<meta property="og:url" content="https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="这是承接基础7的综合运用第三步也就是part3 这一部分要实现的是点亮方块和取消，大体步骤如下  实现绘制方块(block) 实现在指定位置绘制方块(block) 实现在指定表格(grid)绘制方块(block) 实现再次点击block，block消失  经过前几章的学习，步骤1、2应该很简单，就是在鼠标的点击出绘制block，比价麻烦的是block要正好覆盖一个grid,而不是覆盖两个半个gri">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/image-20200531160236546.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/part3-1.gif">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/part3-2.gif">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/image-20200531171735616.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/part3-3.gif">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/part3-4.gif">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/part3-5.gif">
+<meta property="article:published_time" content="2020-05-31T07:45:24.000Z">
+<meta property="article:modified_time" content="2020-06-02T07:45:31.000Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="processing">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/image-20200531160236546.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>processing基础8---综合运用-part3</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part4/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&text=processing基础8---综合运用-part3"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&title=processing基础8---综合运用-part3"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&is_video=false&description=processing基础8---综合运用-part3"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=processing基础8---综合运用-part3&body=Check out this article: https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&title=processing基础8---综合运用-part3"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&title=processing基础8---综合运用-part3"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&title=processing基础8---综合运用-part3"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&title=processing基础8---综合运用-part3"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&name=processing基础8---综合运用-part3&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&t=processing基础8---综合运用-part3"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        processing基础8---综合运用-part3
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-05-31T07:45:24.000Z" itemprop="datePublished">2020-05-31</time>
+        
+        (Updated: <time datetime="2020-06-02T07:45:31.000Z" itemprop="dateModified">2020-06-02</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/java/">java</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/processing/" rel="tag">processing</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>这是承接基础7的综合运用第三步也就是part3</p>
+<p>这一部分要实现的是点亮方块和取消，大体步骤如下</p>
+<ol>
+<li>实现绘制方块(block)</li>
+<li>实现在指定位置绘制方块(block)</li>
+<li>实现在指定表格(grid)绘制方块(block)</li>
+<li>实现再次点击block，block消失</li>
+</ol>
+<p>经过前几章的学习，步骤1、2应该很简单，就是在鼠标的点击出绘制block，比价麻烦的是block要正好覆盖一个grid,而不是覆盖两个半个grid，我把问题的解决着重放在后面两步</p>
+<p>由前面的学习，我们知道，绘制图片，其实需要的只是图片左上那个点的起始坐标，于是为了简化问题，我把block抽象成一个对象block,</p>
+<p>属性就只有x,y坐标，x,y都为整数，因为grid每个顶点的坐标都是整数，不存在小数，block.java代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> piano;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Block</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> x;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> y;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> the x</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getX</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> the y</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getY</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> y;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> x the x to set</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setX</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.x = x;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> y the y to set</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setY</span><span class="params">(<span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.y = y;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>项目结构如下</p>
+<p><img src="image-20200531160236546.png" alt="image-20200531160236546"></p>
+<p>错误演示1如下：</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 绘制block</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> drawBlock()&#123;</span><br><span class="line">   <span class="built_in">image</span>(block, <span class="built_in">mouseX</span>, <span class="built_in">mouseY</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="part3-1.gif" alt="part3-1"></p>
+<p>我们直接将鼠标的坐标赋给block图片</p>
+<p>错误演示2，如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 绘制block</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">drawBlock</span><span class="params">()</span></span>&#123;</span><br><span class="line">      image(block, blockPosition.getX(), blockPosition.getY());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//part 3 -1 首先我们要界定鼠标点击的区域，只有点击区域在gridl内点击才会出现block</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clickGrid</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(mouseX &gt; <span class="number">60</span> &amp;&amp; mouseX &lt; <span class="number">540</span> &amp;&amp; mouseY &gt; <span class="number">75</span> &amp;&amp; mouseY &lt; <span class="number">335</span>)&#123;<span class="comment">//点击在Grid区域内</span></span><br><span class="line">        blockPosition = <span class="keyword">new</span> Block();<span class="comment">//每点击一次就要创建一个新的Block</span></span><br><span class="line">        blockPosition.setX(mouseX);</span><br><span class="line">        blockPosition.setY(mouseY);</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这么写思路是正确的，但是效果并不对</p>
+<p><img src="part3-2.gif" alt="part3-2"></p>
+<p>最开始左上角有一个block，我们明明是每点一次就创建一个新的block,为什么只显示一个block的，无论我们点得有多快都只显示我们最新点击的那个地方的block，我们要达到的效果是每点一次，就创建一个block并绘制一个，并且所有的block都显示在屏幕上，还有我们现在写的代码，block并不是正好覆盖一个方格，这一点也要修改。</p>
+<p>问题我们一个一个来解决，解决问题应该从简单的开始，把所有复杂的问题都分解成若干个简单的问题，然后逐个击破。</p>
+<ol>
+<li><p>我们先画出一个block在覆盖方格</p>
+<ol>
+<li><p>问题的关键是计算通过鼠标的点击坐标计算出block的坐标</p>
+</li>
+<li><p>然后将block的坐标转换成grid每个方格的左上角的坐标</p>
+</li>
+<li><p>沿着这个思路，我们只需要找到鼠标落点最近的方格的左上顶点坐标就够了</p>
+</li>
+<li><p>grid的宽高是block宽高的整数倍，因此我们用鼠标落点坐标mouseX和mouseY对block的宽高整除，然后取整就可以得到mouseX，mouseY最近的方格的点的坐标</p>
+</li>
+<li><p>可以用如下的公式</p>
+<ol>
+<li><p>(int)((int)(mouseX - 60) / 15) * 15 + 60</p>
+<ol>
+<li><p>为什么是这样的我们以一个点为例，就可以推导出所有的了</p>
+</li>
+<li><p>首先打印出mouseX和mouseY</p>
+<p><img src="image-20200531171735616.png" alt="image-20200531171735616"></p>
+</li>
+<li><p>我们以这个点为例子，这个点的坐标是（85,207）,</p>
+</li>
+<li><p>上面减去的60是左边琴键的宽度(85-60)/15 = 1，1*15也就是刚好一个方格的宽度，由于这里对精度要求不高，这种取整近似计算足够了，下面的y坐标的计算也同理，就不赘述了</p>
+</li>
+</ol>
+</li>
+<li><p>(int)((int)(mouseY - 75) / 20) * 20 + 75</p>
+</li>
+</ol>
+</li>
+<li><p>block的坐标计算方法已经完成，修改后的代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clickGrid</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(mouseX &gt; <span class="number">60</span> &amp;&amp; mouseX &lt; <span class="number">540</span> &amp;&amp; mouseY &gt; <span class="number">75</span> &amp;&amp; mouseY &lt; <span class="number">335</span>)&#123;<span class="comment">//点击在Grid区域内</span></span><br><span class="line">        blockPosition = <span class="keyword">new</span> Block();<span class="comment">//每点击一次就要创建一个新的Block</span></span><br><span class="line">        <span class="comment">//blockPosition.setX(mouseX);</span></span><br><span class="line">        <span class="comment">//blockPosition.setY(mouseY);</span></span><br><span class="line">        <span class="comment">//System.out.println(mouseX+&quot;,&quot;+mouseY);</span></span><br><span class="line">        blockPosition.setX((<span class="keyword">int</span>)((<span class="keyword">int</span>)(mouseX - <span class="number">60</span>) / <span class="number">15</span>) * <span class="number">15</span> + <span class="number">60</span>);</span><br><span class="line">        blockPosition.setY((<span class="keyword">int</span>)((<span class="keyword">int</span>)(mouseY - <span class="number">75</span>) / <span class="number">20</span>) * <span class="number">20</span> + <span class="number">75</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>验证一下：已经达到了我们要的效果</p>
+<p><img src="part3-3.gif" alt="part3-3"></p>
+</li>
+</ol>
+</li>
+<li><p>画多个block</p>
+<ol>
+<li><p>我们只能画一个block是因为我们不了解processing的工作原理，于是我查询了很多资料和官方文档</p>
+</li>
+<li><p>知道了draw()方法里的绘画代码会无限循环地执行下去，这个在前面的动画章节也提到过，这个很重要的</p>
+</li>
+<li><p>然后说到动画大家都知道帧率，动画和ppt的区别就在这个地方，draw()里的代码，每一帧都会重新绘制，覆盖掉先前的数据，</p>
+</li>
+<li><p>也就是我们每次点击的都只绘制当前那一个点，我们要想绘制出所有点击的block，就必须把这个block保存起来，然后遍历这个保存的集合，于是每次绘制都会绘制出所有点击的block</p>
+</li>
+<li><p>试验一下，是不是这样的，定义一个<code>ArrayList&lt;Block&gt;</code>,然后每点击一次，就把新创建的Block添加到这个集合中，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">   ArrayList&lt;Block&gt; blocks </span><br><span class="line"><span class="comment">/* 绘制block</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">drawBlock</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="comment">//绘制一个block</span></span><br><span class="line">      <span class="comment">//image(block, blockPosition.getX(), blockPosition.getY());</span></span><br><span class="line">      <span class="comment">//遍历所有的集合</span></span><br><span class="line">      <span class="keyword">for</span> (Block blo : blocks) &#123;</span><br><span class="line">        image(block, blo.getX(), blo.getY());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//part 3 -1 首先我们要界定鼠标点击的区域，只有点击区域在gridl内点击才会出现block</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clickGrid</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(mouseX &gt; <span class="number">60</span> &amp;&amp; mouseX &lt; <span class="number">540</span> &amp;&amp; mouseY &gt; <span class="number">75</span> &amp;&amp; mouseY &lt; <span class="number">335</span>)&#123;<span class="comment">//点击在Grid区域内</span></span><br><span class="line">        blockPosition = <span class="keyword">new</span> Block();<span class="comment">//每点击一次就要创建一个新的Block</span></span><br><span class="line">        <span class="comment">//blockPosition.setX(mouseX);</span></span><br><span class="line">        <span class="comment">//blockPosition.setY(mouseY);</span></span><br><span class="line">        <span class="comment">//System.out.println(mouseX+&quot;,&quot;+mouseY);</span></span><br><span class="line">        <span class="comment">//计算block的坐标</span></span><br><span class="line">        blockPosition.setX((<span class="keyword">int</span>)((<span class="keyword">int</span>)(mouseX - <span class="number">60</span>) / <span class="number">15</span>) * <span class="number">15</span> + <span class="number">60</span>);</span><br><span class="line">        blockPosition.setY((<span class="keyword">int</span>)((<span class="keyword">int</span>)(mouseY - <span class="number">75</span>) / <span class="number">20</span>) * <span class="number">20</span> + <span class="number">75</span>);</span><br><span class="line">        blocks.add(blockPosition);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：达到了我们想要的效果</p>
+<p><img src="part3-4.gif" alt="part3-4"></p>
+</li>
+</ol>
+</li>
+<li><p>至此我们part3的4个目标已经完成3个了，再就是第4个目标是，再次点击已经点亮的block，清除block</p>
+<ol>
+<li>这一步一步下来，事实告诉我们维护Block集合的思路是没有问题的</li>
+<li>清除block，翻译给计算机就是在集合里就是删除点击的这个元素</li>
+<li>所以我们ArrayList刚好有一个remove()方法删除元素，事实就是这么巧合，仿佛一切都是设计好的，修改原有的代码，删除相同点击的block</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//part 3 -1 首先我们要界定鼠标点击的区域，只有点击区域在gridl内点击才会出现block</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clickGrid</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">if</span>(mouseX &gt; <span class="number">60</span> &amp;&amp; mouseX &lt; <span class="number">540</span> &amp;&amp; mouseY &gt; <span class="number">75</span> &amp;&amp; mouseY &lt; <span class="number">335</span>)&#123;<span class="comment">//点击在Grid区域内</span></span><br><span class="line">        blockPosition = <span class="keyword">new</span> Block();<span class="comment">//每点击一次就要创建一个新的Block</span></span><br><span class="line">        <span class="comment">//blockPosition.setX(mouseX);</span></span><br><span class="line">        <span class="comment">//blockPosition.setY(mouseY);</span></span><br><span class="line">        <span class="comment">//System.out.println(mouseX+&quot;,&quot;+mouseY);</span></span><br><span class="line">        <span class="comment">//计算block的坐标</span></span><br><span class="line">        blockPosition.setX((<span class="keyword">int</span>)((<span class="keyword">int</span>)(mouseX - <span class="number">60</span>) / <span class="number">15</span>) * <span class="number">15</span> + <span class="number">60</span>);</span><br><span class="line">        blockPosition.setY((<span class="keyword">int</span>)((<span class="keyword">int</span>)(mouseY - <span class="number">75</span>) / <span class="number">20</span>) * <span class="number">20</span> + <span class="number">75</span>);</span><br><span class="line">        <span class="comment">//blocks.add(blockPosition);这行代码改成下面的，这行要注释或者删掉</span></span><br><span class="line">        <span class="keyword">if</span>(blocks.contains(blockPosition))&#123;<span class="comment">//如果新点击的元素包含在原集合中</span></span><br><span class="line">          blocks.remove(blockPosition);<span class="comment">//已经存在就删除</span></span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">          blocks.add(blockPosition);<span class="comment">//不存在就添加进去</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//至此思路是完全对的，没有任何问题</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>验证一下：结果出人意料，并没有清除原来的block</p>
+<p><img src="part3-5.gif" alt="part3-5"></p>
+<p>为什么会这样这里作为思考题交给大家去思考</p>
+</li>
+</ol>
+<p>下一章<a href="https://blog.likanug.top/2020/05/31/processing基础8-综合运用-part4">processing基础8—综合运用-part4</a></p>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&text=processing基础8---综合运用-part3"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&title=processing基础8---综合运用-part3"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&is_video=false&description=processing基础8---综合运用-part3"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=processing基础8---综合运用-part3&body=Check out this article: https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&title=processing基础8---综合运用-part3"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&title=processing基础8---综合运用-part3"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&title=processing基础8---综合运用-part3"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&title=processing基础8---综合运用-part3"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&name=processing基础8---综合运用-part3&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/&t=processing基础8---综合运用-part3"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

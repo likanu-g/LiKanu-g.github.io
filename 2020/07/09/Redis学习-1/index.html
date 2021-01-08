@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="Redis安装Docker安装123docker pull redisdocker run --name myredis -d -p6379:6379 redisdocker exec -it myredis redis-cli  Linux下安装123456$ wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-3.0.7.tar.gz$ tar xzf r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis学习-1-基本数据类型">
+<meta property="og:url" content="https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="Redis安装Docker安装123docker pull redisdocker run --name myredis -d -p6379:6379 redisdocker exec -it myredis redis-cli  Linux下安装123456$ wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-3.0.7.tar.gz$ tar xzf r">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/image-20200724150015832.png">
+<meta property="og:image" content="https://blog.likanug.top/image-20200724201515361.png">
+<meta property="og:image" content="https://blog.likanug.top/image-20200724201335303.png">
+<meta property="og:image" content="https://blog.likanug.top/image-20200724201428313.png">
+<meta property="og:image" content="https://blog.likanug.top/image-20200724201735225.png">
+<meta property="og:image" content="https://blog.likanug.top/image-20200724201845231.png">
+<meta property="og:image" content="https://blog.likanug.top/image-20200724202039649.png">
+<meta property="og:image" content="https://blog.likanug.top/image-20200724202810893.png">
+<meta property="article:published_time" content="2020-07-09T05:18:22.000Z">
+<meta property="article:modified_time" content="2020-07-25T14:54:55.000Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/image-20200724150015832.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Redis学习-1-基本数据类型</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../../11/java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../../08/Netty%E5%9F%BA%E7%A1%80-2--Java%E5%AD%97%E7%AC%A6%E6%B5%81%E5%92%8C%E5%AD%97%E8%8A%82%E6%B5%81/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&text=Redis学习-1-基本数据类型"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&title=Redis学习-1-基本数据类型"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&is_video=false&description=Redis学习-1-基本数据类型"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Redis学习-1-基本数据类型&body=Check out this article: https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&title=Redis学习-1-基本数据类型"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&title=Redis学习-1-基本数据类型"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&title=Redis学习-1-基本数据类型"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&title=Redis学习-1-基本数据类型"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&name=Redis学习-1-基本数据类型&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&t=Redis学习-1-基本数据类型"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">Redis安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">Docker安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E4%B8%8B%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">Linux下安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%90%AF%E5%8A%A8"><span class="toc-number">1.3.</span> <span class="toc-text">Redis服务器启动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E5%90%AF%E5%8A%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">运行启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%90%AF%E5%8A%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text">配置文件启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Redis%E7%9A%84%E5%9F%BA%E7%A1%80%E5%90%AF%E5%8A%A8%E5%8F%82%E6%95%B0"><span class="toc-number">1.3.3.</span> <span class="toc-text">Redis的基础启动参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">1.4.</span> <span class="toc-text">Redis命令行客户端</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E6%96%B9%E6%B3%95%E5%90%AF%E5%8A%A8"><span class="toc-number">1.4.1.</span> <span class="toc-text">交互式方法启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E5%BC%8F%E6%96%B9%E5%BC%8F%E5%90%AF%E5%8A%A8"><span class="toc-number">1.4.2.</span> <span class="toc-text">命令式方式启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%81%9C%E6%AD%A2Redis%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.4.3.</span> <span class="toc-text">停止Redis服务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%91%BD%E4%BB%A4"><span class="toc-number">1.5.</span> <span class="toc-text">全局命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89key"><span class="toc-number">1.5.1.</span> <span class="toc-text">查看所有key</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%AE%E6%80%BB%E6%95%B0"><span class="toc-number">1.5.2.</span> <span class="toc-text">键总数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E9%94%AE%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8"><span class="toc-number">1.5.3.</span> <span class="toc-text">检查键是否存在</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E9%94%AE"><span class="toc-number">1.5.4.</span> <span class="toc-text">删除键</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%AE%E8%BF%87%E6%9C%9F"><span class="toc-number">1.5.5.</span> <span class="toc-text">键过期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.5.6.</span> <span class="toc-text">键的数据类型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text">Redis基本数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E5%86%85%E9%83%A8%E7%BC%96%E7%A0%81"><span class="toc-number">2.1.</span> <span class="toc-text">数据结构和内部编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#string-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.2.</span> <span class="toc-text">string(字符串)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#string%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">2.2.1.</span> <span class="toc-text">string的基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#string%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">2.2.2.</span> <span class="toc-text">string的基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B0%E5%A2%9E-%E4%BF%AE%E6%94%B9"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">新增&#x2F;修改</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%87%AA%E5%A2%9E%E8%AE%A1%E6%95%B0"><span class="toc-number">2.2.2.2.</span> <span class="toc-text">自增计数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2"><span class="toc-number">2.2.2.3.</span> <span class="toc-text">查询</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%A0%E9%99%A4"><span class="toc-number">2.2.2.4.</span> <span class="toc-text">删除</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%87%E6%9C%9F"><span class="toc-number">2.2.2.5.</span> <span class="toc-text">过期</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#list-%E5%88%97%E8%A1%A8"><span class="toc-number">2.3.</span> <span class="toc-text">list(列表)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">2.3.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">2.3.2.</span> <span class="toc-text">基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%98%9F%E5%88%97%EF%BC%9A%E5%8F%B3%E8%BE%B9%E8%BF%9B%E5%B7%A6%E8%BE%B9%E5%87%BA"><span class="toc-number">2.3.2.1.</span> <span class="toc-text">队列：右边进左边出</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A0%88%EF%BC%9A%E5%8F%B3%E8%BE%B9%E8%BF%9B%E5%8F%B3%E8%BE%B9%E5%87%BA"><span class="toc-number">2.3.2.2.</span> <span class="toc-text">栈：右边进右边出</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%85%A2%E6%93%8D%E4%BD%9C"><span class="toc-number">2.3.2.3.</span> <span class="toc-text">慢操作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hash-%E5%93%88%E5%B8%8C"><span class="toc-number">2.4.</span> <span class="toc-text">hash(哈希)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-1"><span class="toc-number">2.4.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-1"><span class="toc-number">2.4.2.</span> <span class="toc-text">基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E5%85%83%E7%B4%A0%EF%BC%9A"><span class="toc-number">2.4.2.1.</span> <span class="toc-text">增加元素：</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8D%95%E4%B8%AA%E5%85%83%E7%B4%A0%E5%A2%9E%E5%8A%A0hset"><span class="toc-number">2.4.2.1.1.</span> <span class="toc-text">单个元素增加hset</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%89%B9%E9%87%8F%E5%A2%9E%E5%8A%A0%E5%85%83%E7%B4%A0hmset"><span class="toc-number">2.4.2.1.2.</span> <span class="toc-text">批量增加元素hmset</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E5%85%83%E7%B4%A0"><span class="toc-number">2.4.2.2.</span> <span class="toc-text">查询元素</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%80%9A%E8%BF%87key%E8%8E%B7%E5%8F%96value%EF%BC%9Ahget"><span class="toc-number">2.4.2.2.1.</span> <span class="toc-text">通过key获取value：hget</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%81%8D%E5%8E%86hash%EF%BC%9Ahgetall"><span class="toc-number">2.4.2.2.2.</span> <span class="toc-text">遍历hash：hgetall</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%94%E5%9B%9Ehash%E5%AE%B9%E9%87%8F%EF%BC%9Ahlen"><span class="toc-number">2.4.2.3.</span> <span class="toc-text">返回hash容量：hlen</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%A1%E6%95%B0%EF%BC%9Ahincrby"><span class="toc-number">2.4.2.4.</span> <span class="toc-text">计数：hincrby</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set-%E9%9B%86%E5%90%88"><span class="toc-number">2.5.</span> <span class="toc-text">set(集合)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-2"><span class="toc-number">2.5.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-2"><span class="toc-number">2.5.2.</span> <span class="toc-text">基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E5%85%83%E7%B4%A0%EF%BC%9Asadd"><span class="toc-number">2.5.2.1.</span> <span class="toc-text">增加元素：sadd</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%85%83%E7%B4%A0%EF%BC%9Aspop"><span class="toc-number">2.5.2.2.</span> <span class="toc-text">删除元素：spop</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E5%85%83%E7%B4%A0-1"><span class="toc-number">2.5.2.3.</span> <span class="toc-text">查询元素</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%81%8D%E5%8E%86set%EF%BC%9Asmembers"><span class="toc-number">2.5.2.3.1.</span> <span class="toc-text">遍历set：smembers</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E5%85%83%E7%B4%A0%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%EF%BC%9Asismember"><span class="toc-number">2.5.2.3.2.</span> <span class="toc-text">判断元素是否存在：sismember</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E9%9B%86%E5%90%88%E5%A4%A7%E5%B0%8F%EF%BC%9Ascard"><span class="toc-number">2.5.2.3.3.</span> <span class="toc-text">统计集合大小：scard</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zset-%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88"><span class="toc-number">2.6.</span> <span class="toc-text">zset(有序集合)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-3"><span class="toc-number">2.6.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-3"><span class="toc-number">2.6.2.</span> <span class="toc-text">基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A0%EF%BC%9Azadd"><span class="toc-number">2.6.2.1.</span> <span class="toc-text">添加元素：zadd</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%81%8D%E5%8E%86%E9%9B%86%E5%90%88"><span class="toc-number">2.6.2.2.</span> <span class="toc-text">遍历集合</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%AD%A3%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%9Azrange"><span class="toc-number">2.6.2.2.1.</span> <span class="toc-text">正序遍历：zrange</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%80%86%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%9Azrevrange"><span class="toc-number">2.6.2.2.2.</span> <span class="toc-text">逆序遍历：zrevrange</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E5%88%86%E5%80%BC%E5%8C%BA%E5%9F%9F%E9%81%8D%E5%8E%86%EF%BC%9Azrangebyscore"><span class="toc-number">2.6.2.2.3.</span> <span class="toc-text">根据分值区域遍历：zrangebyscore</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E5%88%86%E5%80%BC%E5%8C%BA%E5%9F%9F%E9%81%8D%E5%8E%86%E8%BF%94%E5%9B%9E%E5%88%86%E5%80%BC%EF%BC%9Azrangebyscore"><span class="toc-number">2.6.2.2.4.</span> <span class="toc-text">根据分值区域遍历返回分值：zrangebyscore</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%8C%87%E5%AE%9Avalue%E7%9A%84score%EF%BC%9Azcore"><span class="toc-number">2.6.2.2.5.</span> <span class="toc-text">获取指定value的score：zcore</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E9%9B%86%E5%90%88%E5%AE%B9%E9%87%8F%EF%BC%9Azcard"><span class="toc-number">2.6.2.3.</span> <span class="toc-text">计算集合容量：zcard</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F"><span class="toc-number">2.6.2.4.</span> <span class="toc-text">排序</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8E%92%E5%90%8D%EF%BC%9Azrank"><span class="toc-number">2.6.2.4.1.</span> <span class="toc-text">排名：zrank</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%85%83%E7%B4%A0%EF%BC%9Azrem"><span class="toc-number">2.6.2.5.</span> <span class="toc-text">删除元素：zrem</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link"><span class="toc-number">2.6.2.5.1.</span> <span class="toc-text"></span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E5%9E%8B%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">容器型数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">3.1.</span> <span class="toc-text">容器数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4"><span class="toc-number">3.2.</span> <span class="toc-text">过期时间</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Redis学习-1-基本数据类型
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-07-09T05:18:22.000Z" itemprop="datePublished">2020-07-09</time>
+        
+        (Updated: <time datetime="2020-07-25T14:54:55.000Z" itemprop="dateModified">2020-07-25</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/Redis/" rel="tag">Redis</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Redis安装"><a href="#Redis安装" class="headerlink" title="Redis安装"></a>Redis安装</h2><h3 id="Docker安装"><a href="#Docker安装" class="headerlink" title="Docker安装"></a>Docker安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull redis</span><br><span class="line">docker run --name myredis -d -p6379:6379 redis</span><br><span class="line">docker exec -it myredis redis-cli</span><br></pre></td></tr></table></figure>
+
+<h3 id="Linux下安装"><a href="#Linux下安装" class="headerlink" title="Linux下安装"></a>Linux下安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://download.redis.io/releases/redis-3.0.7.tar.gz</span><br><span class="line">$ tar xzf redis-3.0.7.tar.gz</span><br><span class="line">$ ln -s redis-3.0.7 redis</span><br><span class="line">$ <span class="built_in">cd</span> redis</span><br><span class="line">$ make</span><br><span class="line">$ make install</span><br></pre></td></tr></table></figure>
+
+<h3 id="Redis服务器启动"><a href="#Redis服务器启动" class="headerlink" title="Redis服务器启动"></a>Redis服务器启动</h3><h4 id="运行启动"><a href="#运行启动" class="headerlink" title="运行启动"></a>运行启动</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-server --port 6380 #以6380为监听端口启动</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置文件启动"><a href="#配置文件启动" class="headerlink" title="配置文件启动"></a>配置文件启动</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-server `REDIS_HOME`/redis.conf #从安装目录的redis.conf启动</span><br></pre></td></tr></table></figure>
+
+<h4 id="Redis的基础启动参数"><a href="#Redis的基础启动参数" class="headerlink" title="Redis的基础启动参数"></a>Redis的基础启动参数</h4><table>
+<thead>
+<tr>
+<th align="center">配置名</th>
+<th align="center">配置说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">port</td>
+<td align="center">端口</td>
+</tr>
+<tr>
+<td align="center">logfile</td>
+<td align="center">日志文件</td>
+</tr>
+<tr>
+<td align="center">dir</td>
+<td align="center">Redis工作目录(存放持久化文件和日志文件)</td>
+</tr>
+<tr>
+<td align="center">daemonize</td>
+<td align="center">是否以守护进程的方法启动Redis</td>
+</tr>
+</tbody></table>
+<h3 id="Redis命令行客户端"><a href="#Redis命令行客户端" class="headerlink" title="Redis命令行客户端"></a>Redis命令行客户端</h3><h4 id="交互式方法启动"><a href="#交互式方法启动" class="headerlink" title="交互式方法启动"></a>交互式方法启动</h4><p><code>redis-cli-h&#123;host&#125;-p&#123;port&#125;</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-cli -h 127.0.0.1 -p 6379#连接到本地服务端口6379的redis服务</span><br></pre></td></tr></table></figure>
+
+<h4 id="命令式方式启动"><a href="#命令式方式启动" class="headerlink" title="命令式方式启动"></a>命令式方式启动</h4><p><code>redis-cli-h ip&#123;host&#125;-p&#123;port&#125;&#123;command&#125;</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-cli -h 127.0.0.1 -p 6379 get hello#在原基础上执行命令</span><br></pre></td></tr></table></figure>
+
+<h4 id="停止Redis服务"><a href="#停止Redis服务" class="headerlink" title="停止Redis服务"></a>停止Redis服务</h4><ul>
+<li><p>优雅的停止方式</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-cli shutdown #断开与客户端的连接，持久化文件生成</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>强制停止</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill -9 &#123;redis-pid&#125;#查出redis的pid,强制停止，不会做持久化操作而且还会造成缓冲区等资源不能被优雅关闭，极端情况会造成AOP和复制丢失数据</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>生成持久化文件停止服务</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-cli shutdown nosave|save #不生成或者生成持久化文件</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="全局命令"><a href="#全局命令" class="headerlink" title="全局命令"></a>全局命令</h3><h4 id="查看所有key"><a href="#查看所有key" class="headerlink" title="查看所有key"></a>查看所有key</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keys *</span><br></pre></td></tr></table></figure>
+
+<h4 id="键总数"><a href="#键总数" class="headerlink" title="键总数"></a>键总数</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dbsize</span><br></pre></td></tr></table></figure>
+
+<h4 id="检查键是否存在"><a href="#检查键是否存在" class="headerlink" title="检查键是否存在"></a>检查键是否存在</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exists key</span><br></pre></td></tr></table></figure>
+
+<h4 id="删除键"><a href="#删除键" class="headerlink" title="删除键"></a>删除键</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">del key #删除单个key</span><br><span class="line">del key1 key2 key3 #批量删除多个</span><br></pre></td></tr></table></figure>
+
+<h4 id="键过期"><a href="#键过期" class="headerlink" title="键过期"></a>键过期</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">expire key seconds#seconds单位为秒</span><br></pre></td></tr></table></figure>
+
+<h4 id="键的数据类型"><a href="#键的数据类型" class="headerlink" title="键的数据类型"></a>键的数据类型</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type key #返回key的数据类型，如果key不存在则返回none</span><br></pre></td></tr></table></figure>
+
+<h2 id="Redis基本数据类型"><a href="#Redis基本数据类型" class="headerlink" title="Redis基本数据类型"></a>Redis基本数据类型</h2><h3 id="数据结构和内部编码"><a href="#数据结构和内部编码" class="headerlink" title="数据结构和内部编码"></a>数据结构和内部编码</h3><p><code>object encoding key</code>查询key的内部编码</p>
+<h3 id="string-字符串"><a href="#string-字符串" class="headerlink" title="string(字符串)"></a>string(字符串)</h3><h4 id="string的基本概念"><a href="#string的基本概念" class="headerlink" title="string的基本概念"></a>string的基本概念</h4><p>Redis的字符串是动态字符串，是可以修改的字符串，类似java的ArrayList。</p>
+<p><img src="image-20200724150015832.png" alt="image-20200724150015832"></p>
+<h4 id="string的基本操作"><a href="#string的基本操作" class="headerlink" title="string的基本操作"></a>string的基本操作</h4><h5 id="新增-修改"><a href="#新增-修改" class="headerlink" title="新增/修改"></a>新增/修改</h5><ul>
+<li><p>单个新增/修改：<code>set</code>命令</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> name code</span><br><span class="line"><span class="built_in">set</span> name1 code1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>批量新增/修改：<code>mset</code></p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mset name2 boy name3 girl name4 <span class="built_in">bg</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="自增计数"><a href="#自增计数" class="headerlink" title="自增计数"></a>自增计数</h5><p>自增命令    <code>incr</code>、<code>incrby</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> age 16</span><br><span class="line">incr age<span class="comment">#age自增1</span></span><br><span class="line">incrby age 5<span class="comment">#age自增5,自增最大值为signed long</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h5><ul>
+<li><p>单个查询：<code>get</code>命令</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get name <span class="comment">#不存在返回nil</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>批量查询：<code>mget</code>命令</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mget name name2 name3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>是否存在：<code>exists</code>命令</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exists name<span class="comment">#存在返回1,不存在返回0</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h5><p>删除命令：<code>del</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">del name <span class="comment">#成功删除返回1,否则返回2</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="过期"><a href="#过期" class="headerlink" title="过期"></a>过期</h5><ul>
+<li><p>一般过期：<code>expire</code></p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> name lin</span><br><span class="line">expire name 5 <span class="comment">#设置成功返回1，反之返回0</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>set拓展过期：<code>setex</code></p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setex name 5 codehole <span class="comment"># setnx = set等价于expire</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="list-列表"><a href="#list-列表" class="headerlink" title="list(列表)"></a>list(列表)</h3><h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>Redis的列表相当于Java里的linkedList，底层是链表，当列表弹出了最后一个元素之后，该数据结构自动被删除，内存被回收。</p>
+<p>Redis的列表结构常用来做异步队列使用。将需要延后处理的任务结构体序列化成字符串塞进Redis的列表，另一个线程从这个列表种轮询数据进行处理。</p>
+<h4 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h4><h5 id="队列：右边进左边出"><a href="#队列：右边进左边出" class="headerlink" title="队列：右边进左边出"></a>队列：右边进左边出</h5><ul>
+<li><p>入队：<code>rpush</code></p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpush books java python golang</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>出队：<code>lpop</code></p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lpop books <span class="comment">#返回java</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>队列长度：<code>llen</code></p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">llen books <span class="comment">#返回3</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="栈：右边进右边出"><a href="#栈：右边进右边出" class="headerlink" title="栈：右边进右边出"></a>栈：右边进右边出</h5><ul>
+<li><p>入栈：<code>rpush</code></p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpush books java python golang</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>出栈：<code>rpop</code></p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpop books <span class="comment">#返回golang</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h5 id="慢操作"><a href="#慢操作" class="headerlink" title="慢操作"></a>慢操作</h5><ul>
+<li><p><code>lindex</code>：根据索引查找元素</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lindex books 1 <span class="comment">#返回list中的第二个元素</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>lrange</code> ：遍历列表</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lrange books 0 -1 <span class="comment">#获取所有元素</span></span><br><span class="line">lrange books 0 1 <span class="comment">#返回索引0到索引1之间的元素，类似python和go中的切片</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>ltrim</code>：截取列表</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ltrim books 0 -1<span class="comment">#截取区间内的元素返回一个新的</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="hash-哈希"><a href="#hash-哈希" class="headerlink" title="hash(哈希)"></a>hash(哈希)</h3><h4 id="基本概念-1"><a href="#基本概念-1" class="headerlink" title="基本概念"></a>基本概念</h4><p>Redis的字典相当于hashMap，无序，Redis为了高性能，不能堵塞服务，所以采用渐进式rehash策略。</p>
+<p>渐进式rehash会在rehash的同时，保留新旧两个hash结构，查询时会同时查询两个hash结构，然后在后续的定时任务中以及hash的子指令中，循序渐进地将旧hash的内容一点点迁移到新的hash结构中。</p>
+<h4 id="基本操作-1"><a href="#基本操作-1" class="headerlink" title="基本操作"></a>基本操作</h4><h5 id="增加元素："><a href="#增加元素：" class="headerlink" title="增加元素："></a>增加元素：</h5><h6 id="单个元素增加hset"><a href="#单个元素增加hset" class="headerlink" title="单个元素增加hset"></a>单个元素增加<code>hset</code></h6><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hset books1 java <span class="string">&quot;think in java&quot;</span></span><br><span class="line">hset books1 python <span class="string">&quot;python cookbook&quot;</span></span><br><span class="line">hset books1 golang <span class="string">&quot;concurrency in go&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="批量增加元素hmset"><a href="#批量增加元素hmset" class="headerlink" title="批量增加元素hmset"></a>批量增加元素<code>hmset</code></h6><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hmset books1 java <span class="string">&quot;think in java&quot;</span> python <span class="string">&quot;learn python&quot;</span> golang <span class="string">&quot;modern golang programming&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="查询元素"><a href="#查询元素" class="headerlink" title="查询元素"></a>查询元素</h5><h6 id="通过key获取value：hget"><a href="#通过key获取value：hget" class="headerlink" title="通过key获取value：hget"></a>通过key获取value：<code>hget</code></h6><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">hget</span> books<span class="number">1</span> golang</span><br></pre></td></tr></table></figure>
+
+<h6 id="遍历hash：hgetall"><a href="#遍历hash：hgetall" class="headerlink" title="遍历hash：hgetall"></a>遍历hash：<code>hgetall</code></h6><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hgetall books1<span class="comment">#key和value间隔遍历出来</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="返回hash容量：hlen"><a href="#返回hash容量：hlen" class="headerlink" title="返回hash容量：hlen"></a>返回hash容量：hlen</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hlen books1</span><br></pre></td></tr></table></figure>
+
+<h5 id="计数：hincrby"><a href="#计数：hincrby" class="headerlink" title="计数：hincrby"></a>计数：hincrby</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hincrby user age 1<span class="comment">#返回1</span></span><br><span class="line">hincrby user age 1<span class="comment">#返回2</span></span><br><span class="line">hincrby user age 1<span class="comment">#返回3</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="set-集合"><a href="#set-集合" class="headerlink" title="set(集合)"></a>set(集合)</h3><h4 id="基本概念-2"><a href="#基本概念-2" class="headerlink" title="基本概念"></a>基本概念</h4><p>Redis的集合相当于Java中的hashSet，它内部的键值对是无序的唯一的。</p>
+<p>当集合中最后一个元素被移除后，数据结构自动删除，内存被回收。</p>
+<h4 id="基本操作-2"><a href="#基本操作-2" class="headerlink" title="基本操作"></a>基本操作</h4><h5 id="增加元素：sadd"><a href="#增加元素：sadd" class="headerlink" title="增加元素：sadd"></a>增加元素：<code>sadd</code></h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sadd books2 java <span class="comment">#在books2中添加java</span></span><br><span class="line">sadd books1 c erlang <span class="comment">#批量增加元素</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="删除元素：spop"><a href="#删除元素：spop" class="headerlink" title="删除元素：spop"></a>删除元素：<code>spop</code></h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spop books1 <span class="comment">#删除一个元素</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="查询元素-1"><a href="#查询元素-1" class="headerlink" title="查询元素"></a>查询元素</h5><h6 id="遍历set：smembers"><a href="#遍历set：smembers" class="headerlink" title="遍历set：smembers"></a>遍历set：<code>smembers</code></h6><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">smembers books<span class="comment">#和元素插入的顺序不一致</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="判断元素是否存在：sismember"><a href="#判断元素是否存在：sismember" class="headerlink" title="判断元素是否存在：sismember"></a>判断元素是否存在：<code>sismember</code></h6><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sismember books1 php<span class="comment">#存在返回1，反之返回0</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="统计集合大小：scard"><a href="#统计集合大小：scard" class="headerlink" title="统计集合大小：scard"></a>统计集合大小：<code>scard</code></h6><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scard books1</span><br></pre></td></tr></table></figure>
+
+<h3 id="zset-有序集合"><a href="#zset-有序集合" class="headerlink" title="zset(有序集合)"></a>zset(有序集合)</h3><h4 id="基本概念-3"><a href="#基本概念-3" class="headerlink" title="基本概念"></a>基本概念</h4><p>Redis的zset类似java的SortedSet和hashMap的结合体，无重复的有序hash。它的内部实现用的是一种叫做“跳跃列表”的数据结构。</p>
+<h4 id="基本操作-3"><a href="#基本操作-3" class="headerlink" title="基本操作"></a>基本操作</h4><h5 id="添加元素：zadd"><a href="#添加元素：zadd" class="headerlink" title="添加元素：zadd"></a>添加元素：<code>zadd</code></h5><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">zadd</span> boo <span class="number">9</span>.<span class="number">0</span> <span class="string">&quot;think in java&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/image-20200724201515361.png" alt="image-20200724201515361"></p>
+<h5 id="遍历集合"><a href="#遍历集合" class="headerlink" title="遍历集合"></a>遍历集合</h5><h6 id="正序遍历：zrange"><a href="#正序遍历：zrange" class="headerlink" title="正序遍历：zrange"></a>正序遍历：<code>zrange</code></h6><p><img src="/image-20200724201335303.png" alt="image-20200724201335303"></p>
+<h6 id="逆序遍历：zrevrange"><a href="#逆序遍历：zrevrange" class="headerlink" title="逆序遍历：zrevrange"></a>逆序遍历：<code>zrevrange</code></h6><p><img src="/image-20200724201428313.png" alt="image-20200724201428313"></p>
+<h6 id="根据分值区域遍历：zrangebyscore"><a href="#根据分值区域遍历：zrangebyscore" class="headerlink" title="根据分值区域遍历：zrangebyscore"></a>根据分值区域遍历：<code>zrangebyscore</code></h6><p><img src="/image-20200724201735225.png" alt="image-20200724201735225"></p>
+<h6 id="根据分值区域遍历返回分值：zrangebyscore"><a href="#根据分值区域遍历返回分值：zrangebyscore" class="headerlink" title="根据分值区域遍历返回分值：zrangebyscore"></a>根据分值区域遍历返回分值：<code>zrangebyscore</code></h6><p><img src="/image-20200724201845231.png" alt="image-20200724201845231"></p>
+<h6 id="获取指定value的score：zcore"><a href="#获取指定value的score：zcore" class="headerlink" title="获取指定value的score：zcore"></a>获取指定value的score：<code>zcore</code></h6><p><img src="/image-20200724202039649.png" alt="image-20200724202039649"></p>
+<h5 id="计算集合容量：zcard"><a href="#计算集合容量：zcard" class="headerlink" title="计算集合容量：zcard"></a>计算集合容量：<code>zcard</code></h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zcard boo <span class="comment">#返回3</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h5><h6 id="排名：zrank"><a href="#排名：zrank" class="headerlink" title="排名：zrank"></a>排名：<code>zrank</code></h6><figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">zrank</span> boo <span class="string">&quot;think in java&quot;</span> #返回<span class="number">2</span>，排名第<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="删除元素：zrem"><a href="#删除元素：zrem" class="headerlink" title="删除元素：zrem"></a>删除元素：<code>zrem</code></h5><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zrem <span class="keyword">boo </span><span class="string">&quot;think in java&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/image-20200724202810893.png" alt="image-20200724202810893"></p>
+<h6 id=""><a href="#" class="headerlink" title=""></a></h6><h2 id="容器型数据结构"><a href="#容器型数据结构" class="headerlink" title="容器型数据结构"></a>容器型数据结构</h2><h3 id="容器数据结构"><a href="#容器数据结构" class="headerlink" title="容器数据结构"></a>容器数据结构</h3><p>list/set/hash/zset 这四种数据结构是容器型数据结构，它们共享下面两条通用规则</p>
+<ol>
+<li>容器不存在，就创建一个，再进行操作。</li>
+<li>如果容器里元素没有了，那么立即删除元素，释放内存。</li>
+</ol>
+<h3 id="过期时间"><a href="#过期时间" class="headerlink" title="过期时间"></a>过期时间</h3><p>Redis所有的数据结构都可以设置过期时间，时间到了，Redis会自动删除相应的对象。</p>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">Redis安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Docker%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">Docker安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux%E4%B8%8B%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">Linux下安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%90%AF%E5%8A%A8"><span class="toc-number">1.3.</span> <span class="toc-text">Redis服务器启动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E5%90%AF%E5%8A%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">运行启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%90%AF%E5%8A%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text">配置文件启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Redis%E7%9A%84%E5%9F%BA%E7%A1%80%E5%90%AF%E5%8A%A8%E5%8F%82%E6%95%B0"><span class="toc-number">1.3.3.</span> <span class="toc-text">Redis的基础启动参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">1.4.</span> <span class="toc-text">Redis命令行客户端</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E6%96%B9%E6%B3%95%E5%90%AF%E5%8A%A8"><span class="toc-number">1.4.1.</span> <span class="toc-text">交互式方法启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E5%BC%8F%E6%96%B9%E5%BC%8F%E5%90%AF%E5%8A%A8"><span class="toc-number">1.4.2.</span> <span class="toc-text">命令式方式启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%81%9C%E6%AD%A2Redis%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.4.3.</span> <span class="toc-text">停止Redis服务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%91%BD%E4%BB%A4"><span class="toc-number">1.5.</span> <span class="toc-text">全局命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%80%E6%9C%89key"><span class="toc-number">1.5.1.</span> <span class="toc-text">查看所有key</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%AE%E6%80%BB%E6%95%B0"><span class="toc-number">1.5.2.</span> <span class="toc-text">键总数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E9%94%AE%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8"><span class="toc-number">1.5.3.</span> <span class="toc-text">检查键是否存在</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E9%94%AE"><span class="toc-number">1.5.4.</span> <span class="toc-text">删除键</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%AE%E8%BF%87%E6%9C%9F"><span class="toc-number">1.5.5.</span> <span class="toc-text">键过期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%AE%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.5.6.</span> <span class="toc-text">键的数据类型</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text">Redis基本数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E5%86%85%E9%83%A8%E7%BC%96%E7%A0%81"><span class="toc-number">2.1.</span> <span class="toc-text">数据结构和内部编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#string-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">2.2.</span> <span class="toc-text">string(字符串)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#string%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">2.2.1.</span> <span class="toc-text">string的基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#string%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">2.2.2.</span> <span class="toc-text">string的基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B0%E5%A2%9E-%E4%BF%AE%E6%94%B9"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">新增&#x2F;修改</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%87%AA%E5%A2%9E%E8%AE%A1%E6%95%B0"><span class="toc-number">2.2.2.2.</span> <span class="toc-text">自增计数</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2"><span class="toc-number">2.2.2.3.</span> <span class="toc-text">查询</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%A0%E9%99%A4"><span class="toc-number">2.2.2.4.</span> <span class="toc-text">删除</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%87%E6%9C%9F"><span class="toc-number">2.2.2.5.</span> <span class="toc-text">过期</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#list-%E5%88%97%E8%A1%A8"><span class="toc-number">2.3.</span> <span class="toc-text">list(列表)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">2.3.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">2.3.2.</span> <span class="toc-text">基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%98%9F%E5%88%97%EF%BC%9A%E5%8F%B3%E8%BE%B9%E8%BF%9B%E5%B7%A6%E8%BE%B9%E5%87%BA"><span class="toc-number">2.3.2.1.</span> <span class="toc-text">队列：右边进左边出</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A0%88%EF%BC%9A%E5%8F%B3%E8%BE%B9%E8%BF%9B%E5%8F%B3%E8%BE%B9%E5%87%BA"><span class="toc-number">2.3.2.2.</span> <span class="toc-text">栈：右边进右边出</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%85%A2%E6%93%8D%E4%BD%9C"><span class="toc-number">2.3.2.3.</span> <span class="toc-text">慢操作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hash-%E5%93%88%E5%B8%8C"><span class="toc-number">2.4.</span> <span class="toc-text">hash(哈希)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-1"><span class="toc-number">2.4.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-1"><span class="toc-number">2.4.2.</span> <span class="toc-text">基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E5%85%83%E7%B4%A0%EF%BC%9A"><span class="toc-number">2.4.2.1.</span> <span class="toc-text">增加元素：</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8D%95%E4%B8%AA%E5%85%83%E7%B4%A0%E5%A2%9E%E5%8A%A0hset"><span class="toc-number">2.4.2.1.1.</span> <span class="toc-text">单个元素增加hset</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%89%B9%E9%87%8F%E5%A2%9E%E5%8A%A0%E5%85%83%E7%B4%A0hmset"><span class="toc-number">2.4.2.1.2.</span> <span class="toc-text">批量增加元素hmset</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E5%85%83%E7%B4%A0"><span class="toc-number">2.4.2.2.</span> <span class="toc-text">查询元素</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%80%9A%E8%BF%87key%E8%8E%B7%E5%8F%96value%EF%BC%9Ahget"><span class="toc-number">2.4.2.2.1.</span> <span class="toc-text">通过key获取value：hget</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%81%8D%E5%8E%86hash%EF%BC%9Ahgetall"><span class="toc-number">2.4.2.2.2.</span> <span class="toc-text">遍历hash：hgetall</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%BF%94%E5%9B%9Ehash%E5%AE%B9%E9%87%8F%EF%BC%9Ahlen"><span class="toc-number">2.4.2.3.</span> <span class="toc-text">返回hash容量：hlen</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%A1%E6%95%B0%EF%BC%9Ahincrby"><span class="toc-number">2.4.2.4.</span> <span class="toc-text">计数：hincrby</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set-%E9%9B%86%E5%90%88"><span class="toc-number">2.5.</span> <span class="toc-text">set(集合)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-2"><span class="toc-number">2.5.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-2"><span class="toc-number">2.5.2.</span> <span class="toc-text">基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E5%85%83%E7%B4%A0%EF%BC%9Asadd"><span class="toc-number">2.5.2.1.</span> <span class="toc-text">增加元素：sadd</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%85%83%E7%B4%A0%EF%BC%9Aspop"><span class="toc-number">2.5.2.2.</span> <span class="toc-text">删除元素：spop</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E5%85%83%E7%B4%A0-1"><span class="toc-number">2.5.2.3.</span> <span class="toc-text">查询元素</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%81%8D%E5%8E%86set%EF%BC%9Asmembers"><span class="toc-number">2.5.2.3.1.</span> <span class="toc-text">遍历set：smembers</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E5%85%83%E7%B4%A0%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%EF%BC%9Asismember"><span class="toc-number">2.5.2.3.2.</span> <span class="toc-text">判断元素是否存在：sismember</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E9%9B%86%E5%90%88%E5%A4%A7%E5%B0%8F%EF%BC%9Ascard"><span class="toc-number">2.5.2.3.3.</span> <span class="toc-text">统计集合大小：scard</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zset-%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88"><span class="toc-number">2.6.</span> <span class="toc-text">zset(有序集合)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-3"><span class="toc-number">2.6.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-3"><span class="toc-number">2.6.2.</span> <span class="toc-text">基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A0%EF%BC%9Azadd"><span class="toc-number">2.6.2.1.</span> <span class="toc-text">添加元素：zadd</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%81%8D%E5%8E%86%E9%9B%86%E5%90%88"><span class="toc-number">2.6.2.2.</span> <span class="toc-text">遍历集合</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%AD%A3%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%9Azrange"><span class="toc-number">2.6.2.2.1.</span> <span class="toc-text">正序遍历：zrange</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%80%86%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%9Azrevrange"><span class="toc-number">2.6.2.2.2.</span> <span class="toc-text">逆序遍历：zrevrange</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E5%88%86%E5%80%BC%E5%8C%BA%E5%9F%9F%E9%81%8D%E5%8E%86%EF%BC%9Azrangebyscore"><span class="toc-number">2.6.2.2.3.</span> <span class="toc-text">根据分值区域遍历：zrangebyscore</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E5%88%86%E5%80%BC%E5%8C%BA%E5%9F%9F%E9%81%8D%E5%8E%86%E8%BF%94%E5%9B%9E%E5%88%86%E5%80%BC%EF%BC%9Azrangebyscore"><span class="toc-number">2.6.2.2.4.</span> <span class="toc-text">根据分值区域遍历返回分值：zrangebyscore</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%8C%87%E5%AE%9Avalue%E7%9A%84score%EF%BC%9Azcore"><span class="toc-number">2.6.2.2.5.</span> <span class="toc-text">获取指定value的score：zcore</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E9%9B%86%E5%90%88%E5%AE%B9%E9%87%8F%EF%BC%9Azcard"><span class="toc-number">2.6.2.3.</span> <span class="toc-text">计算集合容量：zcard</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F"><span class="toc-number">2.6.2.4.</span> <span class="toc-text">排序</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8E%92%E5%90%8D%EF%BC%9Azrank"><span class="toc-number">2.6.2.4.1.</span> <span class="toc-text">排名：zrank</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%85%83%E7%B4%A0%EF%BC%9Azrem"><span class="toc-number">2.6.2.5.</span> <span class="toc-text">删除元素：zrem</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link"><span class="toc-number">2.6.2.5.1.</span> <span class="toc-text"></span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E5%9E%8B%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">容器型数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">3.1.</span> <span class="toc-text">容器数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4"><span class="toc-number">3.2.</span> <span class="toc-text">过期时间</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&text=Redis学习-1-基本数据类型"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&title=Redis学习-1-基本数据类型"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&is_video=false&description=Redis学习-1-基本数据类型"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Redis学习-1-基本数据类型&body=Check out this article: https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&title=Redis学习-1-基本数据类型"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&title=Redis学习-1-基本数据类型"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&title=Redis学习-1-基本数据类型"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&title=Redis学习-1-基本数据类型"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&name=Redis学习-1-基本数据类型&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/07/09/Redis%E5%AD%A6%E4%B9%A0-1/&t=Redis学习-1-基本数据类型"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

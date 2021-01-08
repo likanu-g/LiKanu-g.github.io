@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="性能分析大型网站结构复杂，用户从浏览器发出请求直到数据库完成操作事务，中间需要经过很多环节，如果测试或者用户报告网站响应缓慢，存在性能问题，必须对请求经历的各个环节进行分析，排查可能出现性能瓶颈的地方，定位问题。 排查一个网站的性能瓶颈和排查一个程序的性能瓶颈的手法基本相同：检查请求处理的各个环节的日志，分析哪个环节响应时间不合理、超过预期；然后检查监控数据，分析影响性能的主要因素是内存、磁盘、网">
+<meta property="og:type" content="article">
+<meta property="og:title" content="性能优化">
+<meta property="og:url" content="https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="性能分析大型网站结构复杂，用户从浏览器发出请求直到数据库完成操作事务，中间需要经过很多环节，如果测试或者用户报告网站响应缓慢，存在性能问题，必须对请求经历的各个环节进行分析，排查可能出现性能瓶颈的地方，定位问题。 排查一个网站的性能瓶颈和排查一个程序的性能瓶颈的手法基本相同：检查请求处理的各个环节的日志，分析哪个环节响应时间不合理、超过预期；然后检查监控数据，分析影响性能的主要因素是内存、磁盘、网">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-08-22T01:38:38.000Z">
+<meta property="article:modified_time" content="2020-08-22T03:33:03.906Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="架构">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>性能优化</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../Web%E8%BF%90%E4%BD%9C%E5%8E%9F%E7%90%86/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../../18/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E6%8C%87%E6%A0%87/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&text=性能优化"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&title=性能优化"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&is_video=false&description=性能优化"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=性能优化&body=Check out this article: https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&title=性能优化"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&title=性能优化"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&title=性能优化"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&title=性能优化"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&name=性能优化&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&t=性能优化"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">性能分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text">性能优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Web%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">2.1.</span> <span class="toc-text">Web前端性能优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E4%BC%98%E5%8C%96"><span class="toc-number">2.1.1.</span> <span class="toc-text">浏览器访问优化</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%87%8F%E5%B0%91http%E8%AF%B7%E6%B1%82"><span class="toc-number">2.1.1.1.</span> <span class="toc-text">减少http请求</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8E%9F%E5%9B%A0"><span class="toc-number">2.1.1.1.1.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%89%8B%E6%AE%B5"><span class="toc-number">2.1.1.1.2.</span> <span class="toc-text">手段</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98"><span class="toc-number">2.1.1.2.</span> <span class="toc-text">使用浏览器缓存</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%90%AF%E7%94%A8%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.1.1.3.</span> <span class="toc-text">启用压缩</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#CSS%E6%94%BE%E5%9C%A8%E9%A1%B5%E9%9D%A2%E6%9C%80%E4%B8%8A%E9%9D%A2%E3%80%81JavaScript%E6%94%BE%E5%9C%A8%E9%A1%B5%E9%9D%A2%E6%9C%80%E4%B8%8B%E9%9D%A2"><span class="toc-number">2.1.1.4.</span> <span class="toc-text">CSS放在页面最上面、JavaScript放在页面最下面</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%87%8F%E5%B0%91Cookie%E4%BC%A0%E8%BE%93"><span class="toc-number">2.1.1.5.</span> <span class="toc-text">减少Cookie传输</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8E%9F%E5%9B%A0-1"><span class="toc-number">2.1.1.5.1.</span> <span class="toc-text">原因</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CDN%E5%8A%A0%E9%80%9F"><span class="toc-number">2.1.2.</span> <span class="toc-text">CDN加速</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-number">2.1.3.</span> <span class="toc-text">反向代理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text"></span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        性能优化
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-08-22T01:38:38.000Z" itemprop="datePublished">2020-08-22</time>
+        
+        (Updated: <time datetime="2020-08-22T03:33:03.906Z" itemprop="dateModified">2020-08-22</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/%E6%9E%B6%E6%9E%84/">架构</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/%E6%9E%B6%E6%9E%84/" rel="tag">架构</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h2><p>大型网站结构复杂，用户从浏览器发出请求直到数据库完成操作事务，中间需要经过很多环节，如果测试或者用户报告网站响应缓慢，存在性能问题，必须对请求经历的各个环节进行分析，排查可能出现性能瓶颈的地方，定位问题。</p>
+<p>排查一个网站的性能瓶颈和排查一个程序的性能瓶颈的手法基本相同：检查请求处理的各个环节的日志，分析哪个环节响应时间不合理、超过预期；然后检查监控数据，分析影响性能的主要因素是内存、磁盘、网络、还是CPU，是代码问题还是架构设计不合理，或者系统资源确实不足。</p>
+<h2 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h2><p>根据网站分层架构，可分为Web前端性能优化、应用服务器性能优化、存储服务器性能优化3大类</p>
+<h3 id="Web前端性能优化"><a href="#Web前端性能优化" class="headerlink" title="Web前端性能优化"></a>Web前端性能优化</h3><p>Web前端指网站业务逻辑之前的部分，包括浏览器加载、网站视图模型、图片服务、CDN服务等，主要优化手段有优化浏览器访问、使用反向代理、CDN等。</p>
+<h4 id="浏览器访问优化"><a href="#浏览器访问优化" class="headerlink" title="浏览器访问优化"></a>浏览器访问优化</h4><h5 id="减少http请求"><a href="#减少http请求" class="headerlink" title="减少http请求"></a>减少http请求</h5><h6 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h6><p>每次http请求都需要建立通信链路、进行数据传输，在服务器端，每个http请求都需要启动独立的线程去处理。这些通信和服务都需要大量系统资源的开销。</p>
+<h6 id="手段"><a href="#手段" class="headerlink" title="手段"></a>手段</h6><p>合并CSS、合并JS。将浏览器一次请求访问需要的js、CSS合并成一个文件，这样浏览器就只需要一次请求。</p>
+<p>合并图片。多张图片合并成一张、如果每张图片都有不同的超链接，可通过CSS偏移响应鼠标点击操作，构造不同的URL。</p>
+<h5 id="使用浏览器缓存"><a href="#使用浏览器缓存" class="headerlink" title="使用浏览器缓存"></a>使用浏览器缓存</h5><p>对于更新频率比较低的资源，使用缓存已经是一个比较通用的优化策略，无论是在前端还是在后端。对于网站而言，CSS、JS、Logo、图标这些静态资源都是更新频率较低的，可以将这些缓存在浏览器中，通过设置HTTP请求头中Cache-Control和Expire的属性，可以设定浏览器缓存，缓存时间可以是天，甚至是几个月。</p>
+<p>缓存更新策略：网站你在更新静态资源时，不宜采取批量更新的方法，而是应一个文件一个文件逐步更新，并有一定的间隔时间，以免用户浏览器突然大量失效，集中更新缓存，造成服务器负载骤增、网络阻塞的情况。</p>
+<h5 id="启用压缩"><a href="#启用压缩" class="headerlink" title="启用压缩"></a>启用压缩</h5><p>在服务器端压缩，在浏览器端解压，减少通信传输的数据量，但是也要视情况而定，因为压缩也会占用服务器系统资源。</p>
+<h5 id="CSS放在页面最上面、JavaScript放在页面最下面"><a href="#CSS放在页面最上面、JavaScript放在页面最下面" class="headerlink" title="CSS放在页面最上面、JavaScript放在页面最下面"></a>CSS放在页面最上面、JavaScript放在页面最下面</h5><p>浏览器会下载全部CSS之后才对整个页面进行渲染，因此最好的做法是将CSS放在页面最上面，让浏览器尽快下载CSS。JS则相反，浏览器在加载JavaScript后立即执行，有可能会阻塞整个页面，造成页面显示缓慢。如果页面解析需要用到JS，就不适合将JS放在最下面了。</p>
+<h5 id="减少Cookie传输"><a href="#减少Cookie传输" class="headerlink" title="减少Cookie传输"></a>减少Cookie传输</h5><h6 id="原因-1"><a href="#原因-1" class="headerlink" title="原因"></a>原因</h6><p>一方面，Cookie存放在每次请求和响应中，太大的Cookies会严重影响数据传输，因此哪些数据需要写入Cookies需要慎重考虑，尽量减少Cookies中传输的数据量。另一方面，对于某些静态资源的访问，如CSS、JS等，发送Cookies没有意义，可以考虑静态资源使用独立域名访问，避免请求静态资源时发送Cookies，减少Cookies传输的次数。</p>
+<h4 id="CDN加速"><a href="#CDN加速" class="headerlink" title="CDN加速"></a>CDN加速</h4><p>CDN(Content Distribute Network，内容分发网络)的本质任然是一个缓存，而且是将数据存在离用户最近的地方，使用户以最快速度获取数据。</p>
+<p>CDN能够缓存的一般是静态资源，如图片、文件、CSS、JS脚本、静态网页等，这些文件访问频率很高，将它们缓存在CDN里面可以极大改善网页的打开速度。</p>
+<h4 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h4><p>用户将访问请求发给反向代理服务器(例如大家最熟悉的Nginx)，然后由Nginx分发给真实的Web服务器。</p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">性能分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text">性能优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Web%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">2.1.</span> <span class="toc-text">Web前端性能优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E4%BC%98%E5%8C%96"><span class="toc-number">2.1.1.</span> <span class="toc-text">浏览器访问优化</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%87%8F%E5%B0%91http%E8%AF%B7%E6%B1%82"><span class="toc-number">2.1.1.1.</span> <span class="toc-text">减少http请求</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8E%9F%E5%9B%A0"><span class="toc-number">2.1.1.1.1.</span> <span class="toc-text">原因</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%89%8B%E6%AE%B5"><span class="toc-number">2.1.1.1.2.</span> <span class="toc-text">手段</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98"><span class="toc-number">2.1.1.2.</span> <span class="toc-text">使用浏览器缓存</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%90%AF%E7%94%A8%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.1.1.3.</span> <span class="toc-text">启用压缩</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#CSS%E6%94%BE%E5%9C%A8%E9%A1%B5%E9%9D%A2%E6%9C%80%E4%B8%8A%E9%9D%A2%E3%80%81JavaScript%E6%94%BE%E5%9C%A8%E9%A1%B5%E9%9D%A2%E6%9C%80%E4%B8%8B%E9%9D%A2"><span class="toc-number">2.1.1.4.</span> <span class="toc-text">CSS放在页面最上面、JavaScript放在页面最下面</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%87%8F%E5%B0%91Cookie%E4%BC%A0%E8%BE%93"><span class="toc-number">2.1.1.5.</span> <span class="toc-text">减少Cookie传输</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8E%9F%E5%9B%A0-1"><span class="toc-number">2.1.1.5.1.</span> <span class="toc-text">原因</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CDN%E5%8A%A0%E9%80%9F"><span class="toc-number">2.1.2.</span> <span class="toc-text">CDN加速</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-number">2.1.3.</span> <span class="toc-text">反向代理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text"></span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&text=性能优化"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&title=性能优化"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&is_video=false&description=性能优化"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=性能优化&body=Check out this article: https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&title=性能优化"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&title=性能优化"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&title=性能优化"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&title=性能优化"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&name=性能优化&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/08/22/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/&t=性能优化"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

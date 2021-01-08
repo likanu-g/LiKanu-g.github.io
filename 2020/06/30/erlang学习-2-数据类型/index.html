@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="erlang有如下内置数据类型1、数值类型 div取商，rem取余(取模)，\不同与其他语言的除号，\的结果是真正的商，带小数点的那种  无需额外计算，erlang可以直接进行其他进制与十进制之间转换转换格式为进制#该进制的数值，例如2#10010，表示2进制的10010。 2、变量erlang与其他编程语言有很大的不同，在erlang中变量一经赋值，该变量的值将无法改变。还有erlang中变量的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="erlang学习-2-数据类型">
+<meta property="og:url" content="https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="erlang有如下内置数据类型1、数值类型 div取商，rem取余(取模)，\不同与其他语言的除号，\的结果是真正的商，带小数点的那种  无需额外计算，erlang可以直接进行其他进制与十进制之间转换转换格式为进制#该进制的数值，例如2#10010，表示2进制的10010。 2、变量erlang与其他编程语言有很大的不同，在erlang中变量一经赋值，该变量的值将无法改变。还有erlang中变量的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/div.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/2_8_16bit.png">
+<meta property="og:image" content="https://blog.likanug.top/var.png">
+<meta property="og:image" content="https://blog.likanug.top/rre.png">
+<meta property="og:image" content="https://blog.likanug.top/xor.png">
+<meta property="og:image" content="https://blog.likanug.top/compare.png">
+<meta property="og:image" content="https://blog.likanug.top/array.png">
+<meta property="og:image" content="https://blog.likanug.top/ww.png">
+<meta property="og:image" content="https://blog.likanug.top/vv.png">
+<meta property="og:image" content="https://blog.likanug.top/list.png">
+<meta property="og:image" content="https://blog.likanug.top/hd_tl.png">
+<meta property="og:image" content="https://blog.likanug.top/HeadAndTail.png">
+<meta property="og:image" content="https://blog.likanug.top/image-20200630174828155.png">
+<meta property="og:image" content="https://blog.likanug.top/image-20200630175133246.png">
+<meta property="article:published_time" content="2020-06-30T05:05:27.000Z">
+<meta property="article:modified_time" content="2020-06-30T09:56:48.000Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="erlang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/div.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>erlang学习-2-数据类型</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../erlang%E5%AD%A6%E4%B9%A0-3-%E6%A8%A1%E5%9D%97/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../erlang%E5%AD%A6%E4%B9%A0-1/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&text=erlang学习-2-数据类型"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&title=erlang学习-2-数据类型"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&is_video=false&description=erlang学习-2-数据类型"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=erlang学习-2-数据类型&body=Check out this article: https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&title=erlang学习-2-数据类型"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&title=erlang学习-2-数据类型"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&title=erlang学习-2-数据类型"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&title=erlang学习-2-数据类型"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&name=erlang学习-2-数据类型&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&t=erlang学习-2-数据类型"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#erlang%E6%9C%89%E5%A6%82%E4%B8%8B%E5%86%85%E7%BD%AE%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">erlang有如下内置数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">1、数值类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%8F%98%E9%87%8F"><span class="toc-number">1.2.</span> <span class="toc-text">2、变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E5%8E%9F%E5%AD%90"><span class="toc-number">1.3.</span> <span class="toc-text">3、原子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E5%B8%83%E5%B0%94%E4%BB%A3%E6%95%B0%E5%92%8C%E6%AF%94%E8%BE%83%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">1.4.</span> <span class="toc-text">4、布尔代数和比较操作符</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97"><span class="toc-number">1.4.1.</span> <span class="toc-text">逻辑运算</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97"><span class="toc-number">1.4.2.</span> <span class="toc-text">比较运算</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5%E3%80%81%E5%85%83%E7%BB%84"><span class="toc-number">1.5.</span> <span class="toc-text">5、元组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6%E3%80%81%E5%88%97%E8%A1%A8"><span class="toc-number">1.6.</span> <span class="toc-text">6、列表</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-number">1.6.1.</span> <span class="toc-text">列表的操作</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7%E3%80%81%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%BC%8F"><span class="toc-number">1.7.</span> <span class="toc-text">7、列表推导式</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        erlang学习-2-数据类型
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-06-30T05:05:27.000Z" itemprop="datePublished">2020-06-30</time>
+        
+        (Updated: <time datetime="2020-06-30T09:56:48.000Z" itemprop="dateModified">2020-06-30</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%88%86%E5%B8%83%E5%BC%8F/">高并发分布式</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/erlang/" rel="tag">erlang</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="erlang有如下内置数据类型"><a href="#erlang有如下内置数据类型" class="headerlink" title="erlang有如下内置数据类型"></a>erlang有如下内置数据类型</h3><h4 id="1、数值类型"><a href="#1、数值类型" class="headerlink" title="1、数值类型"></a>1、数值类型</h4><p><img src="div.png" alt="div"></p>
+<p><code>div</code>取商，<code>rem</code>取余(取模)，<code>\</code>不同与其他语言的除号，<code>\</code>的结果是真正的商，带小数点的那种</p>
+<p><img src="2_8_16bit.png" alt="2,8,16#"></p>
+<p>无需额外计算，erlang可以直接进行其他进制与十进制之间转换转换格式为<code>进制#该进制的数值</code>，例如<code>2#10010</code>，表示2进制的10010。</p>
+<h4 id="2、变量"><a href="#2、变量" class="headerlink" title="2、变量"></a>2、变量</h4><p>erlang与其他编程语言有很大的不同，在erlang中变量一经赋值，该变量的值将无法改变。还有erlang中变量的首字母必须是大写。</p>
+<p><img src="/var.png" alt="image-20200630134015273"></p>
+<p>erlang的变量赋值很灵活，</p>
+<h4 id="3、原子"><a href="#3、原子" class="headerlink" title="3、原子"></a>3、原子</h4><p>erlang的原子可以理解为C、Java中的常量</p>
+<p><img src="/rre.png" alt="rre"></p>
+<p>atom就是“atom”，不能操作它，我们不能给他复制，不能操作它。</p>
+<h4 id="4、布尔代数和比较操作符"><a href="#4、布尔代数和比较操作符" class="headerlink" title="4、布尔代数和比较操作符"></a>4、布尔代数和比较操作符</h4><h5 id="逻辑运算"><a href="#逻辑运算" class="headerlink" title="逻辑运算"></a>逻辑运算</h5><p>erlang也有或且非这几种逻辑运算，<code>or</code>、<code>and</code>、<code>not</code>、<code>xor</code></p>
+<p><img src="/xor.png" alt="xor"></p>
+<h5 id="比较运算"><a href="#比较运算" class="headerlink" title="比较运算"></a>比较运算</h5><p>有大于、小于、等于、大于等于、小于等于 ，不等于这几种比较运算符，<code>&gt;</code>、<code>&lt;</code>、<code>=:=</code>、<code>&gt;=</code>、<code>=&lt;</code>、<code>=\=</code></p>
+<p><img src="/compare.png" alt="compare"></p>
+<p>在erlang中相等是<code>=:=</code>，虽然用<code>==</code>运算符也可以，但是<code>==</code>和<code>=:=</code>还是有差异的</p>
+<h4 id="5、元组"><a href="#5、元组" class="headerlink" title="5、元组"></a>5、元组</h4><p>erlang中用{element1,element2…,elementsN}的形式表示元组，元组可以理解为C,Java中的数组</p>
+<p><img src="/array.png" alt="image-20200630143915067"></p>
+<p>模式匹配</p>
+<p><img src="/ww.png" alt="image-20200630145108401"></p>
+<p>在erlang中<code>=</code>并并不只是赋值操作符，对于相同类型的数据，例如元组，如上图所示，我们把一个元组“赋值”给另一个元组，然后元组对应的元组就相等，我们称这种操作性质为模式匹配。</p>
+<h4 id="6、列表"><a href="#6、列表" class="headerlink" title="6、列表"></a>6、列表</h4><p>列表的基本形式是[element1,element2….elementN]，用中括号表示，erlang中的列表可以理解为java中的List,性质也基本类似。</p>
+<p><img src="/vv.png" alt="vv"></p>
+<p>列表里可以存放其他数据类型，包括列表</p>
+<h5 id="列表的操作"><a href="#列表的操作" class="headerlink" title="列表的操作"></a>列表的操作</h5><p>列表的操作符有<code>++</code>：列表拼接、<code>--</code>：列表删除元素。</p>
+<p><img src="/list.png" alt="list"></p>
+<p><code>--</code>操作符的运算规则是右结合，是从右往左运算</p>
+<p><img src="/hd_tl.png" alt="hd_tl"></p>
+<p><code>hd()</code>和<code>tl()</code>方法返回列表头和列表尾，<code>lenght()</code>返回列表的长度，我们使用<code>|</code>操作符来分离列表，列表的另外一种表现形式可以是[Head|Tail]</p>
+<p><img src="/HeadAndTail.png" alt="image-20200630153446258"></p>
+<p><code>|</code>操作符为称之为cons操作符，仅凭cons操作符和值可以构建出任何列表</p>
+<p>任何列表都可以用这个公式构建<code>[Term1|[Term2|[…|[TremN]]]</code></p>
+<h4 id="7、列表推导式"><a href="#7、列表推导式" class="headerlink" title="7、列表推导式"></a>7、列表推导式</h4><p><img src="/image-20200630174828155.png" alt="image-20200630174828155"></p>
+<p>列表推导式的表示类似于数学集合的表示方法：<img src="/image-20200630175133246.png" alt="image-20200630175133246">，</p>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#erlang%E6%9C%89%E5%A6%82%E4%B8%8B%E5%86%85%E7%BD%AE%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">erlang有如下内置数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">1、数值类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%8F%98%E9%87%8F"><span class="toc-number">1.2.</span> <span class="toc-text">2、变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E5%8E%9F%E5%AD%90"><span class="toc-number">1.3.</span> <span class="toc-text">3、原子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E5%B8%83%E5%B0%94%E4%BB%A3%E6%95%B0%E5%92%8C%E6%AF%94%E8%BE%83%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">1.4.</span> <span class="toc-text">4、布尔代数和比较操作符</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97"><span class="toc-number">1.4.1.</span> <span class="toc-text">逻辑运算</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97"><span class="toc-number">1.4.2.</span> <span class="toc-text">比较运算</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5%E3%80%81%E5%85%83%E7%BB%84"><span class="toc-number">1.5.</span> <span class="toc-text">5、元组</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6%E3%80%81%E5%88%97%E8%A1%A8"><span class="toc-number">1.6.</span> <span class="toc-text">6、列表</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-number">1.6.1.</span> <span class="toc-text">列表的操作</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7%E3%80%81%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%BC%8F"><span class="toc-number">1.7.</span> <span class="toc-text">7、列表推导式</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&text=erlang学习-2-数据类型"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&title=erlang学习-2-数据类型"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&is_video=false&description=erlang学习-2-数据类型"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=erlang学习-2-数据类型&body=Check out this article: https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&title=erlang学习-2-数据类型"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&title=erlang学习-2-数据类型"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&title=erlang学习-2-数据类型"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&title=erlang学习-2-数据类型"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&name=erlang学习-2-数据类型&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/06/30/erlang%E5%AD%A6%E4%B9%A0-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/&t=erlang学习-2-数据类型"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="processing用途：可以说是java绘图方面的一个拓展和延伸，现在多用于艺术创作，图形绘画多媒体方面 processing开发环境搭建：由于是processing是用java开发的，是java一个类库的延伸，可以直接用IDEA,VSCode等java集成开发环境开发，同样也可以用processing官方的PDE开发 processing官方开发环境PDE安装简单，到官网下载https:&#x2F;&#x2F;p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="processing入门0">
+<meta property="og:url" content="https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="processing用途：可以说是java绘图方面的一个拓展和延伸，现在多用于艺术创作，图形绘画多媒体方面 processing开发环境搭建：由于是processing是用java开发的，是java一个类库的延伸，可以直接用IDEA,VSCode等java集成开发环境开发，同样也可以用processing官方的PDE开发 processing官方开发环境PDE安装简单，到官网下载https:&#x2F;&#x2F;p">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/image-20200530003838460.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/image-20200530004106893.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/image-20200530004413606.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/image-20200530004558558.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/image-20200530010914084.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/image-20200530011017369.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/image-20200530011833768.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/image-20200530012304515.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/image-20200530015017474.png">
+<meta property="article:published_time" content="2020-05-29T16:10:09.000Z">
+<meta property="article:modified_time" content="2020-06-03T10:02:43.000Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="processing">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/image-20200530003838460.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>processing入门0</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../processing%E5%9F%BA%E7%A1%801-%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../../29/%E6%96%B0%E5%AE%89%E8%A3%85IDEA%E7%9A%84%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&text=processing入门0"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&title=processing入门0"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&is_video=false&description=processing入门0"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=processing入门0&body=Check out this article: https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&title=processing入门0"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&title=processing入门0"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&title=processing入门0"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&title=processing入门0"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&name=processing入门0&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&t=processing入门0"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        processing入门0
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-05-29T16:10:09.000Z" itemprop="datePublished">2020-05-30</time>
+        
+        (Updated: <time datetime="2020-06-03T10:02:43.000Z" itemprop="dateModified">2020-06-03</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/java/">java</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/processing/" rel="tag">processing</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>processing用途：可以说是java绘图方面的一个拓展和延伸，现在多用于艺术创作，图形绘画多媒体方面</p>
+<p>processing开发环境搭建：由于是processing是用java开发的，是java一个类库的延伸，可以直接用IDEA,VSCode等java集成开发环境开发，同样也可以用processing官方的PDE开发</p>
+<p>processing官方开发环境PDE安装简单，到官网下载<a target="_blank" rel="noopener" href="https://processing.org/，">https://processing.org/，</a></p>
+<p><img src="image-20200530003838460.png" alt="image-20200530003838460"></p>
+<p>点击Download,</p>
+<p><img src="image-20200530004106893.png" alt="image-20200530004106893"></p>
+<p>然后下载合适的系统版本，然后解压按即可，下载后解压到想安装的目录，下面以Windows系统为例子</p>
+<p><img src="image-20200530004413606.png" alt="image-20200530004413606"></p>
+<p>无需安装，点processing.exe就可以直接运行集成开发环境PDE,界面如下图所示</p>
+<p><img src="image-20200530004558558.png" alt="image-20200530004558558"></p>
+<p>下面介绍用idea和Gradle搭建processing开发环境,此处假定Gradle已经安装配置完毕</p>
+<p>复习一下，用Gradle从零开始构建java程序</p>
+<p>打开gradle官方文档<a target="_blank" rel="noopener" href="https://guides.gradle.org/building-java-applications/">https://guides.gradle.org/building-java-applications/</a></p>
+<ul>
+<li><p>选择一个没有空格和中文名称的文件夹，打开cmd，或终端工具</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir demo</span><br><span class="line">$ <span class="built_in">cd</span> demo</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>gradle初始化文件夹，按照提示一步一步就初始化完毕了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">$ gradle init</span><br><span class="line">&gt; Task :wrapper</span><br><span class="line"></span><br><span class="line">Select <span class="built_in">type</span> of project to generate:</span><br><span class="line">  1: basic</span><br><span class="line">  2: application</span><br><span class="line">  3: library</span><br><span class="line">  4: Gradle plugin</span><br><span class="line">Enter selection (default: basic) [1..4] 2</span><br><span class="line"></span><br><span class="line">Select implementation language:</span><br><span class="line">  1: C++</span><br><span class="line">  2: Groovy</span><br><span class="line">  3: Java</span><br><span class="line">  4: Kotlin</span><br><span class="line">  5: Swift</span><br><span class="line">Enter selection (default: Java) [1..5] 3</span><br><span class="line"></span><br><span class="line">Select build script DSL:</span><br><span class="line">  1: Groovy</span><br><span class="line">  2: Kotlin</span><br><span class="line">Enter selection (default: Groovy) [1..2] 1</span><br><span class="line"></span><br><span class="line">Select <span class="built_in">test</span> framework:</span><br><span class="line">  1: JUnit 4</span><br><span class="line">  2: TestNG</span><br><span class="line">  3: Spock</span><br><span class="line">  4: JUnit Jupiter</span><br><span class="line">Enter selection (default: JUnit 4) [1..4]</span><br><span class="line"></span><br><span class="line">Project name (default: demo):</span><br><span class="line"></span><br><span class="line">Source package (default: demo):</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt; Task :init</span><br><span class="line">Get more <span class="built_in">help</span> with your project: https://docs.gradle.org/5.4.1/userguide/tutorial_java_projects.html</span><br><span class="line"></span><br><span class="line">BUILD SUCCESSFUL</span><br><span class="line">2 actionable tasks: 2 execute</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>此时其实已经初始化完毕，查看项目目录</p>
+<p><img src="image-20200530010914084.png" alt="image-20200530010914084"></p>
+</li>
+<li><p>文件夹如下图所示</p>
+<p><img src="image-20200530011017369.png" alt="image-20200530011017369"></p>
+</li>
+<li><p>此时可以继续按照文档的提示步骤继续配置，或者直接用IDEA或者VSCode打开这个项目，我这里选择用继续配置依赖，编辑<strong>build.gradle</strong>，添加最重要的依赖</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">implementation <span class="string">&#x27;org.processing:core:3.3.7&#x27;</span></span><br><span class="line"><span class="comment">//3.3.7比3.5.4下载更快</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="image-20200530011833768.png" alt="image-20200530011833768"></p>
+<p><strong>build.gradle</strong>配置如下</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">repositories &#123;</span><br><span class="line">    <span class="comment">// Use jcenter for resolving dependencies.</span></span><br><span class="line">    <span class="comment">// You can declare any Maven/Ivy/file repository here.</span></span><br><span class="line">    <span class="comment">//jcenter()</span></span><br><span class="line">    maven &#123;</span><br><span class="line">        url <span class="string">&#x27;http://maven.aliyun.com/nexus/content/groups/public/&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    <span class="comment">// This dependency is used by the application.</span></span><br><span class="line">    implementation <span class="string">&#x27;com.google.guava:guava:28.1-jre&#x27;</span></span><br><span class="line">    <span class="comment">//processing dependency</span></span><br><span class="line">    implementation <span class="string">&#x27;org.processing:core:3.3.7&#x27;</span></span><br><span class="line">    <span class="comment">// Use JUnit test framework</span></span><br><span class="line">    testImplementation <span class="string">&#x27;junit:junit:4.12&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>下载依赖，执行<code>gradle build</code>,可以看到在下载依赖</p>
+<p><img src="image-20200530012304515.png" alt="image-20200530012304515"></p>
+</li>
+<li><p>构建成功后用IDEA打开项目</p>
+</li>
+<li><p>删除App.java里面的内容，将App.java修改成如下所示</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> demo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> processing.core.PApplet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">PApplet</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        PApplet.main(<span class="string">&quot;demo.App&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>运行main方法，出现如下所示，说明基础开发环境配置完毕</p>
+<p><img src="image-20200530015017474.png" alt="image-20200530015017474"></p>
+</li>
+<li><p>上面就是processing的绘图面板，后面的开发将用VSCode开发，VSCode编译较快，IDEA显得过于大材小用，臃肿</p>
+</li>
+</ul>
+<p>下一章将是<a href="https://blog.likanug.top/2020/05/30/processing基础1-代码结构">processing基础1—代码结构</a></p>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&text=processing入门0"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&title=processing入门0"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&is_video=false&description=processing入门0"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=processing入门0&body=Check out this article: https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&title=processing入门0"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&title=processing入门0"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&title=processing入门0"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&title=processing入门0"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&name=processing入门0&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/05/30/processing%E5%85%A5%E9%97%A80/&t=processing入门0"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

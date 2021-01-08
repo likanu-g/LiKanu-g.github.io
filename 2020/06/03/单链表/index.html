@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="单链表模型  单链表节点定义如下 12345678910111213141516171819202122public  class Node&lt;E&gt; &amp;#123;  E data;  Node&lt;E&gt; next;  public Node()&amp;#123;    data &#x3D; null;    next &#x3D; null;  &amp;#125;  public Node(E theData">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单链表">
+<meta property="og:url" content="https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="单链表模型  单链表节点定义如下 12345678910111213141516171819202122public  class Node&lt;E&gt; &amp;#123;  E data;  Node&lt;E&gt; next;  public Node()&amp;#123;    data &#x3D; null;    next &#x3D; null;  &amp;#125;  public Node(E theData">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/webp.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/image-20200603232914169.png">
+<meta property="og:image" content="https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/image-20200604094234036.png">
+<meta property="article:published_time" content="2020-06-03T15:24:55.000Z">
+<meta property="article:modified_time" content="2020-07-25T03:40:28.000Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="数据结构与算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/webp.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>单链表</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../../04/haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../haxe%E5%AD%A6%E4%B9%A0-%E4%BA%8C-hello%20world/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&text=单链表"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&title=单链表"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&is_video=false&description=单链表"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=单链表&body=Check out this article: https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&title=单链表"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&title=单链表"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&title=单链表"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&title=单链表"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&name=单链表&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&t=单链表"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        单链表
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-06-03T15:24:55.000Z" itemprop="datePublished">2020-06-03</time>
+        
+        (Updated: <time datetime="2020-07-25T03:40:28.000Z" itemprop="dateModified">2020-07-25</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/%E5%8D%95%E9%93%BE%E8%A1%A8/">单链表</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" rel="tag">数据结构与算法</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>单链表模型</p>
+<p><img src="webp.png" alt="img"></p>
+<p>单链表节点定义如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span>  <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">  E data;</span><br><span class="line">  Node&lt;E&gt; next;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span></span>&#123;</span><br><span class="line">    data = <span class="keyword">null</span>;</span><br><span class="line">    next = <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(E theData, Node before)</span> </span>&#123;</span><br><span class="line">    data = theData;</span><br><span class="line">    next = before.next;</span><br><span class="line">    before.next = <span class="keyword">this</span>;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Node&lt;Integer&gt; n0 = <span class="keyword">new</span> Node&lt;Integer&gt;();</span><br><span class="line">    Node&lt;Integer&gt; n1 = <span class="keyword">new</span> Node(<span class="number">1</span>,n0);</span><br><span class="line">    Node&lt;Integer&gt; n2 = <span class="keyword">new</span> Node(<span class="number">2</span>,n0);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在的问题是main方法执行后，链表的结构时怎样的</p>
+<p>应该是这样的：</p>
+<p><img src="image-20200603232914169.png" alt="image-20200603232914169"></p>
+<p>起始链表本来就抽象，光看代码，真的很难看出答案来，我们可以利用IDE的调试功能查看，在此之前，我们先分析一下代码</p>
+<p>n0初始化之后，链表的结构时只有一个节点n0，n0.data=null，no.next=null，注意n0是无参构造器初始化的。</p>
+<p>n1初始化以后，链表的就有两个节点了，n0、n1，此时n0.data=null，n0.next=n1,n1.data=1,ni.next=null,</p>
+<p>n2初始化以后，我们先分析n2，从构造器一步一来</p>
+<ol>
+<li>n2  =  new Node(2,n0);</li>
+<li>data = 2;</li>
+<li>next = n0.next，由n1初始化之后我们知道n0.next = n1;所以next = n1;</li>
+<li>before.next即n0.next ,this也就是n2这个节点，before.next = this的意思也就是说n0.next = n2;</li>
+</ol>
+<p>所以现在n2节点是:n2.data = 2,n2.next = n1;整个链表的结构是n0.data = null,n1.next = n2,n2.data = 2,n2.next = n1,ni.data = 1,n1.next = null，也即是上面图显示那样。</p>
+<p>仔细回顾一下代码，我们可以发现</p>
+<p> <code>Node&lt;Integer&gt; n1 = new Node(new Integer(1),n0)</code>实现了链表添加元素的一种方式，当然这是每次只是在n0的后面添加节点，</p>
+<p>如果要在指定位置添加节点，我们还需要做修改一下代码，先把我们的需求抽象一下我们其实是要实现这样的方法add(int index,E newItem)，就是在指定索引处添加一个元素，大致如图所示，用图片模型表示比较直观</p>
+<p><img src="image-20200604094234036.png" alt="image-20200604094234036"></p>
+<p>myLinkdedList(1,itm),表示在索引1处添加一个itm，我们的思路应该是这样的</p>
+<p>我们原来节点里是没有index的，必须在节点里添加一个index，为了以后更好的维护节点，我们遵循程序设计的单一职责的原则，重新设计一个具有索引的单链表</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MySingleLinkedList</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">  Node&lt;E&gt; head;</span><br><span class="line">  <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">MySingleLinkedList</span><span class="params">()</span></span>&#123;</span><br><span class="line">    head = <span class="keyword">new</span> Node&lt;E&gt;();</span><br><span class="line">    size = <span class="number">0</span>;</span><br><span class="line">  &#125;  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> index, E newItem)</span></span>&#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>首先应该判断这个索引是否越界或者合法，也就是判断index是否大于0或者小于size</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(index &lt; <span class="number">0</span>|| index &gt; size)&#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException();<span class="comment">//直接抛出异常</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后查找到我们要添加的索引位置的目标节点</p>
+<ul>
+<li><p>查找目标节点之前我们要先定义一个目标节点，因为后面要用到</p>
+<ul>
+<li><p>怎么定义目标节点，由上面的链表定义我们知道，所有的节点都是从head派生而来的，我们只需要创建一个新的Node，然后将head赋值给它就够了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Node&lt;E&gt; curr = head;<span class="comment">//创建目标节点</span></span><br></pre></td></tr></table></figure>
+
+<p>这里有个问题，我们所有的依据都是前面的Node的定义和链表的设计，如果我们上面的设计和定义有问题，后面不就都是错的吗？</p>
+<p>从逻辑上讲确实是这样的，但是事实确是，我们发现了我们定义的那种链表可以实现节点的添加，然后我们这种定义，去推广出我们在指定索引位置添加元素，结果是切实可行的。我们确实可以用我们自己设计的链表进行元素的添加，这在实践上是正确的。</p>
+</li>
+</ul>
+</li>
+<li><p>这个查找目标节点并没有很好地办法，我们只能一个一个遍历</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">0</span>; i &lt; index; i++)<span class="comment">//循环遍历到我们index处的目标节点</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>将当前要添加的节点插到目标节点前面</p>
+<p>将当前节点插到目标节点的前面，其实上面节点里已经实现了在指定节点处添加新节点，当目标节点后面没有节点就在目标节点后面添加节点，当目标节点后面有元素，就在目标节点前面添加元素，因此如果要在目标节点前面添加元素，我们要么在目标节点前节点的后面添加，要么将目标节点移动到当前位置的后面，然后再在当前位置添加。当然后面一种方式比较简单，因为我们更容易找到目标节点的位置，然后把它移动到后面即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curr = curr.next; <span class="comment">//目标节点的next指针指向自己也就是向后移动了</span></span><br></pre></td></tr></table></figure>
+
+<p>然后将新节点插到目标节点的前面</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Node&lt;E&gt; newNode = <span class="keyword">new</span> Node&lt;E&gt;(newItem, curr);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>最终的add()方法就是这样的；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> index, E newItem)</span></span>&#123;</span><br><span class="line">     <span class="keyword">if</span>(index &lt; <span class="number">0</span> || index &gt;size) <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException();<span class="comment">//索引越界</span></span><br><span class="line">     Node&lt;E&gt; curr = head;</span><br><span class="line">     <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;index; i++) &#123; </span><br><span class="line">       curr = curr.next; </span><br><span class="line">     &#125;</span><br><span class="line">     Node&lt;E&gt; newNode = <span class="keyword">new</span> Node&lt;E&gt;(newItem, curr);</span><br><span class="line">     size ++;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后用IDE调试一下，确实达到了我们要的结果。</p>
+<p>完整的单链表</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line">    ListNode next;</span><br><span class="line">    ListNode (<span class="keyword">int</span> val) &#123;</span><br><span class="line">        <span class="keyword">this</span>.val = val;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyLinkedList</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Initialize your data structure here. */</span></span><br><span class="line">    ListNode head = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyLinkedList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">         head = <span class="keyword">new</span> ListNode(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** Get the value of the index-th node in the linked list. If the index is invalid, return -1. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">        ListNode cur = head.next;</span><br><span class="line">        <span class="keyword">int</span> num = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(cur != <span class="keyword">null</span>) &#123;</span><br><span class="line">            num ++;</span><br><span class="line">            <span class="keyword">if</span>(num == index) &#123;</span><br><span class="line">                <span class="keyword">return</span> cur.val;</span><br><span class="line">            &#125;</span><br><span class="line">            cur = cur.next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addAtHead</span><span class="params">(<span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        ListNode node = <span class="keyword">new</span> ListNode(val);</span><br><span class="line">        node.next = head.next;</span><br><span class="line">        head.next = node;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** Append a node of value val to the last element of the linked list. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addAtTail</span><span class="params">(<span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        ListNode cur = head;</span><br><span class="line">        <span class="keyword">while</span>(cur.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">            cur = cur.next;</span><br><span class="line">        &#125;</span><br><span class="line">        cur.next = <span class="keyword">new</span> ListNode(val);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** Add a node of value val before the index-th node in the linked list. If index equals to the length of linked list, the node will be appended to the end of linked list. If index is greater than the length, the node will not be inserted. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addAtIndex</span><span class="params">(<span class="keyword">int</span> index, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        ListNode cur = head;</span><br><span class="line">        <span class="keyword">int</span> num = -<span class="number">1</span>;</span><br><span class="line">      </span><br><span class="line">        <span class="keyword">while</span>(cur != <span class="keyword">null</span>) &#123;</span><br><span class="line">            num ++;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(num == index ) &#123;</span><br><span class="line">                ListNode node = <span class="keyword">new</span> ListNode(val);</span><br><span class="line">                node.next = cur.next;</span><br><span class="line">                cur.next = node;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>( index == -<span class="number">1</span>) &#123;</span><br><span class="line">                ListNode node = <span class="keyword">new</span> ListNode(val);</span><br><span class="line">                node.next = head.next;</span><br><span class="line">                head.next = node;</span><br><span class="line">            &#125;</span><br><span class="line">            cur = cur.next;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** Delete the index-th node in the linked list, if the index is valid. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteAtIndex</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">        ListNode cur = head;</span><br><span class="line">        <span class="keyword">int</span> num = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(cur.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">            num ++;</span><br><span class="line">            <span class="keyword">if</span>(num == index ) &#123;</span><br><span class="line">                ListNode temp = cur.next;</span><br><span class="line">                cur.next = temp.next;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            cur = cur.next;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&text=单链表"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&title=单链表"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&is_video=false&description=单链表"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=单链表&body=Check out this article: https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&title=单链表"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&title=单链表"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&title=单链表"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&title=单链表"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&name=单链表&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/06/03/%E5%8D%95%E9%93%BE%E8%A1%A8/&t=单链表"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

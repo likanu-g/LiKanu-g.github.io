@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="Spark的核心概念概览​    从上层讲，每个spark应用都是由一个驱动器程序来发起集群上的各种并行操作 ​    驱动器程序包含应用的main函数，并且定义了集群上的分布式数据集，还对这些分布式数据集应用了相关操作。 ​    驱动器程序通过通过SparkContext对象来访问Spark。这个对象代表对计算集群的一个连接。shell启动时已经自动创建了一个SparkConte对象，是一个叫">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark大数据分析学习笔记(二)">
+<meta property="og:url" content="https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="Spark的核心概念概览​    从上层讲，每个spark应用都是由一个驱动器程序来发起集群上的各种并行操作 ​    驱动器程序包含应用的main函数，并且定义了集群上的分布式数据集，还对这些分布式数据集应用了相关操作。 ​    驱动器程序通过通过SparkContext对象来访问Spark。这个对象代表对计算集群的一个连接。shell启动时已经自动创建了一个SparkConte对象，是一个叫">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-01-09T08:54:49.000Z">
+<meta property="article:modified_time" content="2020-01-19T02:15:17.000Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="Spark">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Spark大数据分析学习笔记(二)</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../../../03/26/MYSQL%E8%A7%A3%E5%8E%8B%E7%89%88%E5%AE%89%E8%A3%85/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%80/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&text=Spark大数据分析学习笔记(二)"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&title=Spark大数据分析学习笔记(二)"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&is_video=false&description=Spark大数据分析学习笔记(二)"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Spark大数据分析学习笔记(二)&body=Check out this article: https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&title=Spark大数据分析学习笔记(二)"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&title=Spark大数据分析学习笔记(二)"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&title=Spark大数据分析学习笔记(二)"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&title=Spark大数据分析学习笔记(二)"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&name=Spark大数据分析学习笔记(二)&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&t=Spark大数据分析学习笔记(二)"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spark%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E6%A6%82%E8%A7%88"><span class="toc-number">1.</span> <span class="toc-text">Spark的核心概念概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8B%AC%E7%AB%8B%E5%BA%94%E7%94%A8%E4%B8%AD%E4%BD%BF%E7%94%A8Spark"><span class="toc-number">2.</span> <span class="toc-text">独立应用中使用Spark</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96SparkContext"><span class="toc-number">2.1.</span> <span class="toc-text">1、初始化SparkContext</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%9E%84%E5%BB%BA%E7%8B%AC%E7%AB%8B%E5%BA%94%E7%94%A8"><span class="toc-number">2.2.</span> <span class="toc-text">2、构建独立应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RDD%E7%BC%96%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">RDD编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%A6%82%E5%BF%B5"><span class="toc-number">3.1.</span> <span class="toc-text">1、概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%88%9B%E5%BB%BARDD"><span class="toc-number">3.2.</span> <span class="toc-text">2、创建RDD</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E8%AF%BB%E5%8F%96%E4%B8%80%E4%B8%AA%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-number">3.2.1.</span> <span class="toc-text">1、读取一个外部数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1%E3%80%81Python"><span class="toc-number">3.2.1.0.1.</span> <span class="toc-text">1、Python</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2%E3%80%81Scala"><span class="toc-number">3.2.1.0.2.</span> <span class="toc-text">2、Scala</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3%E3%80%81Java"><span class="toc-number">3.2.1.0.3.</span> <span class="toc-text">3、Java</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%9C%A8%E9%A9%B1%E5%8A%A8%E5%99%A8%E7%A8%8B%E5%BA%8F%E9%87%8C%E5%88%86%E5%8F%91%E9%A9%B1%E5%8A%A8%E5%99%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E5%AF%B9%E8%B1%A1%E9%9B%86%E5%90%88"><span class="toc-number">3.2.2.</span> <span class="toc-text">2、在驱动器程序里分发驱动器程序中的对象集合</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81RDD%E6%93%8D%E4%BD%9C"><span class="toc-number">3.3.</span> <span class="toc-text">3、RDD操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1%E3%80%81%E8%BD%AC%E5%8C%96%E6%93%8D%E4%BD%9C"><span class="toc-number">3.3.0.1.</span> <span class="toc-text">1、转化操作</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1%E3%80%81python"><span class="toc-number">3.3.0.1.1.</span> <span class="toc-text">1、python</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2%E3%80%81Scala-1"><span class="toc-number">3.3.0.1.2.</span> <span class="toc-text">2、Scala</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3%E3%80%81Java-1"><span class="toc-number">3.3.0.1.3.</span> <span class="toc-text">3、Java</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2%E3%80%81%E8%A1%8C%E5%8A%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">3.3.0.2.</span> <span class="toc-text">2、行动操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3%E3%80%81%E6%83%B0%E6%80%A7%E6%B1%82%E5%80%BC"><span class="toc-number">3.3.0.3.</span> <span class="toc-text">3、惰性求值</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E5%90%91Spark%E4%BC%A0%E9%80%92%E5%87%BD%E6%95%B0"><span class="toc-number">3.4.</span> <span class="toc-text">4、向Spark传递函数</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Spark大数据分析学习笔记(二)
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-01-09T08:54:49.000Z" itemprop="datePublished">2020-01-09</time>
+        
+        (Updated: <time datetime="2020-01-19T02:15:17.000Z" itemprop="dateModified">2020-01-19</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/Spark/" rel="tag">Spark</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Spark的核心概念概览"><a href="#Spark的核心概念概览" class="headerlink" title="Spark的核心概念概览"></a>Spark的核心概念概览</h2><p>​    从上层讲，每个spark应用都是由一个<strong>驱动器程序</strong>来发起集群上的各种并行操作</p>
+<p>​    <strong>驱动器程序</strong>包含应用的main函数，并且定义了集群上的分布式数据集，还对这些分布式数据集应用了相关操作。</p>
+<p>​    <strong>驱动器程序</strong>通过通过SparkContext对象来访问Spark。这个对象代表对计算集群的一个连接。shell启动时已经自动创建了一个SparkConte对象，是一个叫做sc的变量一旦有了SparkContext，你就可以用来创建RDD</p>
+<h2 id="独立应用中使用Spark"><a href="#独立应用中使用Spark" class="headerlink" title="独立应用中使用Spark"></a>独立应用中使用Spark</h2><p>​    从Linux环境搭建，到在shell命令行客户端使用Spark,我们使用Spark都没有脱离服务器，除此之外，我们还可以在独立应用中使用Spark</p>
+<p>​    简言之就是我们可以在本地开发spark应用程序，然后发布到spark服务器中运行，类比hadopp上的mapReduce程序</p>
+<h3 id="1、初始化SparkContext"><a href="#1、初始化SparkContext" class="headerlink" title="1、初始化SparkContext"></a>1、初始化SparkContext</h3><p>​    我们可以分别用Python、Scala和Java开发</p>
+<p>​    Python</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from pyspark import SparkConf, SparkContext</span><br><span class="line">conf &#x3D; SparkConf().SetMaster(&quot;local&quot;).setAppName(&quot;My App&quot;)</span><br><span class="line">sc &#x3D; SparkContext(conf &#x3D; conf)</span><br></pre></td></tr></table></figure>
+
+<p>​    Scala</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.<span class="type">SparkConf</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.<span class="type">SparkContext</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.<span class="type">SparkContext</span>._</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> conf = <span class="keyword">new</span> <span class="type">SparkConf</span>().setMaster(<span class="string">&quot;local&quot;</span>).setAppName(<span class="string">&quot;My App&quot;</span>)</span><br><span class="line"><span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)</span><br></pre></td></tr></table></figure>
+
+<p>​    Java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.SparkConf;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaSparkContext;</span><br><span class="line"></span><br><span class="line">SparkConf conf = <span class="keyword">new</span> <span class="keyword">new</span> SparkConf().setMaster(<span class="string">&quot;local&quot;</span>).setAppName(<span class="string">&quot;My App&quot;</span>);</span><br><span class="line">JavaSparkContext sc = <span class="keyword">new</span> JavaSparkContext(conf);</span><br></pre></td></tr></table></figure>
+
+<p>创建SparkContext的基本的方法，你只需要传递两个参数</p>
+<ul>
+<li>集群URL：告诉Spark如何连接到集群上。在这几个例子中我们使用的时“local”,这个特殊值可以让Spark运行在单机单线程上而无需连接到集群</li>
+<li>应用名：在例子中我们使用的是My App。当连接到集群时，这个值可以帮助你在集群管理器的用户界面中找到你的应用。</li>
+</ul>
+<h3 id="2、构建独立应用"><a href="#2、构建独立应用" class="headerlink" title="2、构建独立应用"></a>2、构建独立应用</h3><p>Scala版本</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建一个scalaa版本的Spark Context</span></span><br><span class="line"><span class="keyword">val</span> conf <span class="keyword">new</span> <span class="type">SparkConf</span>().setAppName(<span class="string">&quot;wordCount&quot;</span>)</span><br><span class="line"><span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)</span><br><span class="line"><span class="comment">//读取数据</span></span><br><span class="line"><span class="keyword">val</span> input = sc.textFile(inputFile)</span><br><span class="line"><span class="comment">//拆分</span></span><br><span class="line"><span class="keyword">val</span> words = input.flatMap(line =&gt; line.split(<span class="string">&quot; &quot;</span>))</span><br><span class="line"><span class="comment">//计数键值对</span></span><br><span class="line"><span class="keyword">var</span> counts = words.map(word =&gt; (word, <span class="number">1</span>).reduceByKey&#123;<span class="keyword">case</span>(x,y) =&gt; x + y&#125;)</span><br><span class="line"><span class="comment">//将统计出来的单词数存入一个文本文件</span></span><br><span class="line">counts.saveAsTextFile(outputFile)</span><br></pre></td></tr></table></figure>
+
+<p>​    </p>
+<h2 id="RDD编程"><a href="#RDD编程" class="headerlink" title="RDD编程"></a>RDD编程</h2><h3 id="1、概念"><a href="#1、概念" class="headerlink" title="1、概念"></a>1、概念</h3><p>​    RDD就是一个不可变的分布式集合。每个RDD都被分为多个分区，这些分区运行在集群中的不同节点上。RDD可以包含Python、Java、Scala中的任意类型的对象，甚至可以包含用户自定义的对象。</p>
+<p>在初始化SparkContext中已经写了如果获取sc对象，所以下面的RDD编程都只是写核心代码</p>
+<h3 id="2、创建RDD"><a href="#2、创建RDD" class="headerlink" title="2、创建RDD"></a>2、创建RDD</h3><h4 id="1、读取一个外部数据集"><a href="#1、读取一个外部数据集" class="headerlink" title="1、读取一个外部数据集"></a>1、读取一个外部数据集</h4><h6 id="1、Python"><a href="#1、Python" class="headerlink" title="1、Python"></a>1、Python</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lines = sc.textFile(<span class="string">&quot;/path/to/README.md&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h6 id="2、Scala"><a href="#2、Scala" class="headerlink" title="2、Scala"></a>2、Scala</h6><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> lines = sc.textFile(<span class="string">&quot;/path/to/README.md&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h6 id="3、Java"><a href="#3、Java" class="headerlink" title="3、Java"></a>3、Java</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">JavaRDD&lt;String&gt; lines = sc.textFile(<span class="string">&quot;/path/to/README.md&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、在驱动器程序里分发驱动器程序中的对象集合"><a href="#2、在驱动器程序里分发驱动器程序中的对象集合" class="headerlink" title="2、在驱动器程序里分发驱动器程序中的对象集合"></a>2、在驱动器程序里分发驱动器程序中的对象集合</h4><h3 id="3、RDD操作"><a href="#3、RDD操作" class="headerlink" title="3、RDD操作"></a>3、RDD操作</h3><h5 id="1、转化操作"><a href="#1、转化操作" class="headerlink" title="1、转化操作"></a>1、转化操作</h5><p>​        由一个RDD生成新的RDD。例如，根据谓词匹配情况筛选数据就是一个常见的转化操作。</p>
+<h6 id="1、python"><a href="#1、python" class="headerlink" title="1、python"></a>1、python</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">inputRDD = sc.textFile(<span class="string">&quot;log.txt&quot;</span>)</span><br><span class="line">errorsRDD = inputRDD.filter(lamdba x: <span class="string">&quot;error&quot;</span> <span class="keyword">in</span> x)</span><br></pre></td></tr></table></figure>
+
+<h6 id="2、Scala-1"><a href="#2、Scala-1" class="headerlink" title="2、Scala"></a>2、Scala</h6><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> inputRDD = sc.textFile(<span class="string">&quot;log.txt&quot;</span>)</span><br><span class="line"><span class="keyword">val</span> errorsRDD = inputRDD.filter(line =&gt; line.contains(<span class="string">&quot;error&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<h6 id="3、Java-1"><a href="#3、Java-1" class="headerlink" title="3、Java"></a>3、Java</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">JavaRDD&lt;String&gt; inputRDD = sc.textFile(<span class="string">&quot;log.txt&quot;</span>);</span><br><span class="line">JavaRDD&lt;string&gt; errorsRDD = inputRDD.filter(</span><br><span class="line">    <span class="keyword">new</span> Function&lt;String, Boolean&gt;()&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> Boolean <span class="title">call</span><span class="params">(String x)</span></span>&#123;</span><br><span class="line">            <span class="keyword">return</span> x.contains(<span class="string">&quot;error&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br><span class="line"><span class="comment">//其实java8中可以写成lamdba表达式的形式</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="2、行动操作"><a href="#2、行动操作" class="headerlink" title="2、行动操作"></a>2、行动操作</h5><p>​        行动操作会对RDD计算出一个结果，并把结果返回到驱动器程序中，或把结果存储到外部存储系统中(如HDFS)中。</p>
+<p>转化操作和行动操作的区别在于Spark计算RDD的方式不同。</p>
+<p>对于RDD操作的理解可以类比java8中的流，流和RDD操作的思想基本一致</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">&quot;Input had &quot;</span> + badLinesRDD.count() + <span class="string">&quot; concernint lines&quot;</span> )</span><br><span class="line">print(<span class="string">&quot;Here are 10 example:&quot;</span>)</span><br><span class="line">badLinesRDD.take(<span class="number">10</span>).foreach(println)</span><br></pre></td></tr></table></figure>
+
+<h5 id="3、惰性求值"><a href="#3、惰性求值" class="headerlink" title="3、惰性求值"></a>3、惰性求值</h5><p>RDD的转化操作都是惰性求值。这意味着在被调用行动操作之前Spark不会开始结算。</p>
+<h3 id="4、向Spark传递函数"><a href="#4、向Spark传递函数" class="headerlink" title="4、向Spark传递函数"></a>4、向Spark传递函数</h3>
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spark%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E6%A6%82%E8%A7%88"><span class="toc-number">1.</span> <span class="toc-text">Spark的核心概念概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8B%AC%E7%AB%8B%E5%BA%94%E7%94%A8%E4%B8%AD%E4%BD%BF%E7%94%A8Spark"><span class="toc-number">2.</span> <span class="toc-text">独立应用中使用Spark</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96SparkContext"><span class="toc-number">2.1.</span> <span class="toc-text">1、初始化SparkContext</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%9E%84%E5%BB%BA%E7%8B%AC%E7%AB%8B%E5%BA%94%E7%94%A8"><span class="toc-number">2.2.</span> <span class="toc-text">2、构建独立应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RDD%E7%BC%96%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">RDD编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%A6%82%E5%BF%B5"><span class="toc-number">3.1.</span> <span class="toc-text">1、概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%88%9B%E5%BB%BARDD"><span class="toc-number">3.2.</span> <span class="toc-text">2、创建RDD</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E8%AF%BB%E5%8F%96%E4%B8%80%E4%B8%AA%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-number">3.2.1.</span> <span class="toc-text">1、读取一个外部数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1%E3%80%81Python"><span class="toc-number">3.2.1.0.1.</span> <span class="toc-text">1、Python</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2%E3%80%81Scala"><span class="toc-number">3.2.1.0.2.</span> <span class="toc-text">2、Scala</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3%E3%80%81Java"><span class="toc-number">3.2.1.0.3.</span> <span class="toc-text">3、Java</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%9C%A8%E9%A9%B1%E5%8A%A8%E5%99%A8%E7%A8%8B%E5%BA%8F%E9%87%8C%E5%88%86%E5%8F%91%E9%A9%B1%E5%8A%A8%E5%99%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E5%AF%B9%E8%B1%A1%E9%9B%86%E5%90%88"><span class="toc-number">3.2.2.</span> <span class="toc-text">2、在驱动器程序里分发驱动器程序中的对象集合</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81RDD%E6%93%8D%E4%BD%9C"><span class="toc-number">3.3.</span> <span class="toc-text">3、RDD操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1%E3%80%81%E8%BD%AC%E5%8C%96%E6%93%8D%E4%BD%9C"><span class="toc-number">3.3.0.1.</span> <span class="toc-text">1、转化操作</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1%E3%80%81python"><span class="toc-number">3.3.0.1.1.</span> <span class="toc-text">1、python</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2%E3%80%81Scala-1"><span class="toc-number">3.3.0.1.2.</span> <span class="toc-text">2、Scala</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3%E3%80%81Java-1"><span class="toc-number">3.3.0.1.3.</span> <span class="toc-text">3、Java</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2%E3%80%81%E8%A1%8C%E5%8A%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">3.3.0.2.</span> <span class="toc-text">2、行动操作</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3%E3%80%81%E6%83%B0%E6%80%A7%E6%B1%82%E5%80%BC"><span class="toc-number">3.3.0.3.</span> <span class="toc-text">3、惰性求值</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E5%90%91Spark%E4%BC%A0%E9%80%92%E5%87%BD%E6%95%B0"><span class="toc-number">3.4.</span> <span class="toc-text">4、向Spark传递函数</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&text=Spark大数据分析学习笔记(二)"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&title=Spark大数据分析学习笔记(二)"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&is_video=false&description=Spark大数据分析学习笔记(二)"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Spark大数据分析学习笔记(二)&body=Check out this article: https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&title=Spark大数据分析学习笔记(二)"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&title=Spark大数据分析学习笔记(二)"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&title=Spark大数据分析学习笔记(二)"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&title=Spark大数据分析学习笔记(二)"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&name=Spark大数据分析学习笔记(二)&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/01/09/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%BA%8C/&t=Spark大数据分析学习笔记(二)"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

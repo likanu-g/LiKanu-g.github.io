@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="String:字符串字符串的定义12&quot;string text&quot;;&amp;#x27;string text&amp;#x27;;  字符串的赋值12var a:String &#x3D; &quot;a&quot;; &#x2F;&#x2F; with type declarationvar b &#x3D; &quot;b&quot;; &#x2F;&#x2F; without type declaration  字符串的拼接123var greet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="haxe学习-四-字符串和数组集合">
+<meta property="og:url" content="https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="String:字符串字符串的定义12&quot;string text&quot;;&amp;#x27;string text&amp;#x27;;  字符串的赋值12var a:String &#x3D; &quot;a&quot;; &#x2F;&#x2F; with type declarationvar b &#x3D; &quot;b&quot;; &#x2F;&#x2F; without type declaration  字符串的拼接123var greet">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-04T07:01:19.000Z">
+<meta property="article:modified_time" content="2020-06-04T07:01:56.000Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="haxe">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>haxe学习-四-字符串和数组集合</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../haxe%E5%AD%A6%E4%B9%A0-%E4%BA%94-List%E5%92%8CMap/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../haxe%E5%AD%A6%E4%B9%A0-%E4%B8%89-%E7%B1%BB%E5%9E%8B/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&text=haxe学习-四-字符串和数组集合"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&title=haxe学习-四-字符串和数组集合"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&is_video=false&description=haxe学习-四-字符串和数组集合"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=haxe学习-四-字符串和数组集合&body=Check out this article: https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&title=haxe学习-四-字符串和数组集合"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&title=haxe学习-四-字符串和数组集合"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&title=haxe学习-四-字符串和数组集合"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&title=haxe学习-四-字符串和数组集合"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&name=haxe学习-四-字符串和数组集合&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&t=haxe学习-四-字符串和数组集合"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#String-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.</span> <span class="toc-text">String:字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.</span> <span class="toc-text">字符串的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%B5%8B%E5%80%BC"><span class="toc-number">1.2.</span> <span class="toc-text">字符串的赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8B%BC%E6%8E%A5"><span class="toc-number">1.3.</span> <span class="toc-text">字符串的拼接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.4.</span> <span class="toc-text">模板字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%BF%90%E7%AE%97"><span class="toc-number">1.5.</span> <span class="toc-text">字符串的运算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E8%A1%8C%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.5.1.</span> <span class="toc-text">多行字符串</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E8%BD%ACASCII"><span class="toc-number">1.5.2.</span> <span class="toc-text">字符转ASCII</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Array-%E9%9B%86%E5%90%88-%E6%95%B0%E7%BB%84"><span class="toc-number">2.</span> <span class="toc-text">Array:集合-数组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88%E5%AE%9A%E4%B9%89"><span class="toc-number">2.1.</span> <span class="toc-text">集合定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88%E6%8E%A8%E5%B1%95%E5%AE%9A%E4%B9%89"><span class="toc-number">2.2.</span> <span class="toc-text">集合推展定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-number">2.3.</span> <span class="toc-text">集合的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A0"><span class="toc-number">2.3.1.</span> <span class="toc-text">添加元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%85%83%E7%B4%A0"><span class="toc-number">2.3.2.</span> <span class="toc-text">删除元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E5%85%83%E7%B4%A0"><span class="toc-number">2.3.3.</span> <span class="toc-text">修改元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0"><span class="toc-number">2.3.4.</span> <span class="toc-text">查找元素</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%81%8D%E5%8E%86array"><span class="toc-number">2.3.4.1.</span> <span class="toc-text">遍历array</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3"><span class="toc-number">2.3.4.1.1.</span> <span class="toc-text">迭代</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%93%8D%E4%BD%9C"><span class="toc-number">2.3.5.</span> <span class="toc-text">其他操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Copy%EF%BC%9A%E5%A4%8D%E5%88%B6"><span class="toc-number">2.3.5.1.</span> <span class="toc-text">Copy：复制</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Filter%EF%BC%9A%E8%BF%87%E6%BB%A4"><span class="toc-number">2.3.5.2.</span> <span class="toc-text">Filter：过滤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Map%EF%BC%9A%E6%98%A0%E5%B0%84"><span class="toc-number">2.3.5.3.</span> <span class="toc-text">Map：映射</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Reverse%EF%BC%9A%E5%8F%8D%E8%BD%AC"><span class="toc-number">2.3.5.4.</span> <span class="toc-text">Reverse：反转</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Slice-%E5%88%87%E7%89%87"><span class="toc-number">2.3.5.5.</span> <span class="toc-text">Slice:切片</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Sort%EF%BC%9A%E6%8E%92%E5%BA%8F"><span class="toc-number">2.3.5.6.</span> <span class="toc-text">Sort：排序</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Array%E7%9A%84%E6%98%BE%E7%A4%BA"><span class="toc-number">2.3.6.</span> <span class="toc-text">Array的显示</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multidimensional-arrays%EF%BC%9A%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88"><span class="toc-number">2.4.</span> <span class="toc-text">Multidimensional arrays：多维数组(集合)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E5%8F%96%E5%80%BC"><span class="toc-number">2.4.1.</span> <span class="toc-text">多维数组的取值</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        haxe学习-四-字符串和数组集合
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-06-04T07:01:19.000Z" itemprop="datePublished">2020-06-04</time>
+        
+        (Updated: <time datetime="2020-06-04T07:01:56.000Z" itemprop="dateModified">2020-06-04</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/haxe/">haxe</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/haxe/" rel="tag">haxe</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="String-字符串"><a href="#String-字符串" class="headerlink" title="String:字符串"></a>String:字符串</h2><h3 id="字符串的定义"><a href="#字符串的定义" class="headerlink" title="字符串的定义"></a>字符串的定义</h3><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;string text&quot;</span>;</span><br><span class="line"><span class="string">&#x27;string text&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="字符串的赋值"><a href="#字符串的赋值" class="headerlink" title="字符串的赋值"></a>字符串的赋值</h3><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a:<span class="type">String </span>= <span class="string">&quot;a&quot;</span>; <span class="comment">// with type declaration</span></span><br><span class="line"><span class="keyword">var</span> b = <span class="string">&quot;b&quot;</span>; <span class="comment">// without type declaration</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="字符串的拼接"><a href="#字符串的拼接" class="headerlink" title="字符串的拼接"></a>字符串的拼接</h3><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> greeting = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> message = greeting + <span class="string">&quot; world&quot;</span>; </span><br><span class="line"><span class="built_in">trace</span>(message); <span class="comment">// output: hello world</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="模板字符串"><a href="#模板字符串" class="headerlink" title="模板字符串"></a>模板字符串</h3><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">&quot;Mark&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> age = <span class="number">33</span>;</span><br><span class="line"><span class="keyword">var</span> message = <span class="string">&#x27;Hello, I am <span class="subst">$name and my age is $age&#x27;;</span></span></span><br><span class="line"><span class="string"><span class="subst">trace(message); // output: Hello, I am Mark and my age is 33</span></span></span><br></pre></td></tr></table></figure>
+
+<p>模板字符串就是用$符号和变量名的方式替换变量在字符串中的位置，避免字符串拼接带来的书写麻烦，效果是等同于字符串的拼接的</p>
+<p>对于复杂变量的字符串拼接和插入我们可以使用这样的表达式<code>$&#123;myvariable&#125;</code></p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> age = <span class="number">33</span>;</span><br><span class="line"><span class="keyword">var</span> year = <span class="number">2017</span>;</span><br><span class="line"><span class="keyword">var</span> message = <span class="string">&#x27;I am born in <span class="subst">$&#123;year - age&#125;</span>&#x27;</span>;</span><br><span class="line"><span class="built_in">trace</span>(message); <span class="comment">// output: I am born in 1984</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="字符串的运算"><a href="#字符串的运算" class="headerlink" title="字符串的运算"></a>字符串的运算</h3><p>我们可以对字符串使用运算符</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// add two strings</span></span><br><span class="line"><span class="built_in">trace</span>(<span class="string">&quot;apple&quot;</span> + <span class="string">&quot;pear&quot;</span>); <span class="comment">// applepear</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// compare if both are the same</span></span><br><span class="line"><span class="built_in">trace</span>(<span class="string">&quot;apple&quot;</span> == <span class="string">&quot;pear&quot;</span>); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">trace</span>(<span class="string">&quot;apple&quot;</span> == <span class="string">&quot;apple&quot;</span>); <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// compare if both are different</span></span><br><span class="line"><span class="built_in">trace</span>(<span class="string">&quot;strawberry&quot;</span> != <span class="string">&quot;blueberry&quot;</span>); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">trace</span>(<span class="string">&quot;patato&quot;</span> != <span class="string">&quot;patato&quot;</span>); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">trace</span>(<span class="string">&quot;ABCB&quot;</span> &gt; <span class="string">&quot;ABBBB&quot;</span>); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">trace</span>(<span class="string">&quot;ABCB&quot;</span> &lt; <span class="string">&quot;AAAA&quot;</span>); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p>当然数字字符串的比较的运算符操作与字符字符串的比较会有所差别，例如</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">&quot;11.5&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> b = <span class="string">&quot;3&quot;</span>;</span><br><span class="line"><span class="built_in">trace</span>(a &gt; b); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p>出现这种情况的原因是a中11.5的1在前面，会优先用1和3比较，我们可以测试一下其他数据验证这个规则</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">&quot;31.5&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> b = <span class="string">&quot;3&quot;</span>;</span><br><span class="line"><span class="built_in">trace</span>(a &gt; b); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="多行字符串"><a href="#多行字符串" class="headerlink" title="多行字符串"></a>多行字符串</h4><p>对于多行字符串，在haxe中可以这么写</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fruits = <span class="string">&quot;</span></span><br><span class="line"><span class="string">- apple</span></span><br><span class="line"><span class="string">- pear</span></span><br><span class="line"><span class="string">- banana&quot;</span>;</span><br><span class="line"><span class="comment">//output</span></span><br><span class="line"><span class="comment">//Number.hx:17: </span></span><br><span class="line"><span class="comment">//    - apple</span></span><br><span class="line"><span class="comment">//    - pear</span></span><br><span class="line"><span class="comment">//    - banana</span></span><br></pre></td></tr></table></figure>
+
+<p>输出的样式也是按照原样式输出的</p>
+<h4 id="字符转ASCII"><a href="#字符转ASCII" class="headerlink" title="字符转ASCII"></a>字符转ASCII</h4><p>我们可以使用<code>.code</code>方法将单个字符转成ASSII码</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">trace</span>(<span class="string">&quot;\n&quot;</span>.code); <span class="comment">// output: 10</span></span><br><span class="line"><span class="built_in">trace</span>(<span class="string">&quot;@&quot;</span>.code); <span class="comment">// // output: 64</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Array-集合-数组"><a href="#Array-集合-数组" class="headerlink" title="Array:集合-数组"></a>Array:集合-数组</h2><p>haxo中的集合用是用array表示，准确地说haxe中的数组就是用集合表示的只不过关键字用的是Array</p>
+<h3 id="集合定义"><a href="#集合定义" class="headerlink" title="集合定义"></a>集合定义</h3><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arrayOfStrings:<span class="type">Array</span>&lt;<span class="keyword">String</span>&gt; = [<span class="string">&quot;Apple&quot;</span>, <span class="string">&quot;Pear&quot;</span>, <span class="string">&quot;Banana&quot;</span>];</span><br><span class="line"><span class="built_in">trace</span>(arrayOfStrings);<span class="comment">//[Apple,Pear,Banana]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Creating an array with float values</span></span><br><span class="line"><span class="keyword">var</span> arrayOfFloats = [<span class="number">10.2</span>, <span class="number">40.5</span>, <span class="number">60.3</span>];</span><br><span class="line"><span class="built_in">trace</span>(arrayOfFloats);</span><br></pre></td></tr></table></figure>
+
+<h3 id="集合推展定义"><a href="#集合推展定义" class="headerlink" title="集合推展定义"></a>集合推展定义</h3><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ar aInts = [<span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">0.</span>.<span class="number">.5</span>) i];</span><br><span class="line"><span class="built_in">trace</span>(aInts); <span class="comment">// [0,1,2,3,4]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> aEvens = [<span class="keyword">for</span>(i <span class="keyword">in</span> <span class="number">0.</span>.<span class="number">.5</span>) i*<span class="number">2</span>];</span><br><span class="line"><span class="built_in">trace</span>(aEvens); <span class="comment">// [0,2,4,6,8]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> aChars = [<span class="keyword">for</span>(c <span class="keyword">in</span> <span class="number">65.</span>.<span class="number">.70</span>) <span class="keyword">String</span>.fromCharCode(c)];</span><br><span class="line"><span class="built_in">trace</span>(aChars); <span class="comment">// [&#x27;A&#x27;,&#x27;B&#x27;,&#x27;C&#x27;,&#x27;D&#x27;,&#x27;E&#x27;]         </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> x = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">var</span> aBits = [<span class="keyword">while</span>(x &lt; <span class="number">128</span>) x = x * <span class="number">2</span>];</span><br><span class="line"><span class="built_in">trace</span>(aBits); <span class="comment">// [2,4,8,16,32,64,128]</span></span><br></pre></td></tr></table></figure>
+
+<p>这种定义和初始化类似于python中的列表生成器，不过haxe中的描述更加灵活</p>
+<h3 id="集合的操作"><a href="#集合的操作" class="headerlink" title="集合的操作"></a>集合的操作</h3><h4 id="添加元素"><a href="#添加元素" class="headerlink" title="添加元素"></a>添加元素</h4><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arrayOfStrings:<span class="type">Array</span>&lt;<span class="keyword">String</span>&gt; = [];</span><br><span class="line"><span class="comment">//在索引0的位置添加 Hello</span></span><br><span class="line">arrayOfStrings.insert(<span class="number">0</span>, <span class="string">&quot;Hello&quot;</span>);</span><br><span class="line"><span class="comment">// 在array起始位置添加 Haxe</span></span><br><span class="line">arrayOfStrings.unshift(<span class="string">&quot;Haxe&quot;</span>);</span><br><span class="line"><span class="comment">//在array的末尾位置追加 World</span></span><br><span class="line">arrayOfStrings.push(<span class="string">&quot;World&quot;</span>);</span><br><span class="line"><span class="comment">//复制array然后追加&quot;foo&quot;, &quot;bar&quot;到array的最后面</span></span><br><span class="line">arrayOfStrings = arrayOfStrings.concat([<span class="string">&quot;foo&quot;</span>, <span class="string">&quot;bar&quot;</span>]);</span><br></pre></td></tr></table></figure>
+
+<h4 id="删除元素"><a href="#删除元素" class="headerlink" title="删除元素"></a>删除元素</h4><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arrayOfStrings:<span class="type">Array</span>&lt;<span class="keyword">String</span>&gt; = [<span class="string">&quot;first&quot;</span>, <span class="string">&quot;foo&quot;</span>, <span class="string">&quot;middle&quot;</span>, <span class="string">&quot;foo&quot;</span>, <span class="string">&quot;middle&quot;</span>,<span class="string">&quot;last&quot;</span>];</span><br><span class="line"><span class="comment">// 删除第一次出现的&quot;middle&quot;</span></span><br><span class="line">arrayOfStrings.remove(<span class="string">&quot;middle&quot;</span>);</span><br><span class="line"><span class="built_in">trace</span>(arrayOfStrings);<span class="comment">//输出：[first,foo,foo,middle,last]</span></span><br><span class="line"><span class="comment">// 删除索引0开始以的3个元素，一共删除3个元素，第一个参数是索引位置，第二个参数是删除元素的个数</span></span><br><span class="line">arrayOfStrings.splice(<span class="number">0</span>, <span class="number">3</span>);</span><br><span class="line"><span class="built_in">trace</span>(arrayOfStrings.splice(<span class="number">0</span>, <span class="number">3</span>));<span class="comment">//输出：[first,foo,foo]</span></span><br><span class="line"><span class="built_in">trace</span>(arrayOfStrings);<span class="comment">//输出：[middle,last]</span></span><br><span class="line"><span class="comment">// 删除并返回array第一个元素</span></span><br><span class="line">arrayOfStrings.shift();<span class="comment">//这个表达式会返回middle</span></span><br><span class="line"><span class="built_in">trace</span>(arrayOfStrings);<span class="comment">//操作后arrayOfStrings输出：[last]</span></span><br><span class="line"><span class="comment">// 删除并返回array最后一个元素</span></span><br><span class="line">arrayOfStrings.pop();</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改元素"><a href="#修改元素" class="headerlink" title="修改元素"></a>修改元素</h4><p>haxe中不允许遍历修改array</p>
+<h4 id="查找元素"><a href="#查找元素" class="headerlink" title="查找元素"></a>查找元素</h4><p>haxe中数组的array的取值可以用类似C,Java中使用数组下标来表示</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arrayOfStrings:<span class="type">Array</span>&lt;<span class="keyword">String</span>&gt; = [<span class="string">&quot;first&quot;</span>, <span class="string">&quot;foo&quot;</span>, <span class="string">&quot;middle&quot;</span>, <span class="string">&quot;foo&quot;</span>, <span class="string">&quot;last&quot;</span>];</span><br><span class="line"><span class="comment">// Retrieves first array element</span></span><br><span class="line"><span class="keyword">var</span> first = arrayOfStrings[<span class="number">0</span>];</span><br><span class="line"><span class="comment">// Retrieves last array element</span></span><br><span class="line"><span class="keyword">var</span> last = arrayOfStrings[arrayOfStrings.length - <span class="number">1</span>];</span><br><span class="line"><span class="comment">// Retrieves first occurrence of &quot;foo&quot; string</span></span><br><span class="line"><span class="keyword">var</span> firstOccurrence = arrayOfStrings[arrayOfStrings.indexOf(<span class="string">&quot;foo&quot;</span>)];</span><br><span class="line"><span class="comment">// Retrieves last occurrence of &quot;foo&quot; string</span></span><br><span class="line"><span class="keyword">var</span> lastOccurrence = arrayOfStrings[arrayOfStrings.lastIndexOf(<span class="string">&quot;foo&quot;</span>)];</span><br></pre></td></tr></table></figure>
+
+<h5 id="遍历array"><a href="#遍历array" class="headerlink" title="遍历array"></a>遍历array</h5><h6 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a>迭代</h6><p>迭代有两种形式，</p>
+<ul>
+<li>类似Java的foreach，可以在不知道索引的情况下使用</li>
+</ul>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (item <span class="keyword">in</span> arrayOfStrings) &#123;</span><br><span class="line">    <span class="regexp">//</span> <span class="keyword">do</span> something</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>也可以用索引的for循环</li>
+</ul>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var a1 = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>];</span><br><span class="line">var a2 = [<span class="number">11</span>, <span class="number">22</span>, <span class="number">33</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">i</span> in <span class="number">0.</span>..a1.<span class="built_in">length</span>) &#123;</span><br><span class="line">    trace(<span class="built_in">i</span> + <span class="string">&quot;, &quot;</span> + a1[<span class="built_in">i</span>] + <span class="string">&quot;, &quot;</span> + a2[<span class="built_in">i</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h4><h5 id="Copy：复制"><a href="#Copy：复制" class="headerlink" title="Copy：复制"></a>Copy：复制</h5><p>Array的copy()方法复制原Array的到一个新的Array中</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> list:<span class="type">Array</span>&lt;<span class="keyword">String</span>&gt; = [<span class="string">&quot;first&quot;</span>, <span class="string">&quot;second&quot;</span>, <span class="string">&quot;last&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> copiedList = list.copy();</span><br><span class="line"></span><br><span class="line">copiedList.push(<span class="string">&quot;best&quot;</span>); <span class="comment">// add extra value to the copied list</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">trace</span>(list); <span class="comment">// [&quot;first&quot;, &quot;second&quot;, &quot;last&quot;];</span></span><br><span class="line"><span class="built_in">trace</span>(copiedList); <span class="comment">// [&quot;first&quot;, &quot;second&quot;, &quot;last&quot;, &quot;best&quot;];</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Filter：过滤"><a href="#Filter：过滤" class="headerlink" title="Filter：过滤"></a>Filter：过滤</h5><p>Array的filter()类似Java8中的Stream，filter()里的参数是一个返回布尔值的函数，暂且就称之为匿名函数，如果返回true就被添加到新的Array中</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> list:<span class="type">Array</span>&lt;<span class="keyword">String</span>&gt; = [<span class="string">&quot;apple&quot;</span>, <span class="string">&quot;pear&quot;</span>, <span class="string">&quot;banana&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> filteredList = list.filter(<span class="function"><span class="keyword">function</span> </span>(v) <span class="keyword">return</span> v == <span class="string">&quot;banana&quot;</span>);</span><br><span class="line"><span class="built_in">trace</span>(filteredList); <span class="comment">// banana</span></span><br></pre></td></tr></table></figure>
+
+<p>与下面这种形式是等价的</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> list:<span class="type">Array</span>&lt;<span class="keyword">String</span>&gt; = [<span class="string">&quot;apple&quot;</span>, <span class="string">&quot;pear&quot;</span>, <span class="string">&quot;banana&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> filteredList = [<span class="keyword">for</span> (v <span class="keyword">in</span> list ) <span class="keyword">if</span> (v == <span class="string">&quot;banana&quot;</span>) v];</span><br><span class="line"><span class="built_in">trace</span>(filteredList); <span class="comment">// banana</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Map：映射"><a href="#Map：映射" class="headerlink" title="Map：映射"></a>Map：映射</h5><p>Array的映射函数map()，可以将Array中的元素通过映射函数映射到一个新的Array中，原Array和新Array的元素一一对应，顺序不变</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> list:<span class="type">Array</span>&lt;<span class="keyword">String</span>&gt; = [<span class="string">&quot;first&quot;</span>, <span class="string">&quot;second&quot;</span>, <span class="string">&quot;last&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> importantList = list.map(<span class="function"><span class="keyword">function</span> </span>(v) <span class="keyword">return</span> v.toUpperCase());</span><br><span class="line"><span class="built_in">trace</span>(importantList); <span class="comment">// [&quot;FIRST&quot;,&quot;SECOND&quot;,&quot;LAST&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<p>等价于下面的</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> list:<span class="type">Array</span>&lt;<span class="keyword">String</span>&gt; = [<span class="string">&quot;first&quot;</span>, <span class="string">&quot;second&quot;</span>, <span class="string">&quot;last&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> importantList = [<span class="keyword">for</span>(v <span class="keyword">in</span> list) v.toUpperCase()];</span><br><span class="line"><span class="built_in">trace</span>(importantList); <span class="comment">// [&quot;FIRST&quot;,&quot;SECOND&quot;,&quot;LAST&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<p>map()函数还能这么用，批量将将字符串元素转化成数字元素</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> list:<span class="type">Array</span>&lt;<span class="keyword">String</span>&gt; = [<span class="string">&quot;1.1&quot;</span>, <span class="string">&quot;1.2&quot;</span>, <span class="string">&quot;1.3&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> listAsFloats:<span class="type">Array</span>&lt;<span class="keyword">Float</span>&gt; = list.map(Std.parseFloat);</span><br><span class="line"><span class="built_in">trace</span>(listAsFloats); <span class="comment">// [1.1, 1.2, 1.3]</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Reverse：反转"><a href="#Reverse：反转" class="headerlink" title="Reverse：反转"></a>Reverse：反转</h5><p>Array的reverse()方法可以反转Array里元素的顺序</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> list:<span class="type">Array</span>&lt;<span class="keyword">String</span>&gt; = [<span class="string">&quot;first&quot;</span>, <span class="string">&quot;second&quot;</span>, <span class="string">&quot;last&quot;</span>];</span><br><span class="line">list.reverse();</span><br><span class="line"><span class="built_in">trace</span>(list); <span class="comment">// [&quot;last&quot;,&quot;second&quot;,&quot;first&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="Slice-切片"><a href="#Slice-切片" class="headerlink" title="Slice:切片"></a>Slice:切片</h5><p>切片的概念在python和go中也出现过，也很常见，但是java中不支持</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> list:<span class="type">Array</span>&lt;<span class="keyword">String</span>&gt; = [<span class="string">&quot;first&quot;</span>, <span class="string">&quot;second&quot;</span>, <span class="string">&quot;last&quot;</span>];</span><br><span class="line"><span class="keyword">var</span> slicedList = list.slice(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line"><span class="built_in">trace</span>(slicedList); <span class="comment">// [&quot;second&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<p>通俗点说用Array的索引直接来截取Array，而不通过其他方法</p>
+<h5 id="Sort：排序"><a href="#Sort：排序" class="headerlink" title="Sort：排序"></a>Sort：排序</h5><p>排序有两种，一种升序，一种降序，演示如下</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arrayOfInts:<span class="type">Array</span>&lt;<span class="keyword">Int</span>&gt; = [<span class="number">1</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">3</span>];</span><br><span class="line">arrayOfInts.sort(<span class="function"><span class="keyword">function</span> </span>(a, b) <span class="keyword">return</span> a - b);</span><br><span class="line"><span class="built_in">trace</span>(arrayOfInts); <span class="comment">// [1,2,3,4,5]</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arrayOfStrings:<span class="type">Array</span>&lt;<span class="keyword">String</span>&gt; = [<span class="string">&quot;c&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>];</span><br><span class="line">arrayOfStrings.sort(<span class="function"><span class="keyword">function</span> </span>(a, b) <span class="keyword">return</span> <span class="keyword">if</span> (a &lt; b) <span class="number">-1</span> <span class="keyword">else</span> <span class="number">1</span>);</span><br><span class="line"><span class="built_in">trace</span>(arrayOfStrings); <span class="comment">// [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<p>sort()方法里的匿名函数，是一种具有两个参数的返回有0、正、负三种情况的函数，返回值 0 表示元素等效，正返回值让位于后继者，负返回值让位于前置代任务。简言之就是返回正升序，返回负降序。</p>
+<h4 id="Array的显示"><a href="#Array的显示" class="headerlink" title="Array的显示"></a>Array的显示</h4><p>用join()方法和toString()格式化打印Array</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> list:<span class="type">Array</span>&lt;<span class="keyword">String</span>&gt; = [<span class="string">&quot;first&quot;</span>, <span class="string">&quot;second&quot;</span>, <span class="string">&quot;last&quot;</span>];</span><br><span class="line"><span class="comment">// Returns a string of array elements concatenated by separator string</span></span><br><span class="line"><span class="keyword">var</span> listJoined:<span class="type">String </span>= list.join(<span class="string">&quot; / &quot;</span>);</span><br><span class="line"><span class="built_in">trace</span>(listJoined); <span class="comment">// &quot;first / second / last&quot;</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">// Returns a string representation of the array structure</span></span><br><span class="line"><span class="keyword">var</span> listAsString:<span class="type">String </span>= list.toString();</span><br><span class="line"><span class="built_in">trace</span>(listAsString); <span class="comment">// &quot;first,second,last&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>此外，haxe还内置了两种其他的数据类型，list和map，由于篇幅问题，list和map的详细介绍就放在后面章节给出</p>
+<h3 id="Multidimensional-arrays：多维数组-集合"><a href="#Multidimensional-arrays：多维数组-集合" class="headerlink" title="Multidimensional arrays：多维数组(集合)"></a>Multidimensional arrays：多维数组(集合)</h3><p>创建二维数组</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arrayTwoD:<span class="type">Array</span>&lt;<span class="keyword">Array</span>&lt;<span class="keyword">Int</span>&gt;&gt; = [[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]];</span><br></pre></td></tr></table></figure>
+
+<p>二维数组的赋值</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arrayTwoD:<span class="type">Array</span>&lt;<span class="keyword">Array</span>&lt;<span class="keyword">Int</span>&gt;&gt; = [<span class="keyword">for</span> (x <span class="keyword">in</span> <span class="number">0.</span>.<span class="number">.2</span>) [<span class="keyword">for</span> (y <span class="keyword">in</span> <span class="number">0.</span>.<span class="number">.3</span>) <span class="number">0</span>]];</span><br></pre></td></tr></table></figure>
+
+<p>创建三维数组</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var <span class="built_in">array</span>ThreeD:Array&lt;Array&lt;Array&lt;Int&gt;&gt;&gt; = [</span><br><span class="line">  [ [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], ],</span><br><span class="line">  [ [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], ],</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p>三维数组的赋值</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var <span class="built_in">array</span>ThreeD : Array&lt;Array&lt;Array&lt;Int&gt;&gt;&gt; = [<span class="keyword">for</span> (x <span class="keyword">in</span> <span class="number">0.</span>.<span class="number">.2</span>) [<span class="keyword">for</span> (y <span class="keyword">in</span> <span class="number">0.</span>.<span class="number">.3</span>) [<span class="keyword">for</span> (z <span class="keyword">in</span> <span class="number">0.</span>.<span class="number">.3</span>) <span class="number">0</span>]]];</span><br></pre></td></tr></table></figure>
+
+<h4 id="多维数组的取值"><a href="#多维数组的取值" class="headerlink" title="多维数组的取值"></a>多维数组的取值</h4><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Retrieves the array </span></span><br><span class="line"><span class="keyword">var</span> arrayOfInts:<span class="type">Array</span>&lt;<span class="keyword">Int</span>&gt; = arrayTwoD[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">var</span> arrayOfArrayOfInts:<span class="type">Array</span>&lt;<span class="keyword">Array</span>&lt;<span class="keyword">Int</span>&gt;&gt; = arrayThreeD[<span class="number">0</span>];</span><br><span class="line"><span class="comment">// Retrieves only first element </span></span><br><span class="line"><span class="keyword">var</span> firstTwoD = arrayTwoD[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line"><span class="keyword">var</span> firstThreeD = arrayThreeD[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>];</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#String-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.</span> <span class="toc-text">String:字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.</span> <span class="toc-text">字符串的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%B5%8B%E5%80%BC"><span class="toc-number">1.2.</span> <span class="toc-text">字符串的赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8B%BC%E6%8E%A5"><span class="toc-number">1.3.</span> <span class="toc-text">字符串的拼接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.4.</span> <span class="toc-text">模板字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%BF%90%E7%AE%97"><span class="toc-number">1.5.</span> <span class="toc-text">字符串的运算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E8%A1%8C%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.5.1.</span> <span class="toc-text">多行字符串</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E8%BD%ACASCII"><span class="toc-number">1.5.2.</span> <span class="toc-text">字符转ASCII</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Array-%E9%9B%86%E5%90%88-%E6%95%B0%E7%BB%84"><span class="toc-number">2.</span> <span class="toc-text">Array:集合-数组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88%E5%AE%9A%E4%B9%89"><span class="toc-number">2.1.</span> <span class="toc-text">集合定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88%E6%8E%A8%E5%B1%95%E5%AE%9A%E4%B9%89"><span class="toc-number">2.2.</span> <span class="toc-text">集合推展定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-number">2.3.</span> <span class="toc-text">集合的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A0"><span class="toc-number">2.3.1.</span> <span class="toc-text">添加元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%85%83%E7%B4%A0"><span class="toc-number">2.3.2.</span> <span class="toc-text">删除元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E5%85%83%E7%B4%A0"><span class="toc-number">2.3.3.</span> <span class="toc-text">修改元素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0"><span class="toc-number">2.3.4.</span> <span class="toc-text">查找元素</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%81%8D%E5%8E%86array"><span class="toc-number">2.3.4.1.</span> <span class="toc-text">遍历array</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3"><span class="toc-number">2.3.4.1.1.</span> <span class="toc-text">迭代</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%93%8D%E4%BD%9C"><span class="toc-number">2.3.5.</span> <span class="toc-text">其他操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Copy%EF%BC%9A%E5%A4%8D%E5%88%B6"><span class="toc-number">2.3.5.1.</span> <span class="toc-text">Copy：复制</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Filter%EF%BC%9A%E8%BF%87%E6%BB%A4"><span class="toc-number">2.3.5.2.</span> <span class="toc-text">Filter：过滤</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Map%EF%BC%9A%E6%98%A0%E5%B0%84"><span class="toc-number">2.3.5.3.</span> <span class="toc-text">Map：映射</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Reverse%EF%BC%9A%E5%8F%8D%E8%BD%AC"><span class="toc-number">2.3.5.4.</span> <span class="toc-text">Reverse：反转</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Slice-%E5%88%87%E7%89%87"><span class="toc-number">2.3.5.5.</span> <span class="toc-text">Slice:切片</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Sort%EF%BC%9A%E6%8E%92%E5%BA%8F"><span class="toc-number">2.3.5.6.</span> <span class="toc-text">Sort：排序</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Array%E7%9A%84%E6%98%BE%E7%A4%BA"><span class="toc-number">2.3.6.</span> <span class="toc-text">Array的显示</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multidimensional-arrays%EF%BC%9A%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88"><span class="toc-number">2.4.</span> <span class="toc-text">Multidimensional arrays：多维数组(集合)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E7%9A%84%E5%8F%96%E5%80%BC"><span class="toc-number">2.4.1.</span> <span class="toc-text">多维数组的取值</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&text=haxe学习-四-字符串和数组集合"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&title=haxe学习-四-字符串和数组集合"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&is_video=false&description=haxe学习-四-字符串和数组集合"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=haxe学习-四-字符串和数组集合&body=Check out this article: https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&title=haxe学习-四-字符串和数组集合"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&title=haxe学习-四-字符串和数组集合"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&title=haxe学习-四-字符串和数组集合"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&title=haxe学习-四-字符串和数组集合"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&name=haxe学习-四-字符串和数组集合&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/06/04/haxe%E5%AD%A6%E4%B9%A0-%E5%9B%9B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%95%B0%E7%BB%84%E9%9B%86%E5%90%88/&t=haxe学习-四-字符串和数组集合"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

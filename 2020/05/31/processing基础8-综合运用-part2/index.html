@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="这是承接基础7的综合运用第二步也就是part2 完成的目标是按钮变换和游标准线的绘制，以及按钮的逻辑功能 点播放时，按钮由播放按钮变成暂停，点播放时，游标和准线会向右移动到达最右边时会回到起始位置，然后如此循环 点暂停时游标准线暂停在原来位置不动，简单来说就是按钮控制游标和准线的移动和停止 要完成这个效果我们可以分为以下几步分步完成  绘制出游标和准线  游标和准线是在一条竖线上的，所以x坐标相同">
+<meta property="og:type" content="article">
+<meta property="og:title" content="processing基础8---综合运用-part2">
+<meta property="og:url" content="https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="这是承接基础7的综合运用第二步也就是part2 完成的目标是按钮变换和游标准线的绘制，以及按钮的逻辑功能 点播放时，按钮由播放按钮变成暂停，点播放时，游标和准线会向右移动到达最右边时会回到起始位置，然后如此循环 点暂停时游标准线暂停在原来位置不动，简单来说就是按钮控制游标和准线的移动和停止 要完成这个效果我们可以分为以下几步分步完成  绘制出游标和准线  游标和准线是在一条竖线上的，所以x坐标相同">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/anci.gif">
+<meta property="og:image" content="https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/part2.gif">
+<meta property="article:published_time" content="2020-05-31T05:37:46.000Z">
+<meta property="article:modified_time" content="2021-01-03T16:10:12.289Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="processing">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/anci.gif">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>processing基础8---综合运用-part2</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part3/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part1/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&text=processing基础8---综合运用-part2"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&title=processing基础8---综合运用-part2"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&is_video=false&description=processing基础8---综合运用-part2"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=processing基础8---综合运用-part2&body=Check out this article: https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&title=processing基础8---综合运用-part2"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&title=processing基础8---综合运用-part2"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&title=processing基础8---综合运用-part2"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&title=processing基础8---综合运用-part2"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&name=processing基础8---综合运用-part2&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&t=processing基础8---综合运用-part2"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        processing基础8---综合运用-part2
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2020-05-31T05:37:46.000Z" itemprop="datePublished">2020-05-31</time>
+        
+        (Updated: <time datetime="2021-01-03T16:10:12.289Z" itemprop="dateModified">2021-01-04</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/java/">java</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/processing/" rel="tag">processing</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>这是承接基础7的综合运用第二步也就是part2</p>
+<p>完成的目标是按钮变换和游标准线的绘制，以及按钮的逻辑功能</p>
+<p>点播放时，按钮由播放按钮变成暂停，点播放时，游标和准线会向右移动到达最右边时会回到起始位置，然后如此循环</p>
+<p>点暂停时游标准线暂停在原来位置不动，简单来说就是按钮控制游标和准线的移动和停止</p>
+<p>要完成这个效果我们可以分为以下几步分步完成</p>
+<ol>
+<li><p>绘制出游标和准线</p>
+<ol>
+<li>游标和准线是在一条竖线上的，所以x坐标相同，由于是在运动的，所以要定义一个游标的x坐标的变量</li>
+<li>又由于游标是一个图片，绘制图片时是从左上角为起始坐标的，所以准线x坐标和和游标的并不相同，所以还必须定义一个准线的x坐标。</li>
+</ol>
+</li>
+<li><p>让游标准线一起运动</p>
+<ol>
+<li>要运动就必须添加速度，定义一个准线的速度vx,因为游标和准线相对静止，所以同一个速度就可以了</li>
+<li>越界回到原点</li>
+</ol>
+<p><img src="anci.gif" alt="anci"></p>
+</li>
+<li><p>实现开始暂停按钮的切换</p>
+<ol>
+<li>这里要用鼠标事件监听</li>
+<li>根据鼠标点击的位置左边判断点击的区域是按钮还是其他区域</li>
+<li>这里需要定义一个幂等的标志位，关于幂等的概念不动的可以自己百度，在这我们要实现按钮的播放暂停一直这个变换下去，就必须要用到幂等，不然按钮停止以后就不能开始</li>
+<li>将按钮绘制出来</li>
+</ol>
+</li>
+<li><p>实现暂停播放按钮控制游标运动</p>
+</li>
+<li><p>实现停止按钮使准线回到起始位置</p>
+</li>
+</ol>
+<p>part2完成的效果图如下：</p>
+<p><img src="part2.gif" alt="part2"></p>
+<p>代码如下；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br></pre></td><td class="code"><pre><span class="line">PImage banner;</span><br><span class="line">  PImage block;</span><br><span class="line">  PImage buttonBack;</span><br><span class="line">  PImage grid;</span><br><span class="line">  PImage keyboard;</span><br><span class="line">  PImage middleBanner;</span><br><span class="line">  PImage pause;</span><br><span class="line">  PImage play;</span><br><span class="line">  PImage pointer;</span><br><span class="line">  PImage stop;</span><br><span class="line">  <span class="comment">//定义游标的X坐标</span></span><br><span class="line">  <span class="keyword">int</span> pointerX;</span><br><span class="line">  <span class="comment">//定义准线的X坐标</span></span><br><span class="line">  <span class="keyword">int</span> pointX;</span><br><span class="line">  <span class="comment">//定义游标和准线的运行速度，因为游标准线是一起运动，所以同一个速度就可以了</span></span><br><span class="line">  <span class="keyword">int</span> pointerVX;</span><br><span class="line">  <span class="comment">//定义暂停开始的幂等标志位</span></span><br><span class="line">  <span class="keyword">int</span> flag = -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">settings</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    size(<span class="number">540</span>,<span class="number">335</span>);</span><br><span class="line">    <span class="comment">//设置app界面大小，这里的设置是固定的，不用修改，图片等相关尺寸都是设计好，不需要再修改</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//2、加载resource中的图片</span></span><br><span class="line">    banner = loadImage(<span class="string">&quot;banner.png&quot;</span>);</span><br><span class="line">    block = loadImage(<span class="string">&quot;block.png&quot;</span>);</span><br><span class="line">    buttonBack = loadImage(<span class="string">&quot;buttonBack.png&quot;</span>);</span><br><span class="line">    grid = loadImage(<span class="string">&quot;grid.png&quot;</span>);</span><br><span class="line">    keyboard = loadImage(<span class="string">&quot;keyboard.png&quot;</span>);</span><br><span class="line">    middleBanner = loadImage(<span class="string">&quot;middleBanner.png&quot;</span>);</span><br><span class="line">    pause = loadImage(<span class="string">&quot;pause.png&quot;</span>);</span><br><span class="line">    play = loadImage(<span class="string">&quot;play.png&quot;</span>);</span><br><span class="line">    pointer = loadImage(<span class="string">&quot;pointer.png&quot;</span>);</span><br><span class="line">    stop = loadImage(<span class="string">&quot;stop.png&quot;</span>);</span><br><span class="line">    <span class="comment">//设置游标准线的起始x坐标和速度</span></span><br><span class="line">    pointerX = <span class="number">49</span>;</span><br><span class="line">    pointX = <span class="number">60</span>;</span><br><span class="line">    pointerVX = <span class="number">0</span>; </span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//3、绘画图片到APP界面上</span></span><br><span class="line">    <span class="comment">//draw()会按照代码顺序无限循环执行下面的代码，</span></span><br><span class="line">    <span class="comment">//所以图片加载的顺序很重要，后面加载的图片会覆盖前面的</span></span><br><span class="line">    <span class="comment">//part 1</span></span><br><span class="line">    drawBackgroud();</span><br><span class="line">    <span class="comment">//part 2-1、2</span></span><br><span class="line">    <span class="comment">//绘制游标准线，此时游标准线已经可以运动了</span></span><br><span class="line">    drawPointerAndButton();</span><br><span class="line">    <span class="comment">//绘制暂停，播放键</span></span><br><span class="line">    <span class="comment">//part 2-3</span></span><br><span class="line">    drawButton();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//part1：背景贴图</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">drawBackgroud</span><span class="params">()</span></span>&#123;</span><br><span class="line">    image(middleBanner, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    image(banner, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    image(buttonBack, <span class="number">5</span>, <span class="number">5</span>);</span><br><span class="line">    image(buttonBack, <span class="number">50</span>, <span class="number">5</span>);</span><br><span class="line">    image(keyboard, <span class="number">0</span>, <span class="number">75</span>);</span><br><span class="line">    image(grid, <span class="number">60</span>, <span class="number">75</span>);</span><br><span class="line">    <span class="comment">//image(pause, 5, 5);</span></span><br><span class="line">    <span class="comment">//image(play, 5, 5);//这个是后来添加的</span></span><br><span class="line">    image(stop, <span class="number">50</span>, <span class="number">5</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * part2-1、2:绘制游标准线及运动</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">drawPointerAndButton</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//加载游标</span></span><br><span class="line">    image(pointer, pointerX,<span class="number">59</span>);</span><br><span class="line">    <span class="comment">//绘制准线</span></span><br><span class="line">    <span class="comment">//设置准线颜色</span></span><br><span class="line">    stroke(<span class="number">255</span>,<span class="number">0</span>,<span class="number">0</span>);<span class="comment">//红色</span></span><br><span class="line">    line(pointX, <span class="number">75</span>, pointX, height);</span><br><span class="line">    <span class="comment">//添加速度</span></span><br><span class="line">    pointX += pointerVX;</span><br><span class="line">    pointerX += pointerVX;</span><br><span class="line">    <span class="comment">//添加越界判断，让游标到做右边回到起始位置</span></span><br><span class="line">    <span class="keyword">if</span>(pointX == width)&#123;<span class="comment">//如果准线x坐标等于UI的宽</span></span><br><span class="line">      pointX = <span class="number">60</span>;<span class="comment">//准线回到起始位置</span></span><br><span class="line">      pointerX = <span class="number">49</span>;<span class="comment">//游标回到起始位置</span></span><br><span class="line">    &#125;<span class="comment">//只需要判断准线就够了，因为准线在游右边，先抵达边界</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * part2-3：添加鼠标事件</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">mousePressed</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//事件判定添加到鼠标事件中，生效</span></span><br><span class="line">    clickPlayAndPause();</span><br><span class="line">    <span class="comment">//控制准线</span></span><br><span class="line">    ctrlPointer();</span><br><span class="line">    <span class="comment">//点击停止按钮</span></span><br><span class="line">    clickStop();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/**part2-3-1</span></span><br><span class="line"><span class="comment">   * 点击暂停播放按钮判定逻辑</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clickPlayAndPause</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//mouseX,mouseY是鼠标点击在屏幕的坐标</span></span><br><span class="line">    <span class="keyword">if</span>(mouseX &gt; <span class="number">5</span> &amp;&amp; mouseX &lt; <span class="number">45</span> &amp;&amp; mouseY &gt; <span class="number">5</span> &amp;&amp; mouseY &lt; <span class="number">45</span>)&#123;<span class="comment">//如果点击的是播放和暂停的按钮区域</span></span><br><span class="line">      flag *= -<span class="number">1</span>;<span class="comment">//每按一次按钮，flag 运算一次乘以一次-1 </span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * part 2 -5</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clickStop</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//点击的区域是stop按钮</span></span><br><span class="line">    <span class="keyword">if</span>(mouseX &gt; <span class="number">50</span> &amp;&amp; mouseX &lt; <span class="number">90</span> &amp;&amp; mouseY &gt; <span class="number">5</span> &amp;&amp; mouseY &lt; <span class="number">45</span>)&#123;<span class="comment">//cl</span></span><br><span class="line">      <span class="comment">//准线，游标归零</span></span><br><span class="line">      pointX = <span class="number">60</span>;</span><br><span class="line">      pointerX = <span class="number">49</span>;</span><br><span class="line">      <span class="comment">//速度归零</span></span><br><span class="line">      pointerVX = <span class="number">0</span>;</span><br><span class="line">      <span class="comment">//播放暂停还原成播放按钮</span></span><br><span class="line">      flag = -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * part 2-3-2绘制按钮</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">drawButton</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(flag == -<span class="number">1</span>)&#123;<span class="comment">//此处假定flag == -1时，是暂停</span></span><br><span class="line">      <span class="comment">//加载播放按钮，因为游标的初始状态静止的，而按钮要显示播放按钮，点击后切换成暂停</span></span><br><span class="line">      image(play, <span class="number">5</span>, <span class="number">5</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="comment">//加载暂停按钮</span></span><br><span class="line">      image(pause,<span class="number">5</span>, <span class="number">5</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * part 2-4,按钮控制准线运动</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ctrlPointer</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(flag == -<span class="number">1</span>)&#123;<span class="comment">//此处假定flag == -1时，是暂停</span></span><br><span class="line">      pointerVX = <span class="number">0</span>;<span class="comment">//暂停也就是速度为0</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      pointerVX = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>为了和文字版的步骤保持基本的一致，我把每个步骤都封装成一个函数，看起来函数比较多，PDE开发的我就不演示了</p>
+<p>下一章 processing基础8—综合运用-part3</p>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&text=processing基础8---综合运用-part2"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&title=processing基础8---综合运用-part2"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&is_video=false&description=processing基础8---综合运用-part2"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=processing基础8---综合运用-part2&body=Check out this article: https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&title=processing基础8---综合运用-part2"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&title=processing基础8---综合运用-part2"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&title=processing基础8---综合运用-part2"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&title=processing基础8---综合运用-part2"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&name=processing基础8---综合运用-part2&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2020/05/31/processing%E5%9F%BA%E7%A1%808-%E7%BB%BC%E5%90%88%E8%BF%90%E7%94%A8-part2/&t=processing基础8---综合运用-part2"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank">鄂ICP备19030241号</a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>
