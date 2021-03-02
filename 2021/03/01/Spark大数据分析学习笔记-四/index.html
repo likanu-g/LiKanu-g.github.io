@@ -20,7 +20,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.likanug.top/2021/03/01/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%9B%9B/image-20210301154109396.png">
 <meta property="article:published_time" content="2021-03-01T02:50:09.000Z">
-<meta property="article:modified_time" content="2021-03-01T07:54:01.146Z">
+<meta property="article:modified_time" content="2021-03-02T07:18:15.191Z">
 <meta property="article:author" content="Likanug">
 <meta property="article:tag" content="Spark">
 <meta name="twitter:card" content="summary">
@@ -119,7 +119,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%A8%E9%9B%86%E7%BE%A4%E4%B8%AD%E8%BF%90%E8%A1%8CSpark"><span class="toc-number">1.</span> <span class="toc-text">在集群中运行Spark</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81Spark%E8%BF%90%E8%A1%8C%E6%97%B6%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-number">1.1.</span> <span class="toc-text">1、Spark运行时架构图</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%A8%E9%9B%86%E7%BE%A4%E4%B8%AD%E8%BF%90%E8%A1%8CSpark"><span class="toc-number">1.</span> <span class="toc-text">在集群中运行Spark</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81Spark%E8%BF%90%E8%A1%8C%E6%97%B6%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-number">1.1.</span> <span class="toc-text">1、Spark运行时架构图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A9%B1%E5%8A%A8%E5%99%A8%E8%8A%82%E7%82%B9"><span class="toc-number">1.1.1.</span> <span class="toc-text">驱动器节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%99%A8%E8%8A%82%E7%82%B9"><span class="toc-number">1.1.2.</span> <span class="toc-text">执行器节点</span></a></li></ol></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -151,7 +151,7 @@
       
         <time datetime="2021-03-01T02:50:09.000Z" itemprop="datePublished">2021-03-01</time>
         
-        (Updated: <time datetime="2021-03-01T07:54:01.146Z" itemprop="dateModified">2021-03-01</time>)
+        (Updated: <time datetime="2021-03-02T07:18:15.191Z" itemprop="dateModified">2021-03-02</time>)
         
       
     </div>
@@ -179,7 +179,7 @@
     <h1 id="在集群中运行Spark"><a href="#在集群中运行Spark" class="headerlink" title="在集群中运行Spark"></a>在集群中运行Spark</h1><h2 id="1、Spark运行时架构图"><a href="#1、Spark运行时架构图" class="headerlink" title="1、Spark运行时架构图"></a>1、Spark运行时架构图</h2><p>在分布式环境中，Spark集群采用的是主/从结构。在一个Spark集群中，有一个节点负责中央协调，调度各个分布式工作节点。这个中央工作节点被称为<strong><em>驱动器</em></strong>(Driver)节点，与之对应的工作节点称为<strong><em>执行器</em></strong>(executor)节点。驱动器节点可以和大量的执行器节点进行通信，它们也都作为独立的Java进程运行。驱动器节点和所有的执行器节点一起被称为一个<strong><em>Spark应用</em></strong>(application)。</p>
 <p><img src="image-20210301154109396.png" alt="image-20210301154109396"></p>
 <p><strong><em>Spark应用</em></strong>通过一个叫做<strong><em>集群管理器</em></strong>(Cluster Manager)的外部服务在集群中的机器上启动。Spark自带的集群管理器被称为独立集群管理器。Spark也能运行在Hadoop YARN和Apache Mesos这两大开源集群管理器上。</p>
-
+<h3 id="驱动器节点"><a href="#驱动器节点" class="headerlink" title="驱动器节点"></a>驱动器节点</h3><h3 id="执行器节点"><a href="#执行器节点" class="headerlink" title="执行器节点"></a>执行器节点</h3>
   </div>
   <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
 </article>
@@ -210,7 +210,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%A8%E9%9B%86%E7%BE%A4%E4%B8%AD%E8%BF%90%E8%A1%8CSpark"><span class="toc-number">1.</span> <span class="toc-text">在集群中运行Spark</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81Spark%E8%BF%90%E8%A1%8C%E6%97%B6%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-number">1.1.</span> <span class="toc-text">1、Spark运行时架构图</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%A8%E9%9B%86%E7%BE%A4%E4%B8%AD%E8%BF%90%E8%A1%8CSpark"><span class="toc-number">1.</span> <span class="toc-text">在集群中运行Spark</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81Spark%E8%BF%90%E8%A1%8C%E6%97%B6%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-number">1.1.</span> <span class="toc-text">1、Spark运行时架构图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A9%B1%E5%8A%A8%E5%99%A8%E8%8A%82%E7%82%B9"><span class="toc-number">1.1.1.</span> <span class="toc-text">驱动器节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%99%A8%E8%8A%82%E7%82%B9"><span class="toc-number">1.1.2.</span> <span class="toc-text">执行器节点</span></a></li></ol></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

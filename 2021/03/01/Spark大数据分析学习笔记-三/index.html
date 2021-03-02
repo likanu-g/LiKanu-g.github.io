@@ -11,19 +11,27 @@
 	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
 	<script type="text/javascript" src="/js/pace.min.js"></script> 
 	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
-    <meta name="description" content="RDD的转化操作和行动操作1、转化操作1、数组型RDD 2、键值对型RDD 2、行动操作1、数组型RDD 2、键值对型RDD除了上述的数组型RDD外，Spark还提供了下面">
+    <meta name="description" content="RDD的转化操作和行动操作1、转化操作1、数组型RDD map()的用法  flapMap()  filter()的用法  distinct()的用法  union()的用法  intersection()的用法  subtract()的用法  cartesian()的用法  2、键值对型RDD 2、行动操作1、数组型RDD 2、键值对型RDD除了上述的数组型RDD外，Spark还提供了下面">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark大数据分析学习笔记-三">
 <meta property="og:url" content="https://blog.likanug.top/2021/03/01/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/index.html">
 <meta property="og:site_name" content="Likanug&#39;s Blog">
-<meta property="og:description" content="RDD的转化操作和行动操作1、转化操作1、数组型RDD 2、键值对型RDD 2、行动操作1、数组型RDD 2、键值对型RDD除了上述的数组型RDD外，Spark还提供了下面">
+<meta property="og:description" content="RDD的转化操作和行动操作1、转化操作1、数组型RDD map()的用法  flapMap()  filter()的用法  distinct()的用法  union()的用法  intersection()的用法  subtract()的用法  cartesian()的用法  2、键值对型RDD 2、行动操作1、数组型RDD 2、键值对型RDD除了上述的数组型RDD外，Spark还提供了下面">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.likanug.top/2021/03/01/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/image-20210301103350775.png">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/01/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/image-20210302172357073.png">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/01/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/image-20210302161658246.png">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/01/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/image-20210302172645104.png">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/01/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/image-20210302172939682.png">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/01/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/image-20210302174225837.png">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/01/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/image-20210302174506776.png">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/01/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/image-20210302174758036.png">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/01/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/image-20210302175456099.png">
 <meta property="og:image" content="https://blog.likanug.top/2021/03/01/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/image-20210301111350472.png">
 <meta property="og:image" content="https://blog.likanug.top/2021/03/01/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/image-20210301103831041.png">
 <meta property="og:image" content="https://blog.likanug.top/2021/03/01/Spark%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E4%B8%89/image-20210301135527961.png">
 <meta property="article:published_time" content="2021-03-01T02:19:59.000Z">
-<meta property="article:modified_time" content="2021-03-01T07:29:54.649Z">
+<meta property="article:modified_time" content="2021-03-02T09:55:04.118Z">
 <meta property="article:author" content="Likanug">
 <meta property="article:tag" content="Spark">
 <meta name="twitter:card" content="summary">
@@ -156,7 +164,7 @@
       
         <time datetime="2021-03-01T02:19:59.000Z" itemprop="datePublished">2021-03-01</time>
         
-        (Updated: <time datetime="2021-03-01T07:29:54.649Z" itemprop="dateModified">2021-03-01</time>)
+        (Updated: <time datetime="2021-03-02T09:55:04.118Z" itemprop="dateModified">2021-03-02</time>)
         
       
     </div>
@@ -182,6 +190,22 @@
 
   <div class="content" itemprop="articleBody">
     <h1 id="RDD的转化操作和行动操作"><a href="#RDD的转化操作和行动操作" class="headerlink" title="RDD的转化操作和行动操作"></a>RDD的转化操作和行动操作</h1><h2 id="1、转化操作"><a href="#1、转化操作" class="headerlink" title="1、转化操作"></a>1、转化操作</h2><h3 id="1、数组型RDD"><a href="#1、数组型RDD" class="headerlink" title="1、数组型RDD"></a>1、数组型RDD</h3><p><img src="image-20210301103350775.png" alt="image-20210301103350775"></p>
+<p>map()的用法</p>
+<p><img src="image-20210302172357073.png" alt="image-20210302172357073"></p>
+<p>flapMap()</p>
+<p><img src="image-20210302161658246.png" alt="image-20210302161658246"></p>
+<p>filter()的用法</p>
+<p><img src="image-20210302172645104.png" alt="image-20210302172645104"></p>
+<p>distinct()的用法</p>
+<p><img src="image-20210302172939682.png" alt="image-20210302172939682"></p>
+<p>union()的用法</p>
+<p><img src="image-20210302174225837.png" alt="image-20210302174225837"></p>
+<p>intersection()的用法</p>
+<p><img src="image-20210302174506776.png" alt="image-20210302174506776"></p>
+<p>subtract()的用法</p>
+<p><img src="image-20210302174758036.png" alt="image-20210302174758036"></p>
+<p>cartesian()的用法</p>
+<p><img src="image-20210302175456099.png" alt="image-20210302175456099"></p>
 <h3 id="2、键值对型RDD"><a href="#2、键值对型RDD" class="headerlink" title="2、键值对型RDD"></a>2、键值对型RDD</h3><p><img src="image-20210301111350472.png" alt="image-20210301111350472"></p>
 <h2 id="2、行动操作"><a href="#2、行动操作" class="headerlink" title="2、行动操作"></a>2、行动操作</h2><h3 id="1、数组型RDD-1"><a href="#1、数组型RDD-1" class="headerlink" title="1、数组型RDD"></a>1、数组型RDD</h3><p><img src="image-20210301103831041.png" alt="image-20210301103831041"></p>
 <h3 id="2、键值对型RDD-1"><a href="#2、键值对型RDD-1" class="headerlink" title="2、键值对型RDD"></a>2、键值对型RDD</h3><p>除了上述的数组型RDD外，Spark还提供了下面</p>
