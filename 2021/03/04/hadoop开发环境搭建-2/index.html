@@ -11,18 +11,26 @@
 	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
 	<script type="text/javascript" src="/js/pace.min.js"></script> 
 	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
-    <meta name="description" content="1、安装JDK2、搭建hadoop伪分布式环境">
+    <meta name="description" content="1、hadoop软件安装安装JDK，Hadoop步骤略 2、搭建hadoop伪分布式环境1、修改Hadoop的配置文件1、进入hadoop安装目录cd $HADOOP_HOME&#x2F;etc&#x2F;hadoop，$HADOOP_HOME代指你安装的hadoop的目录 2、修改 hadoop-env.sh修改第25行处的JAVA_HOME地址为你当前用户的所安装的jdk绝对路径，如 修改前  修改后  3、修改">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hadoop开发环境搭建(2)">
 <meta property="og:url" content="https://blog.likanug.top/2021/03/04/hadoop%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-2/index.html">
 <meta property="og:site_name" content="Likanug&#39;s Blog">
-<meta property="og:description" content="1、安装JDK2、搭建hadoop伪分布式环境">
+<meta property="og:description" content="1、hadoop软件安装安装JDK，Hadoop步骤略 2、搭建hadoop伪分布式环境1、修改Hadoop的配置文件1、进入hadoop安装目录cd $HADOOP_HOME&#x2F;etc&#x2F;hadoop，$HADOOP_HOME代指你安装的hadoop的目录 2、修改 hadoop-env.sh修改第25行处的JAVA_HOME地址为你当前用户的所安装的jdk绝对路径，如 修改前  修改后  3、修改">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/04/hadoop%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-2/image-20210310164436641.png">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/04/hadoop%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-2/image-20210310164632559.png">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/04/hadoop%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-2/image-20210310164935749.png">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/04/hadoop%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-2/image-20210310165658257.png">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/04/hadoop%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-2/image-20210310170550856.png">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/04/hadoop%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-2/image-20210310171216920.png">
+<meta property="og:image" content="https://blog.likanug.top/2021/03/04/hadoop%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-2/image-20210310172906374.png">
 <meta property="article:published_time" content="2021-03-04T09:04:40.000Z">
-<meta property="article:modified_time" content="2021-03-04T09:06:53.095Z">
+<meta property="article:modified_time" content="2021-03-11T02:18:14.111Z">
 <meta property="article:author" content="Likanug">
 <meta property="article:tag" content="Hadoop">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/2021/03/04/hadoop%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-2/image-20210310164436641.png">
     
     
         
@@ -119,7 +127,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%AE%89%E8%A3%85JDK"><span class="toc-number">1.</span> <span class="toc-text">1、安装JDK</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%90%AD%E5%BB%BAhadoop%E4%BC%AA%E5%88%86%E5%B8%83%E5%BC%8F%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text">2、搭建hadoop伪分布式环境</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81hadoop%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">1、hadoop软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85JDK%EF%BC%8CHadoop"><span class="toc-number">1.1.</span> <span class="toc-text">安装JDK，Hadoop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%90%AD%E5%BB%BAhadoop%E4%BC%AA%E5%88%86%E5%B8%83%E5%BC%8F%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text">2、搭建hadoop伪分布式环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BF%AE%E6%94%B9Hadoop%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.1.</span> <span class="toc-text">1、修改Hadoop的配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E8%BF%9B%E5%85%A5hadoop%E5%AE%89%E8%A3%85%E7%9B%AE%E5%BD%95"><span class="toc-number">2.1.1.</span> <span class="toc-text">1、进入hadoop安装目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E4%BF%AE%E6%94%B9-hadoop-env-sh"><span class="toc-number">2.1.2.</span> <span class="toc-text">2、修改 hadoop-env.sh</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9-core-site-xml"><span class="toc-number">2.1.3.</span> <span class="toc-text">3、修改 core-site.xml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E4%BF%AE%E6%94%B9-hdfs-site-xml"><span class="toc-number">2.1.4.</span> <span class="toc-text">4、修改 hdfs-site.xml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5%E3%80%81%E4%BF%AE%E6%94%B9-mapred-site-xml"><span class="toc-number">2.1.5.</span> <span class="toc-text">5、修改 mapred-site.xml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6%E3%80%81%E4%BF%AE%E6%94%B9yarn-site-xml%E6%96%87%E4%BB%B6"><span class="toc-number">2.1.6.</span> <span class="toc-text">6、修改yarn-site.xml文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7%E3%80%81%E4%BF%AE%E6%94%B9%E4%BB%8E%E8%8A%82%E7%82%B9"><span class="toc-number">2.1.7.</span> <span class="toc-text">7、修改从节点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%90%AF%E5%8A%A8Hadoop"><span class="toc-number">2.2.</span> <span class="toc-text">2、启动Hadoop</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E6%A0%BC%E5%BC%8F%E5%8C%96namenode"><span class="toc-number">2.2.1.</span> <span class="toc-text">1、格式化namenode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%90%AF%E5%8A%A8%E5%90%84%E9%A1%B9%E6%9C%8D%E5%8A%A1%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.2.2.</span> <span class="toc-text">2、启动各项服务进程</span></a></li></ol></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -151,7 +159,7 @@
       
         <time datetime="2021-03-04T09:04:40.000Z" itemprop="datePublished">2021-03-04</time>
         
-        (Updated: <time datetime="2021-03-04T09:06:53.095Z" itemprop="dateModified">2021-03-04</time>)
+        (Updated: <time datetime="2021-03-11T02:18:14.111Z" itemprop="dateModified">2021-03-11</time>)
         
       
     </div>
@@ -176,7 +184,45 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="1、安装JDK"><a href="#1、安装JDK" class="headerlink" title="1、安装JDK"></a>1、安装JDK</h2><h2 id="2、搭建hadoop伪分布式环境"><a href="#2、搭建hadoop伪分布式环境" class="headerlink" title="2、搭建hadoop伪分布式环境"></a>2、搭建hadoop伪分布式环境</h2>
+    <h2 id="1、hadoop软件安装"><a href="#1、hadoop软件安装" class="headerlink" title="1、hadoop软件安装"></a>1、hadoop软件安装</h2><h3 id="安装JDK，Hadoop"><a href="#安装JDK，Hadoop" class="headerlink" title="安装JDK，Hadoop"></a>安装JDK，Hadoop</h3><p>步骤略</p>
+<h2 id="2、搭建hadoop伪分布式环境"><a href="#2、搭建hadoop伪分布式环境" class="headerlink" title="2、搭建hadoop伪分布式环境"></a>2、搭建hadoop伪分布式环境</h2><h3 id="1、修改Hadoop的配置文件"><a href="#1、修改Hadoop的配置文件" class="headerlink" title="1、修改Hadoop的配置文件"></a>1、修改Hadoop的配置文件</h3><h4 id="1、进入hadoop安装目录"><a href="#1、进入hadoop安装目录" class="headerlink" title="1、进入hadoop安装目录"></a>1、进入hadoop安装目录</h4><p><code>cd $HADOOP_HOME/etc/hadoop</code>，$HADOOP_HOME代指你安装的hadoop的目录</p>
+<h4 id="2、修改-hadoop-env-sh"><a href="#2、修改-hadoop-env-sh" class="headerlink" title="2、修改 hadoop-env.sh"></a>2、修改 hadoop-env.sh</h4><p>修改第25行处的<code>JAVA_HOME</code>地址为你当前用户的所安装的jdk绝对路径，如</p>
+<p>修改前</p>
+<p><img src="image-20210310164436641.png" alt="image-20210310164436641"></p>
+<p>修改后</p>
+<p><img src="image-20210310164632559.png" alt="image-20210310164632559"></p>
+<h4 id="3、修改-core-site-xml"><a href="#3、修改-core-site-xml" class="headerlink" title="3、修改 core-site.xml"></a>3、修改 core-site.xml</h4><p>在文件中添加下列内容</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://hadoop-server-01:9001<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">value</span>&gt;</span>/home/hadoop/app/hadoop-2.6.5/tmp<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>修改前</p>
+<p><img src="image-20210310164935749.png" alt="image-20210310164935749"></p>
+<p>修改后</p>
+<p><img src="image-20210310165658257.png" alt="image-20210310165658257"></p>
+<h4 id="4、修改-hdfs-site-xml"><a href="#4、修改-hdfs-site-xml" class="headerlink" title="4、修改 hdfs-site.xml"></a>4、修改 hdfs-site.xml</h4><p>在19行添加如下内容</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">value</span>&gt;</span>1<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span> dfs.namenode.secondary.http-address<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>hadoop-server-01:50090<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="image-20210310170550856.png" alt="image-20210310170550856"></p>
+<h4 id="5、修改-mapred-site-xml"><a href="#5、修改-mapred-site-xml" class="headerlink" title="5、修改 mapred-site.xml"></a>5、修改 mapred-site.xml</h4><p>目录下并没有mapred-site.xml文件，但是有一个mapred-site.xml.template文件，我们重命名它为mapred-site.xml即可</p>
+<p>在19行后面添加如下内容</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="image-20210310171216920.png" alt="image-20210310171216920"></p>
+<h4 id="6、修改yarn-site-xml文件"><a href="#6、修改yarn-site-xml文件" class="headerlink" title="6、修改yarn-site.xml文件"></a>6、修改yarn-site.xml文件</h4><p>在15行后面添加如下内容</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.hostname<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>hadoop-server-01<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="7、修改从节点"><a href="#7、修改从节点" class="headerlink" title="7、修改从节点"></a>7、修改从节点</h4><p><code>vi slaves</code></p>
+<p>默认为localhost，修改为要成为从节点的主机名或者ip即可</p>
+<h3 id="2、启动Hadoop"><a href="#2、启动Hadoop" class="headerlink" title="2、启动Hadoop"></a>2、启动Hadoop</h3><h4 id="1、格式化namenode"><a href="#1、格式化namenode" class="headerlink" title="1、格式化namenode"></a>1、格式化namenode</h4><p><code>cd $HADOOP_HOME/bin</code></p>
+<p><code>./hadoop namenode -format</code></p>
+<h4 id="2、启动各项服务进程"><a href="#2、启动各项服务进程" class="headerlink" title="2、启动各项服务进程"></a>2、启动各项服务进程</h4><p><code>cd $HADOOP_HOME/sbin</code></p>
+<p><code>./start-dfs.sh</code></p>
+<p>如果没有配ssh免密钥，会要求输入密码</p>
+<p>启动完成后</p>
+<p><code>jps</code></p>
+<p><img src="image-20210310172906374.png" alt="image-20210310172906374"></p>
+<p>出现如图所示的进程，说明服务启动成功，</p>
+<p>用浏览器打开 <a href="http://192.168.161.131:50090，IP为你部署的那台服务器的地址">http://192.168.161.131:50090，IP为你部署的那台服务器的地址</a></p>
+
   </div>
   <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
 </article>
@@ -207,7 +253,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%AE%89%E8%A3%85JDK"><span class="toc-number">1.</span> <span class="toc-text">1、安装JDK</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%90%AD%E5%BB%BAhadoop%E4%BC%AA%E5%88%86%E5%B8%83%E5%BC%8F%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text">2、搭建hadoop伪分布式环境</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81hadoop%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">1、hadoop软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85JDK%EF%BC%8CHadoop"><span class="toc-number">1.1.</span> <span class="toc-text">安装JDK，Hadoop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%90%AD%E5%BB%BAhadoop%E4%BC%AA%E5%88%86%E5%B8%83%E5%BC%8F%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text">2、搭建hadoop伪分布式环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%BF%AE%E6%94%B9Hadoop%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.1.</span> <span class="toc-text">1、修改Hadoop的配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E8%BF%9B%E5%85%A5hadoop%E5%AE%89%E8%A3%85%E7%9B%AE%E5%BD%95"><span class="toc-number">2.1.1.</span> <span class="toc-text">1、进入hadoop安装目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E4%BF%AE%E6%94%B9-hadoop-env-sh"><span class="toc-number">2.1.2.</span> <span class="toc-text">2、修改 hadoop-env.sh</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9-core-site-xml"><span class="toc-number">2.1.3.</span> <span class="toc-text">3、修改 core-site.xml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E4%BF%AE%E6%94%B9-hdfs-site-xml"><span class="toc-number">2.1.4.</span> <span class="toc-text">4、修改 hdfs-site.xml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5%E3%80%81%E4%BF%AE%E6%94%B9-mapred-site-xml"><span class="toc-number">2.1.5.</span> <span class="toc-text">5、修改 mapred-site.xml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6%E3%80%81%E4%BF%AE%E6%94%B9yarn-site-xml%E6%96%87%E4%BB%B6"><span class="toc-number">2.1.6.</span> <span class="toc-text">6、修改yarn-site.xml文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7%E3%80%81%E4%BF%AE%E6%94%B9%E4%BB%8E%E8%8A%82%E7%82%B9"><span class="toc-number">2.1.7.</span> <span class="toc-text">7、修改从节点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%90%AF%E5%8A%A8Hadoop"><span class="toc-number">2.2.</span> <span class="toc-text">2、启动Hadoop</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E6%A0%BC%E5%BC%8F%E5%8C%96namenode"><span class="toc-number">2.2.1.</span> <span class="toc-text">1、格式化namenode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%90%AF%E5%8A%A8%E5%90%84%E9%A1%B9%E6%9C%8D%E5%8A%A1%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.2.2.</span> <span class="toc-text">2、启动各项服务进程</span></a></li></ol></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
