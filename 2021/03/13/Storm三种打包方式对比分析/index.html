@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="Storm三种打包方式对比分析 一、简介 二、mvn package 三、maven-assembly-plugin插件 四、maven-shade-plugin插件 五、结论 六、打包注意事项    一、简介在将 Storm Topology 提交到服务器集群运行时，需要先将项目进行打包。本文主要对比分析各种打包方式，并将打包过程中需要注意的事项进行说明。主要打包方式有以下三种：  第一种：不加">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Storm三种打包方式对比分析">
+<meta property="og:url" content="https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="Storm三种打包方式对比分析 一、简介 二、mvn package 三、maven-assembly-plugin插件 四、maven-shade-plugin插件 五、结论 六、打包注意事项    一、简介在将 Storm Topology 提交到服务器集群运行时，需要先将项目进行打包。本文主要对比分析各种打包方式，并将打包过程中需要注意的事项进行说明。主要打包方式有以下三种：  第一种：不加">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/storm-jar.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/storm-jar2.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/storm-lib.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/storm-jar-complie-error.png">
+<meta property="article:published_time" content="2021-03-13T10:31:55.000Z">
+<meta property="article:modified_time" content="2021-03-13T15:05:38.156Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="Storm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/storm-jar.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Storm三种打包方式对比分析</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../Sqoop%E7%AE%80%E4%BB%8B%E4%B8%8E%E5%AE%89%E8%A3%85/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../Storm%E5%92%8C%E6%B5%81%E5%A4%84%E7%90%86%E7%AE%80%E4%BB%8B/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&text=Storm三种打包方式对比分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&title=Storm三种打包方式对比分析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&is_video=false&description=Storm三种打包方式对比分析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Storm三种打包方式对比分析&body=Check out this article: https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&title=Storm三种打包方式对比分析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&title=Storm三种打包方式对比分析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&title=Storm三种打包方式对比分析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&title=Storm三种打包方式对比分析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&name=Storm三种打包方式对比分析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&t=Storm三种打包方式对比分析"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">Storm三种打包方式对比分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81mvn-package"><span class="toc-number">1.2.</span> <span class="toc-text">二、mvn package</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-mvn-package%E7%9A%84%E5%B1%80%E9%99%90"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 mvn package的局限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 解决办法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81maven-assembly-plugin%E6%8F%92%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">三、maven-assembly-plugin插件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%BC%95%E5%85%A5%E6%8F%92%E4%BB%B6"><span class="toc-number">1.3.1.</span> <span class="toc-text">1. 引入插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%89%93%E5%8C%85%E5%91%BD%E4%BB%A4"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.  打包命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81maven-shade-plugin%E6%8F%92%E4%BB%B6"><span class="toc-number">1.4.</span> <span class="toc-text">四、maven-shade-plugin插件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E8%AF%B4%E6%98%8E"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 官方文档说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E9%85%8D%E7%BD%AE"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E6%89%93%E5%8C%85%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.3.</span> <span class="toc-text">4.3 打包命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%BB%93%E8%AE%BA"><span class="toc-number">1.5.</span> <span class="toc-text">五、结论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%89%93%E5%8C%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">1.6.</span> <span class="toc-text">六、打包注意事项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">1.7.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Storm三种打包方式对比分析
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2021-03-13T10:31:55.000Z" itemprop="datePublished">2021-03-13</time>
+        
+        (Updated: <time datetime="2021-03-13T15:05:38.156Z" itemprop="dateModified">2021-03-13</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/Storm/" rel="tag">Storm</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="Storm三种打包方式对比分析"><a href="#Storm三种打包方式对比分析" class="headerlink" title="Storm三种打包方式对比分析"></a>Storm三种打包方式对比分析</h1><nav>
+<a href="#一简介">一、简介</a><br/>
+<a href="#二mvn-package">二、mvn package</a><br/>
+<a href="#三maven-assembly-plugin插件">三、maven-assembly-plugin插件</a><br/>
+<a href="#四maven-shade-plugin插件">四、maven-shade-plugin插件</a><br/>
+<a href="#五结论">五、结论</a><br/>
+<a href="#六打包注意事项">六、打包注意事项</a><br/>
+</nav>
+
+
+<h2 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h2><p>在将 Storm Topology 提交到服务器集群运行时，需要先将项目进行打包。本文主要对比分析各种打包方式，并将打包过程中需要注意的事项进行说明。主要打包方式有以下三种：</p>
+<ul>
+<li>第一种：不加任何插件，直接使用 mvn package 打包；</li>
+<li>第二种：使用 maven-assembly-plugin 插件进行打包；</li>
+<li>第三种：使用 maven-shade-plugin 进行打包。</li>
+</ul>
+<p>以下分别进行详细的说明。</p>
+<h2 id="二、mvn-package"><a href="#二、mvn-package" class="headerlink" title="二、mvn package"></a>二、mvn package</h2><h3 id="2-1-mvn-package的局限"><a href="#2-1-mvn-package的局限" class="headerlink" title="2.1 mvn package的局限"></a>2.1 mvn package的局限</h3><p>不在 POM 中配置任何插件，直接使用 <code>mvn package</code> 进行项目打包，这对于没有使用外部依赖包的项目是可行的。</p>
+<p>但如果项目中使用了第三方 JAR 包，就会出现问题，因为 <code>mvn package</code> 打包后的 JAR 中是不含有依赖包的，如果此时你提交到服务器上运行，就会出现找不到第三方依赖的异常。</p>
+<p>如果你想采用这种方式进行打包，但是又使用了第三方 JAR，有没有解决办法？答案是有的，这一点在官方文档的<a target="_blank" rel="noopener" href="http://storm.apache.org/releases/2.0.0-SNAPSHOT/Command-line-client.html">Command Line Client</a> 章节有所讲解，主要解决办法如下。</p>
+<h3 id="2-2-解决办法"><a href="#2-2-解决办法" class="headerlink" title="2.2 解决办法"></a>2.2 解决办法</h3><p>在使用 <code>storm jar</code> 提交 Topology 时，可以使用如下方式指定第三方依赖：</p>
+<ul>
+<li>如果第三方 JAR 包在本地，可以使用 <code>--jars</code> 指定；</li>
+<li>如果第三方 JAR 包在远程中央仓库，可以使用 <code>--artifacts</code> 指定，此时如果想要排除某些依赖，可以使用 <code>^</code> 符号。指定后 Storm 会自动到中央仓库进行下载，然后缓存到本地；</li>
+<li>如果第三方 JAR 包在其他仓库，还需要使用 <code>--artifactRepositories</code> 指明仓库地址，库名和地址使用 <code>^</code> 符号分隔。</li>
+</ul>
+<p>以下是一个包含上面三种情况的命令示例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">./bin/storm jar example/storm-starter/storm-starter-topologies-*.jar \</span><br><span class="line">org.apache.storm.starter.RollingTopWords blobstore-remote2 remote  \</span><br><span class="line">--jars &quot;./external/storm-redis/storm-redis-1.1.0.jar,./external/storm-kafka/storm-kafka-1.1.0.jar&quot; \</span><br><span class="line">--artifacts &quot;redis.clients:jedis:2.9.0,org.apache.kafka:kafka_2.10:0.8.2.2^org.slf4j:slf4j-log4j12&quot; \</span><br><span class="line">--artifactRepositories &quot;jboss-repository^http://repository.jboss.com/maven2, \</span><br><span class="line">HDPRepo^http://repo.hortonworks.com/content/groups/public/&quot;</span><br></pre></td></tr></table></figure>
+
+<p>这种方式是建立在你能够连接到外网的情况下，如果你的服务器不能连接外网，或者你希望能把项目直接打包成一个 <code>ALL IN ONE</code> 的 JAR，即包含所有相关依赖，此时可以采用下面介绍的两个插件。</p>
+<h2 id="三、maven-assembly-plugin插件"><a href="#三、maven-assembly-plugin插件" class="headerlink" title="三、maven-assembly-plugin插件"></a>三、maven-assembly-plugin插件</h2><p>maven-assembly-plugin 是官方文档中介绍的打包方法，来源于官方文档：<a target="_blank" rel="noopener" href="http://storm.apache.org/releases/2.0.0-SNAPSHOT/Running-topologies-on-a-production-cluster.html">Running Topologies on a Production Cluster</a></p>
+<blockquote>
+<p>If you’re using Maven, the <a target="_blank" rel="noopener" href="http://maven.apache.org/plugins/maven-assembly-plugin/">Maven Assembly Plugin</a> can do the packaging for you. Just add this to your pom.xml:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-assembly-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">descriptorRefs</span>&gt;</span>  </span><br><span class="line">   <span class="tag">&lt;<span class="name">descriptorRef</span>&gt;</span>jar-with-dependencies<span class="tag">&lt;/<span class="name">descriptorRef</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">descriptorRefs</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">archive</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">manifest</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">mainClass</span>&gt;</span>com.path.to.main.Class<span class="tag">&lt;/<span class="name">mainClass</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">manifest</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">archive</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Then run mvn assembly:assembly to get an appropriately packaged jar. Make sure you <a target="_blank" rel="noopener" href="http://maven.apache.org/plugins/maven-assembly-plugin/examples/single/including-and-excluding-artifacts.html">exclude</a> the Storm jars since the cluster already has Storm on the classpath.</p>
+</blockquote>
+<p>官方文档主要说明了以下几点：</p>
+<ul>
+<li>使用 maven-assembly-plugin 可以把所有的依赖一并打入到最后的 JAR 中；</li>
+<li>需要排除掉 Storm 集群环境中已经提供的 Storm jars；</li>
+<li>通过 <code>&lt;mainClass&gt;</code> 标签指定主入口类；</li>
+<li>通过 <code>&lt;descriptorRef&gt;</code> 标签指定打包相关配置。</li>
+</ul>
+<p><code>jar-with-dependencies</code> 是 Maven<a target="_blank" rel="noopener" href="http://maven.apache.org/plugins/maven-assembly-plugin/descriptor-refs.html#jar-with-dependencies">预定义</a> 的一种最基本的打包配置，其 XML 文件如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">assembly</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/ASSEMBLY/2.0.0&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/ASSEMBLY/2.0.0</span></span></span><br><span class="line"><span class="tag"><span class="string">                              http://maven.apache.org/xsd/assembly-2.0.0.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>jar-with-dependencies<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">formats</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">format</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">format</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">formats</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">includeBaseDirectory</span>&gt;</span>false<span class="tag">&lt;/<span class="name">includeBaseDirectory</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencySets</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependencySet</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">outputDirectory</span>&gt;</span>/<span class="tag">&lt;/<span class="name">outputDirectory</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">useProjectArtifact</span>&gt;</span>true<span class="tag">&lt;/<span class="name">useProjectArtifact</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">unpack</span>&gt;</span>true<span class="tag">&lt;/<span class="name">unpack</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependencySet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencySets</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">assembly</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以通过对该配置文件进行拓展，从而实现更多的功能，比如排除指定的 JAR 等。使用示例如下：</p>
+<h3 id="1-引入插件"><a href="#1-引入插件" class="headerlink" title="1. 引入插件"></a>1. 引入插件</h3><p>在 POM.xml 中引入插件，并指定打包格式的配置文件为 <code>assembly.xml</code>(名称可自定义)：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-assembly-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">descriptors</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">descriptor</span>&gt;</span>src/main/resources/assembly.xml<span class="tag">&lt;/<span class="name">descriptor</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">descriptors</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">archive</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">manifest</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">mainClass</span>&gt;</span>com.heibaiying.wordcount.ClusterWordCountApp<span class="tag">&lt;/<span class="name">mainClass</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">manifest</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">archive</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>assembly.xml</code> 拓展自 <code>jar-with-dependencies.xml</code>，使用了 <code>&lt;excludes&gt;</code> 标签排除 Storm jars，具体内容如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">assembly</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/ASSEMBLY/2.0.0&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/ASSEMBLY/2.0.0 </span></span></span><br><span class="line"><span class="tag"><span class="string">                              http://maven.apache.org/xsd/assembly-2.0.0.xsd&quot;</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>jar-with-dependencies<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--指明打包方式--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">formats</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">format</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">format</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">formats</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">includeBaseDirectory</span>&gt;</span>false<span class="tag">&lt;/<span class="name">includeBaseDirectory</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencySets</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependencySet</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">outputDirectory</span>&gt;</span>/<span class="tag">&lt;/<span class="name">outputDirectory</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">useProjectArtifact</span>&gt;</span>true<span class="tag">&lt;/<span class="name">useProjectArtifact</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">unpack</span>&gt;</span>true<span class="tag">&lt;/<span class="name">unpack</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!--排除 storm 环境中已经提供的 storm-core--&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">excludes</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>org.apache.storm:storm-core<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">excludes</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependencySet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencySets</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">assembly</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在配置文件中不仅可以排除依赖，还可以排除指定的文件，更多的配置规则可以参考官方文档：<a target="_blank" rel="noopener" href="http://maven.apache.org/plugins/maven-assembly-plugin/assembly.html#">Descriptor Format</a></p>
+</blockquote>
+<h3 id="2-打包命令"><a href="#2-打包命令" class="headerlink" title="2.  打包命令"></a>2.  打包命令</h3><p>采用 maven-assembly-plugin 进行打包时命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> mvn assembly:assembly </span></span><br></pre></td></tr></table></figure>
+
+<p>打包后会同时生成两个 JAR 包，其中后缀为 <code>jar-with-dependencies</code> 是含有第三方依赖的 JAR 包，后缀是由 <code>assembly.xml</code> 中 <code>&lt;id&gt;</code> 标签指定的，可以自定义修改。提交该 JAR 到集群环境即可直接使用。</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/storm-jar.png"/> </div>
+
+
+
+<h2 id="四、maven-shade-plugin插件"><a href="#四、maven-shade-plugin插件" class="headerlink" title="四、maven-shade-plugin插件"></a>四、maven-shade-plugin插件</h2><h3 id="4-1-官方文档说明"><a href="#4-1-官方文档说明" class="headerlink" title="4.1 官方文档说明"></a>4.1 官方文档说明</h3><p>第三种方式是使用 maven-shade-plugin，既然已经有了 maven-assembly-plugin，为什么还需要 maven-shade-plugin，这一点在官方文档中也是有所说明的，来自于官方对 HDFS 整合讲解的章节<a target="_blank" rel="noopener" href="http://storm.apache.org/releases/2.0.0-SNAPSHOT/storm-hdfs.html">Storm HDFS Integration</a>，原文如下：</p>
+<blockquote>
+<p>When packaging your topology, it’s important that you use the <a target="_blank" rel="noopener" href="http://storm.apache.org/releases/2.0.0-SNAPSHOT/storm-hdfs.html">maven-shade-plugin</a> as opposed to the <a target="_blank" rel="noopener" href="http://storm.apache.org/releases/2.0.0-SNAPSHOT/storm-hdfs.html">maven-assembly-plugin</a>.</p>
+<p>The shade plugin provides facilities for merging JAR manifest entries, which the hadoop client leverages for URL scheme resolution.</p>
+<p>If you experience errors such as the following:</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;java.lang.<span class="attr">RuntimeException:</span> Error preparing <span class="attr">HdfsBolt:</span> No FileSystem <span class="keyword">for</span> <span class="attr">scheme:</span> hdfs</span><br></pre></td></tr></table></figure>
+
+<p>it’s an indication that your topology jar file isn’t packaged properly.</p>
+<p>If you are using maven to create your topology jar, you should use the following <code>maven-shade-plugin</code> configuration to create your topology jar。</p>
+</blockquote>
+<p>这里第一句就说的比较清晰，在集成 HDFS 时候，你必须使用 maven-shade-plugin 来代替 maven-assembly-plugin，否则会抛出 RuntimeException 异常。</p>
+<p>采用 maven-shade-plugin 打包有很多好处，比如你的工程依赖很多的 JAR 包，而被依赖的 JAR 又会依赖其他的 JAR 包，这样,当工程中依赖到不同的版本的 JAR 时，并且 JAR 中具有相同名称的资源文件时，shade 插件会尝试将所有资源文件打包在一起时，而不是和 assembly 一样执行覆盖操作。</p>
+<h3 id="4-2-配置"><a href="#4-2-配置" class="headerlink" title="4.2 配置"></a>4.2 配置</h3><p>采用 <code>maven-shade-plugin</code> 进行打包时候，配置示例如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-shade-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">createDependencyReducedPom</span>&gt;</span>true<span class="tag">&lt;/<span class="name">createDependencyReducedPom</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">filters</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifact</span>&gt;</span>*:*<span class="tag">&lt;/<span class="name">artifact</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">excludes</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.SF<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.sf<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.DSA<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.dsa<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.RSA<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.rsa<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.EC<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/*.ec<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/MSFTSIG.SF<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>META-INF/MSFTSIG.RSA<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">excludes</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">filters</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactSet</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">excludes</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>org.apache.storm:storm-core<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">excludes</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">artifactSet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">phase</span>&gt;</span>package<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">goal</span>&gt;</span>shade<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">transformers</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">transformer</span></span></span><br><span class="line"><span class="tag">                       <span class="attr">implementation</span>=<span class="string">&quot;org.apache.maven.plugins.shade.resource.ServicesResourceTransformer&quot;</span>/&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">transformer</span></span></span><br><span class="line"><span class="tag">                       <span class="attr">implementation</span>=<span class="string">&quot;org.apache.maven.plugins.shade.resource.ManifestResourceTransformer&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">transformer</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">transformers</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>以上配置示例来源于 Storm Github，这里做一下说明：</p>
+<p>在上面的配置中，排除了部分文件，这是因为有些 JAR 包生成时，会使用 jarsigner 生成文件签名（完成性校验），分为两个文件存放在 META-INF 目录下：</p>
+<ul>
+<li>a signature file, with a .SF extension；</li>
+<li>a signature block file, with a .DSA, .RSA, or .EC extension；</li>
+</ul>
+<p>如果某些包的存在重复引用，这可能会导致在打包时候出现 <code>Invalid signature file digest for Manifest main attributes</code> 异常，所以在配置中排除这些文件。</p>
+<h3 id="4-3-打包命令"><a href="#4-3-打包命令" class="headerlink" title="4.3 打包命令"></a>4.3 打包命令</h3><p>使用 maven-shade-plugin 进行打包的时候，打包命令和普通的一样：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> mvn  package</span></span><br></pre></td></tr></table></figure>
+
+<p>打包后会生成两个 JAR 包，提交到服务器集群时使用 <code>非 original</code> 开头的 JAR。</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/storm-jar2.png"/> </div>
+
+<h2 id="五、结论"><a href="#五、结论" class="headerlink" title="五、结论"></a>五、结论</h2><p>通过以上三种打包方式的详细介绍，这里给出最后的结论：<strong>建议使用 maven-shade-plugin 插件进行打包</strong>，因为其通用性最强，操作最简单，并且 Storm Github 中所有<a target="_blank" rel="noopener" href="https://github.com/apache/storm/tree/master/examples">examples</a> 都是采用该方式进行打包。</p>
+<h2 id="六、打包注意事项"><a href="#六、打包注意事项" class="headerlink" title="六、打包注意事项"></a>六、打包注意事项</h2><p>无论采用任何打包方式，都必须排除集群环境中已经提供的 storm jars。这里比较典型的是 storm-core，其在安装目录的 lib 目录下已经存在。</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/storm-lib.png"/> </div>
+
+
+
+<p>如果你不排除 storm-core，通常会抛出下面的异常：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Caused</span> <span class="string">by: java.lang.RuntimeException: java.io.IOException: Found multiple defaults.yaml resources.   </span></span><br><span class="line"><span class="meta">You&#x27;re</span> <span class="string">probably bundling the Storm jars with your topology jar.   </span></span><br><span class="line"><span class="meta">[jar</span>:<span class="string">file:/usr/app/apache-storm-1.2.2/lib/storm-core-1.2.2.jar!/defaults.yaml,   </span></span><br><span class="line"><span class="attr">jar</span>:<span class="string">file:/usr/appjar/storm-hdfs-integration-1.0.jar!/defaults.yaml]</span></span><br><span class="line">        <span class="attr">at</span> <span class="string">org.apache.storm.utils.Utils.findAndReadConfigFile(Utils.java:384)</span></span><br><span class="line">        <span class="attr">at</span> <span class="string">org.apache.storm.utils.Utils.readDefaultConfig(Utils.java:428)</span></span><br><span class="line">        <span class="attr">at</span> <span class="string">org.apache.storm.utils.Utils.readStormConfig(Utils.java:464)</span></span><br><span class="line">        <span class="attr">at</span> <span class="string">org.apache.storm.utils.Utils.&lt;clinit&gt;(Utils.java:178)</span></span><br><span class="line">        <span class="meta">...</span> <span class="string">39 more</span></span><br></pre></td></tr></table></figure>
+
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/storm-jar-complie-error.png"/> </div>
+
+
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>关于 maven-shade-plugin 的更多配置可以参考： <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/7a0e20b30401">maven-shade-plugin 入门指南</a></p>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">Storm三种打包方式对比分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">一、简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81mvn-package"><span class="toc-number">1.2.</span> <span class="toc-text">二、mvn package</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-mvn-package%E7%9A%84%E5%B1%80%E9%99%90"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 mvn package的局限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 解决办法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81maven-assembly-plugin%E6%8F%92%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">三、maven-assembly-plugin插件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%BC%95%E5%85%A5%E6%8F%92%E4%BB%B6"><span class="toc-number">1.3.1.</span> <span class="toc-text">1. 引入插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%89%93%E5%8C%85%E5%91%BD%E4%BB%A4"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.  打包命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81maven-shade-plugin%E6%8F%92%E4%BB%B6"><span class="toc-number">1.4.</span> <span class="toc-text">四、maven-shade-plugin插件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E8%AF%B4%E6%98%8E"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 官方文档说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E9%85%8D%E7%BD%AE"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E6%89%93%E5%8C%85%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.3.</span> <span class="toc-text">4.3 打包命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%BB%93%E8%AE%BA"><span class="toc-number">1.5.</span> <span class="toc-text">五、结论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%89%93%E5%8C%85%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">1.6.</span> <span class="toc-text">六、打包注意事项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">1.7.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&text=Storm三种打包方式对比分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&title=Storm三种打包方式对比分析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&is_video=false&description=Storm三种打包方式对比分析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Storm三种打包方式对比分析&body=Check out this article: https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&title=Storm三种打包方式对比分析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&title=Storm三种打包方式对比分析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&title=Storm三种打包方式对比分析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&title=Storm三种打包方式对比分析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&name=Storm三种打包方式对比分析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/Storm%E4%B8%89%E7%A7%8D%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94%E5%88%86%E6%9E%90/&t=Storm三种打包方式对比分析"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank"></a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

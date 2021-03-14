@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="大数据常用开发环境搭建部署指南为方便大家查阅，本仓库所有软件的安装方式单独整理如下： 一、基础软件安装 Linux 环境下 JDK 安装 Linux 环境下 Python 安装 Linux系统IP配置  二、Hadoop Hadoop 单机环境搭建 Hadoop 集群环境搭建 基于 Zookeeper 搭建 Hadoop 高可用集群  三、Spark Spark 开发环境搭建 基于 Zookeep">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据常用开发环境搭建部署指南">
+<meta property="og:url" content="https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="大数据常用开发环境搭建部署指南为方便大家查阅，本仓库所有软件的安装方式单独整理如下： 一、基础软件安装 Linux 环境下 JDK 安装 Linux 环境下 Python 安装 Linux系统IP配置  二、Hadoop Hadoop 单机环境搭建 Hadoop 集群环境搭建 基于 Zookeeper 搭建 Hadoop 高可用集群  三、Spark Spark 开发环境搭建 基于 Zookeep">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-03-13T09:04:21.000Z">
+<meta property="article:modified_time" content="2021-03-14T03:23:58.772Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="大数据">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>大数据常用开发环境搭建部署指南</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../Linux-%E7%8E%AF%E5%A2%83%E4%B8%8BJDK%E5%AE%89%E8%A3%85/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&text=大数据常用开发环境搭建部署指南"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&title=大数据常用开发环境搭建部署指南"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&is_video=false&description=大数据常用开发环境搭建部署指南"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=大数据常用开发环境搭建部署指南&body=Check out this article: https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&title=大数据常用开发环境搭建部署指南"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&title=大数据常用开发环境搭建部署指南"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&title=大数据常用开发环境搭建部署指南"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&title=大数据常用开发环境搭建部署指南"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&name=大数据常用开发环境搭建部署指南&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&t=大数据常用开发环境搭建部署指南"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97"><span class="toc-number">1.</span> <span class="toc-text">大数据常用开发环境搭建部署指南</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">一、基础软件安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Hadoop"><span class="toc-number">1.2.</span> <span class="toc-text">二、Hadoop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81Spark"><span class="toc-number">1.3.</span> <span class="toc-text">三、Spark</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Flink"><span class="toc-number">1.4.</span> <span class="toc-text">四、Flink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81Storm"><span class="toc-number">1.5.</span> <span class="toc-text">五、Storm</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81HBase"><span class="toc-number">1.6.</span> <span class="toc-text">六、HBase</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%83%E3%80%81Flume"><span class="toc-number">1.7.</span> <span class="toc-text">七、Flume</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AB%E3%80%81Azkaban"><span class="toc-number">1.8.</span> <span class="toc-text">八、Azkaban</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%9D%E3%80%81Hive"><span class="toc-number">1.9.</span> <span class="toc-text">九、Hive</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E3%80%81Zookeeper"><span class="toc-number">1.10.</span> <span class="toc-text">十、Zookeeper</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E4%B8%80%E3%80%81Kafka"><span class="toc-number">1.11.</span> <span class="toc-text">十一、Kafka</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E"><span class="toc-number">1.12.</span> <span class="toc-text">版本说明</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        大数据常用开发环境搭建部署指南
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2021-03-13T09:04:21.000Z" itemprop="datePublished">2021-03-13</time>
+        
+        (Updated: <time datetime="2021-03-14T03:23:58.772Z" itemprop="dateModified">2021-03-14</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">开发环境搭建</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="大数据常用开发环境搭建部署指南"><a href="#大数据常用开发环境搭建部署指南" class="headerlink" title="大数据常用开发环境搭建部署指南"></a>大数据常用开发环境搭建部署指南</h2><p>为方便大家查阅，本仓库所有软件的安装方式单独整理如下：</p>
+<h3 id="一、基础软件安装"><a href="#一、基础软件安装" class="headerlink" title="一、基础软件安装"></a>一、基础软件安装</h3><ol>
+<li><a href="../Linux下JDK安装">Linux 环境下 JDK 安装</a></li>
+<li><a href="../Linux下Python安装">Linux 环境下 Python 安装</a></li>
+<li><a href="../Linux系统IP配置">Linux系统IP配置</a></li>
+</ol>
+<h3 id="二、Hadoop"><a href="#二、Hadoop" class="headerlink" title="二、Hadoop"></a>二、Hadoop</h3><ol>
+<li><a href="../Hadoop单机环境搭建">Hadoop 单机环境搭建</a></li>
+<li><a href="../Hadoop集群环境搭建">Hadoop 集群环境搭建</a></li>
+<li><a href="../基于Zookeeper搭建Hadoop高可用集群">基于 Zookeeper 搭建 Hadoop 高可用集群</a></li>
+</ol>
+<h3 id="三、Spark"><a href="#三、Spark" class="headerlink" title="三、Spark"></a>三、Spark</h3><ol>
+<li><a href="../Spark开发环境搭建">Spark 开发环境搭建</a></li>
+<li><a href="../Spark集群环境搭建">基于 Zookeeper 搭建 Spark 高可用集群</a></li>
+</ol>
+<h3 id="四、Flink"><a href="#四、Flink" class="headerlink" title="四、Flink"></a>四、Flink</h3><ol>
+<li><a href="../Flink_Standalone_Cluster">Flink Standalone 集群部署</a></li>
+</ol>
+<h3 id="五、Storm"><a href="#五、Storm" class="headerlink" title="五、Storm"></a>五、Storm</h3><ol>
+<li><a href="../Storm单机环境搭建">Storm 单机环境搭建</a></li>
+<li><a href="../Storm集群环境搭建">Storm 集群环境搭建</a></li>
+</ol>
+<h3 id="六、HBase"><a href="#六、HBase" class="headerlink" title="六、HBase"></a>六、HBase</h3><ol>
+<li><a href="../HBase单机环境搭建">HBase 单机环境搭建</a></li>
+<li><a href="../HBase集群环境搭建">HBase 集群环境搭建</a></li>
+</ol>
+<h3 id="七、Flume"><a href="#七、Flume" class="headerlink" title="七、Flume"></a>七、Flume</h3><ol>
+<li><a href="../Linux下Flume的安装">Linux 环境下 Flume 的安装部署</a></li>
+</ol>
+<h3 id="八、Azkaban"><a href="#八、Azkaban" class="headerlink" title="八、Azkaban"></a>八、Azkaban</h3><ol>
+<li><a href="../Azkaban_3.x_编译及部署/">Azkaban3.x 编译及部署</a></li>
+</ol>
+<h3 id="九、Hive"><a href="#九、Hive" class="headerlink" title="九、Hive"></a>九、Hive</h3><ol>
+<li><a href="../Linux环境下Hive的安装部署">Linux 环境下 Hive 的安装部署</a></li>
+</ol>
+<h3 id="十、Zookeeper"><a href="#十、Zookeeper" class="headerlink" title="十、Zookeeper"></a>十、Zookeeper</h3><ol>
+<li><a href="../Zookeeper单机环境和集群环境搭建">Zookeeper 单机环境和集群环境搭建</a> </li>
+</ol>
+<h3 id="十一、Kafka"><a href="#十一、Kafka" class="headerlink" title="十一、Kafka"></a>十一、Kafka</h3><ol>
+<li><a href="../基于Zookeeper搭建Kafka高可用集群">基于 Zookeeper 搭建 Kafka 高可用集群</a></li>
+</ol>
+<h3 id="版本说明"><a href="#版本说明" class="headerlink" title="版本说明"></a>版本说明</h3><p>由于 Apache Hadoop 原有安装包之间兼容性比较差，所以如无特殊需求，本仓库一律选择 <strong>CDH</strong> (Cloudera’s Distribution, including Apache Hadoop) 版本的安装包。它基于稳定版本的 Apache Hadoop 构建，并做了兼容性测试，是目前生产环境中使用最为广泛的版本。</p>
+<p>最新的 CDH 5 的下载地址为：<a target="_blank" rel="noopener" href="http://archive.cloudera.com/cdh5/cdh/5/">http://archive.cloudera.com/cdh5/cdh/5/</a>  。这个页面很大且加载速度比较慢，需要耐心等待页面加载完成。上半部分是文档链接，后半部分才是安装包。同一个 CDH 版本的不同框架间都做了集成测试，可以保证没有任何 JAR 包冲突。安装包包名通常如下所示，这里 CDH 版本都是 <code>5.15.2</code>  ，前面是各个软件自己的版本 ，未避免出现不必要的 JAR 包冲突，<strong>请务必保持 CDH 的版本一致</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hadoop-2.6.0-cdh5.15.2.tar.gz </span><br><span class="line">hbase-1.2.0-cdh5.15.2</span><br><span class="line">hive-1.1.0-cdh5.15.2.tar.gz</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97"><span class="toc-number">1.</span> <span class="toc-text">大数据常用开发环境搭建部署指南</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">一、基础软件安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Hadoop"><span class="toc-number">1.2.</span> <span class="toc-text">二、Hadoop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81Spark"><span class="toc-number">1.3.</span> <span class="toc-text">三、Spark</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Flink"><span class="toc-number">1.4.</span> <span class="toc-text">四、Flink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81Storm"><span class="toc-number">1.5.</span> <span class="toc-text">五、Storm</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81HBase"><span class="toc-number">1.6.</span> <span class="toc-text">六、HBase</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%83%E3%80%81Flume"><span class="toc-number">1.7.</span> <span class="toc-text">七、Flume</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AB%E3%80%81Azkaban"><span class="toc-number">1.8.</span> <span class="toc-text">八、Azkaban</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%9D%E3%80%81Hive"><span class="toc-number">1.9.</span> <span class="toc-text">九、Hive</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E3%80%81Zookeeper"><span class="toc-number">1.10.</span> <span class="toc-text">十、Zookeeper</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%81%E4%B8%80%E3%80%81Kafka"><span class="toc-number">1.11.</span> <span class="toc-text">十一、Kafka</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E"><span class="toc-number">1.12.</span> <span class="toc-text">版本说明</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&text=大数据常用开发环境搭建部署指南"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&title=大数据常用开发环境搭建部署指南"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&is_video=false&description=大数据常用开发环境搭建部署指南"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=大数据常用开发环境搭建部署指南&body=Check out this article: https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&title=大数据常用开发环境搭建部署指南"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&title=大数据常用开发环境搭建部署指南"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&title=大数据常用开发环境搭建部署指南"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&title=大数据常用开发环境搭建部署指南"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&name=大数据常用开发环境搭建部署指南&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97/&t=大数据常用开发环境搭建部署指南"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank"></a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

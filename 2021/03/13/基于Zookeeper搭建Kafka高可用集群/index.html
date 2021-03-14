@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="基于Zookeeper搭建Kafka高可用集群 一、Zookeeper集群搭建 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1.1 下载 &amp; 解压 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1.2 修改配置 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Zookeeper搭建Kafka高可用集群">
+<meta property="og:url" content="https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="基于Zookeeper搭建Kafka高可用集群 一、Zookeeper集群搭建 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1.1 下载 &amp; 解压 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1.2 修改配置 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/zookeeper-cluster.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/kafka-cluster-shell.png">
+<meta property="article:published_time" content="2021-03-13T09:44:28.000Z">
+<meta property="article:modified_time" content="2021-03-14T02:02:25.776Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="大数据">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/zookeeper-cluster.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>基于Zookeeper搭建Kafka高可用集群</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../Zookeeper%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83%E5%92%8C%E9%9B%86%E7%BE%A4%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BA%94%E7%94%A8%E5%B8%B8%E7%94%A8%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&text=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&title=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&is_video=false&description=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=基于Zookeeper搭建Kafka高可用集群&body=Check out this article: https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&title=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&title=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&title=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&title=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&name=基于Zookeeper搭建Kafka高可用集群&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&t=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4"><span class="toc-number">1.</span> <span class="toc-text">基于Zookeeper搭建Kafka高可用集群</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA"><span class="toc-number">1.1.</span> <span class="toc-text">一、Zookeeper集群搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%B8%8B%E8%BD%BD-amp-%E8%A7%A3%E5%8E%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 下载 &amp; 解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2 修改配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E6%A0%87%E8%AF%86%E8%8A%82%E7%82%B9"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.3 标识节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E5%90%AF%E5%8A%A8%E9%9B%86%E7%BE%A4"><span class="toc-number">1.1.4.</span> <span class="toc-text">1.4 启动集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-%E9%9B%86%E7%BE%A4%E9%AA%8C%E8%AF%81"><span class="toc-number">1.1.5.</span> <span class="toc-text">1.5 集群验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Kafka%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA"><span class="toc-number">1.2.</span> <span class="toc-text">二、Kafka集群搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E4%B8%8B%E8%BD%BD%E8%A7%A3%E5%8E%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 下载解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%8B%B7%E8%B4%9D%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 拷贝配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 修改配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E5%90%AF%E5%8A%A8%E9%9B%86%E7%BE%A4"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.4 启动集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E5%88%9B%E5%BB%BA%E6%B5%8B%E8%AF%95%E4%B8%BB%E9%A2%98"><span class="toc-number">1.2.5.</span> <span class="toc-text">2.5 创建测试主题</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        基于Zookeeper搭建Kafka高可用集群
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2021-03-13T09:44:28.000Z" itemprop="datePublished">2021-03-13</time>
+        
+        (Updated: <time datetime="2021-03-14T02:02:25.776Z" itemprop="dateModified">2021-03-14</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">开发环境搭建</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="基于Zookeeper搭建Kafka高可用集群"><a href="#基于Zookeeper搭建Kafka高可用集群" class="headerlink" title="基于Zookeeper搭建Kafka高可用集群"></a>基于Zookeeper搭建Kafka高可用集群</h1><nav>
+<a href="#一Zookeeper集群搭建">一、Zookeeper集群搭建</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#11-下载--解压">1.1 下载 & 解压</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#12-修改配置">1.2 修改配置</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#13-标识节点">1.3 标识节点</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#14-启动集群">1.4 启动集群</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#15-集群验证">1.5 集群验证</a><br/>
+<a href="#二Kafka集群搭建">二、Kafka集群搭建</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#21-下载解压">2.1 下载解压</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#22-拷贝配置文件">2.2 拷贝配置文件</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#23-修改配置">2.3 修改配置</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#24-启动集群">2.4 启动集群</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#25-创建测试主题">2.5 创建测试主题</a><br/>
+</nav>
+
+<h2 id="一、Zookeeper集群搭建"><a href="#一、Zookeeper集群搭建" class="headerlink" title="一、Zookeeper集群搭建"></a>一、Zookeeper集群搭建</h2><p>为保证集群高可用，Zookeeper 集群的节点数最好是奇数，最少有三个节点，所以这里搭建一个三个节点的集群。</p>
+<h3 id="1-1-下载-amp-解压"><a href="#1-1-下载-amp-解压" class="headerlink" title="1.1 下载 &amp; 解压"></a>1.1 下载 &amp; 解压</h3><p>下载对应版本 Zookeeper，这里我下载的版本 <code>3.4.14</code>。官方下载地址：<a target="_blank" rel="noopener" href="https://archive.apache.org/dist/zookeeper/">https://archive.apache.org/dist/zookeeper/</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 下载</span></span><br><span class="line">wget https://archive.apache.org/dist/zookeeper/zookeeper-3.4.14/zookeeper-3.4.14.tar.gz</span><br><span class="line"><span class="meta">#</span><span class="bash"> 解压</span></span><br><span class="line">tar -zxvf zookeeper-3.4.14.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-修改配置"><a href="#1-2-修改配置" class="headerlink" title="1.2 修改配置"></a>1.2 修改配置</h3><p>拷贝三份 zookeeper 安装包。分别进入安装目录的 <code>conf</code> 目录，拷贝配置样本 <code>zoo_sample.cfg</code> 为 <code>zoo.cfg</code> 并进行修改，修改后三份配置文件内容分别如下：</p>
+<p>zookeeper01 配置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">tickTime=2000</span><br><span class="line">initLimit=10</span><br><span class="line">syncLimit=5</span><br><span class="line">dataDir=/usr/local/zookeeper-cluster/data/01</span><br><span class="line">dataLogDir=/usr/local/zookeeper-cluster/log/01</span><br><span class="line">clientPort=2181</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> server.1 这个1是服务器的标识，可以是任意有效数字，标识这是第几个服务器节点，这个标识要写到dataDir目录下面myid文件里</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 指名集群间通讯端口和选举端口</span></span><br><span class="line">server.1=127.0.0.1:2287:3387</span><br><span class="line">server.2=127.0.0.1:2288:3388</span><br><span class="line">server.3=127.0.0.1:2289:3389</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果是多台服务器，则集群中每个节点通讯端口和选举端口可相同，IP 地址修改为每个节点所在主机 IP 即可。</p>
+</blockquote>
+<p>zookeeper02 配置，与 zookeeper01 相比，只有 <code>dataLogDir</code>、<code>dataLogDir</code> 和 <code>clientPort</code> 不同：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tickTime=2000</span><br><span class="line">initLimit=10</span><br><span class="line">syncLimit=5</span><br><span class="line">dataDir=/usr/local/zookeeper-cluster/data/02</span><br><span class="line">dataLogDir=/usr/local/zookeeper-cluster/log/02</span><br><span class="line">clientPort=2182</span><br><span class="line"></span><br><span class="line">server.1=127.0.0.1:2287:3387</span><br><span class="line">server.2=127.0.0.1:2288:3388</span><br><span class="line">server.3=127.0.0.1:2289:3389</span><br></pre></td></tr></table></figure>
+
+<p>zookeeper03 配置，与 zookeeper01，02 相比，也只有 <code>dataLogDir</code>、<code>dataLogDir</code> 和 <code>clientPort</code> 不同：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tickTime=2000</span><br><span class="line">initLimit=10</span><br><span class="line">syncLimit=5</span><br><span class="line">dataDir=/usr/local/zookeeper-cluster/data/03</span><br><span class="line">dataLogDir=/usr/local/zookeeper-cluster/log/03</span><br><span class="line">clientPort=2183</span><br><span class="line"></span><br><span class="line">server.1=127.0.0.1:2287:3387</span><br><span class="line">server.2=127.0.0.1:2288:3388</span><br><span class="line">server.3=127.0.0.1:2289:3389</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>配置参数说明：</p>
+<ul>
+<li><strong>tickTime</strong>：用于计算的基础时间单元。比如 session 超时：N*tickTime；</li>
+<li><strong>initLimit</strong>：用于集群，允许从节点连接并同步到 master 节点的初始化连接时间，以 tickTime 的倍数来表示；</li>
+<li><strong>syncLimit</strong>：用于集群， master 主节点与从节点之间发送消息，请求和应答时间长度（心跳机制）；</li>
+<li><strong>dataDir</strong>：数据存储位置；</li>
+<li><strong>dataLogDir</strong>：日志目录；</li>
+<li><strong>clientPort</strong>：用于客户端连接的端口，默认 2181</li>
+</ul>
+</blockquote>
+<h3 id="1-3-标识节点"><a href="#1-3-标识节点" class="headerlink" title="1.3 标识节点"></a>1.3 标识节点</h3><p>分别在三个节点的数据存储目录下新建 <code>myid</code> 文件,并写入对应的节点标识。Zookeeper 集群通过 <code>myid</code> 文件识别集群节点，并通过上文配置的节点通信端口和选举端口来进行节点通信，选举出 leader 节点。</p>
+<p>创建存储目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> dataDir</span></span><br><span class="line">mkdir -vp  /usr/local/zookeeper-cluster/data/01</span><br><span class="line"><span class="meta">#</span><span class="bash"> dataDir</span></span><br><span class="line">mkdir -vp  /usr/local/zookeeper-cluster/data/02</span><br><span class="line"><span class="meta">#</span><span class="bash"> dataDir</span></span><br><span class="line">mkdir -vp  /usr/local/zookeeper-cluster/data/03</span><br></pre></td></tr></table></figure>
+
+<p>创建并写入节点标识到 <code>myid</code> 文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">server1</span></span><br><span class="line">echo &quot;1&quot; &gt; /usr/local/zookeeper-cluster/data/01/myid</span><br><span class="line"><span class="meta">#</span><span class="bash">server2</span></span><br><span class="line">echo &quot;2&quot; &gt; /usr/local/zookeeper-cluster/data/02/myid</span><br><span class="line"><span class="meta">#</span><span class="bash">server3</span></span><br><span class="line">echo &quot;3&quot; &gt; /usr/local/zookeeper-cluster/data/03/myid</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-4-启动集群"><a href="#1-4-启动集群" class="headerlink" title="1.4 启动集群"></a>1.4 启动集群</h3><p>分别启动三个节点：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 启动节点1</span></span><br><span class="line">/usr/app/zookeeper-cluster/zookeeper01/bin/zkServer.sh start</span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动节点2</span></span><br><span class="line">/usr/app/zookeeper-cluster/zookeeper02/bin/zkServer.sh start</span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动节点3</span></span><br><span class="line">/usr/app/zookeeper-cluster/zookeeper03/bin/zkServer.sh start</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-5-集群验证"><a href="#1-5-集群验证" class="headerlink" title="1.5 集群验证"></a>1.5 集群验证</h3><p>使用 jps 查看进程，并且使用 <code>zkServer.sh status</code> 查看集群各个节点状态。如图三个节点进程均启动成功，并且两个节点为 follower 节点，一个节点为 leader 节点。</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/zookeeper-cluster.png"/> </div>
+
+
+
+<h2 id="二、Kafka集群搭建"><a href="#二、Kafka集群搭建" class="headerlink" title="二、Kafka集群搭建"></a>二、Kafka集群搭建</h2><h3 id="2-1-下载解压"><a href="#2-1-下载解压" class="headerlink" title="2.1 下载解压"></a>2.1 下载解压</h3><p>Kafka 安装包官方下载地址：<a target="_blank" rel="noopener" href="http://kafka.apache.org/downloads">http://kafka.apache.org/downloads</a> ，本用例下载的版本为 <code>2.2.0</code>，下载命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 下载</span></span><br><span class="line">wget https://www-eu.apache.org/dist/kafka/2.2.0/kafka_2.12-2.2.0.tgz</span><br><span class="line"><span class="meta">#</span><span class="bash"> 解压</span></span><br><span class="line">tar -xzf kafka_2.12-2.2.0.tgz</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里解释一下 kafka 安装包的命名规则：以 <code>kafka_2.12-2.2.0.tgz</code> 为例，前面的 2.12 代表 Scala 的版本号（Kafka 采用 Scala 语言进行开发），后面的 2.2.0 则代表 Kafka 的版本号。</p>
+</blockquote>
+<h3 id="2-2-拷贝配置文件"><a href="#2-2-拷贝配置文件" class="headerlink" title="2.2 拷贝配置文件"></a>2.2 拷贝配置文件</h3><p>进入解压目录的 <code>config</code> 目录下 ，拷贝三份配置文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> cp server.properties server-1.properties</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> cp server.properties server-2.properties</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> cp server.properties server-3.properties</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-修改配置"><a href="#2-3-修改配置" class="headerlink" title="2.3 修改配置"></a>2.3 修改配置</h3><p>分别修改三份配置文件中的部分配置，如下：</p>
+<p>server-1.properties：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The id of the broker. 集群中每个节点的唯一标识</span></span><br><span class="line"><span class="meta">broker.id</span>=<span class="string">0</span></span><br><span class="line"><span class="comment"># 监听地址</span></span><br><span class="line"><span class="attr">listeners</span>=<span class="string">PLAINTEXT://hadoop001:9092</span></span><br><span class="line"><span class="comment"># 数据的存储位置</span></span><br><span class="line"><span class="meta">log.dirs</span>=<span class="string">/usr/local/kafka-logs/00</span></span><br><span class="line"><span class="comment"># Zookeeper连接地址</span></span><br><span class="line"><span class="meta">zookeeper.connect</span>=<span class="string">hadoop001:2181,hadoop001:2182,hadoop001:2183</span></span><br></pre></td></tr></table></figure>
+
+<p>server-2.properties：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">broker.id</span>=<span class="string">1</span></span><br><span class="line"><span class="attr">listeners</span>=<span class="string">PLAINTEXT://hadoop001:9093</span></span><br><span class="line"><span class="meta">log.dirs</span>=<span class="string">/usr/local/kafka-logs/01</span></span><br><span class="line"><span class="meta">zookeeper.connect</span>=<span class="string">hadoop001:2181,hadoop001:2182,hadoop001:2183</span></span><br></pre></td></tr></table></figure>
+
+<p>server-3.properties：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">broker.id</span>=<span class="string">2</span></span><br><span class="line"><span class="attr">listeners</span>=<span class="string">PLAINTEXT://hadoop001:9094</span></span><br><span class="line"><span class="meta">log.dirs</span>=<span class="string">/usr/local/kafka-logs/02</span></span><br><span class="line"><span class="meta">zookeeper.connect</span>=<span class="string">hadoop001:2181,hadoop001:2182,hadoop001:2183</span></span><br></pre></td></tr></table></figure>
+
+<p>这里需要说明的是 <code>log.dirs</code> 指的是数据日志的存储位置，确切的说，就是分区数据的存储位置，而不是程序运行日志的位置。程序运行日志的位置是通过同一目录下的 <code>log4j.properties</code> 进行配置的。</p>
+<h3 id="2-4-启动集群"><a href="#2-4-启动集群" class="headerlink" title="2.4 启动集群"></a>2.4 启动集群</h3><p>分别指定不同配置文件，启动三个 Kafka 节点。启动后可以使用 jps 查看进程，此时应该有三个 zookeeper 进程和三个 kafka 进程。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-server-start.sh config/server-1.properties</span><br><span class="line">bin/kafka-server-start.sh config/server-2.properties</span><br><span class="line">bin/kafka-server-start.sh config/server-3.properties</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-创建测试主题"><a href="#2-5-创建测试主题" class="headerlink" title="2.5 创建测试主题"></a>2.5 创建测试主题</h3><p>创建测试主题：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --create --bootstrap-server hadoop001:9092 \</span><br><span class="line">                    --replication-factor 3 \</span><br><span class="line">                    --partitions 1 --topic my-replicated-topic</span><br></pre></td></tr></table></figure>
+
+<p>创建后可以使用以下命令查看创建的主题信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --describe --bootstrap-server hadoop001:9092 --topic my-replicated-topic</span><br></pre></td></tr></table></figure>
+
+<div align="center"> <img src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/kafka-cluster-shell.png"/> </div>
+
+
+
+<p>可以看到分区 0 的有 0,1,2 三个副本，且三个副本都是可用副本，都在 ISR(in-sync Replica 同步副本) 列表中，其中 1 为首领副本，此时代表集群已经搭建成功。</p>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4"><span class="toc-number">1.</span> <span class="toc-text">基于Zookeeper搭建Kafka高可用集群</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Zookeeper%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA"><span class="toc-number">1.1.</span> <span class="toc-text">一、Zookeeper集群搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%B8%8B%E8%BD%BD-amp-%E8%A7%A3%E5%8E%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 下载 &amp; 解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2 修改配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E6%A0%87%E8%AF%86%E8%8A%82%E7%82%B9"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.3 标识节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E5%90%AF%E5%8A%A8%E9%9B%86%E7%BE%A4"><span class="toc-number">1.1.4.</span> <span class="toc-text">1.4 启动集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-%E9%9B%86%E7%BE%A4%E9%AA%8C%E8%AF%81"><span class="toc-number">1.1.5.</span> <span class="toc-text">1.5 集群验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Kafka%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA"><span class="toc-number">1.2.</span> <span class="toc-text">二、Kafka集群搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E4%B8%8B%E8%BD%BD%E8%A7%A3%E5%8E%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 下载解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%8B%B7%E8%B4%9D%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 拷贝配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 修改配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E5%90%AF%E5%8A%A8%E9%9B%86%E7%BE%A4"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.4 启动集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E5%88%9B%E5%BB%BA%E6%B5%8B%E8%AF%95%E4%B8%BB%E9%A2%98"><span class="toc-number">1.2.5.</span> <span class="toc-text">2.5 创建测试主题</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&text=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&title=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&is_video=false&description=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=基于Zookeeper搭建Kafka高可用集群&body=Check out this article: https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&title=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&title=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&title=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&title=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&name=基于Zookeeper搭建Kafka高可用集群&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/%E5%9F%BA%E4%BA%8EZookeeper%E6%90%AD%E5%BB%BAKafka%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4/&t=基于Zookeeper搭建Kafka高可用集群"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank"></a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

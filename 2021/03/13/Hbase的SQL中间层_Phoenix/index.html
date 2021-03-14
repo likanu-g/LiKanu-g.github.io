@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="Hbase的SQL中间层——Phoenix 一、Phoenix简介 二、Phoenix安装 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.1 下载并解压 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.2 拷贝Jar包 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.3 重启 Region Servers &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.4 启动Phoenix &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hbase的SQL中间层——Phoenix">
+<meta property="og:url" content="https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="Hbase的SQL中间层——Phoenix 一、Phoenix简介 二、Phoenix安装 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.1 下载并解压 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.2 拷贝Jar包 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.3 重启 Region Servers &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.4 启动Phoenix &amp;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/Phoenix-hadoop.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/phoenix-shell.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/Phoenix-create-table.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/hbase-web-ui-phoenix.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/Phoenix-update.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/Phoenix-delete.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/Phoenix-select.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/phoenix-core-jar.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/Phoenix-java-api-result.png">
+<meta property="article:published_time" content="2021-03-13T10:31:55.000Z">
+<meta property="article:modified_time" content="2021-03-13T15:18:50.114Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="HBase">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/Phoenix-hadoop.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Hbase的SQL中间层——Phoenix</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../Hbase%E5%AE%B9%E7%81%BE%E4%B8%8E%E5%A4%87%E4%BB%BD/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../Hbase%E7%AE%80%E4%BB%8B/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&text=Hbase的SQL中间层——Phoenix"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&title=Hbase的SQL中间层——Phoenix"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&is_video=false&description=Hbase的SQL中间层——Phoenix"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Hbase的SQL中间层——Phoenix&body=Check out this article: https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&title=Hbase的SQL中间层——Phoenix"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&title=Hbase的SQL中间层——Phoenix"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&title=Hbase的SQL中间层——Phoenix"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&title=Hbase的SQL中间层——Phoenix"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&name=Hbase的SQL中间层——Phoenix&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&t=Hbase的SQL中间层——Phoenix"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82%E2%80%94%E2%80%94Phoenix"><span class="toc-number">1.</span> <span class="toc-text">Hbase的SQL中间层——Phoenix</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Phoenix%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">一、Phoenix简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Phoenix%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">二、Phoenix安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E4%B8%8B%E8%BD%BD%E5%B9%B6%E8%A7%A3%E5%8E%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 下载并解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%8B%B7%E8%B4%9DJar%E5%8C%85"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 拷贝Jar包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E9%87%8D%E5%90%AF-Region-Servers"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 重启 Region Servers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E5%90%AF%E5%8A%A8Phoenix"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.4 启动Phoenix</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E5%90%AF%E5%8A%A8%E7%BB%93%E6%9E%9C"><span class="toc-number">1.2.5.</span> <span class="toc-text">2.5 启动结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81Phoenix-%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">三、Phoenix 简单使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%88%9B%E5%BB%BA%E8%A1%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 创建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.3 修改数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E9%80%80%E5%87%BA%E5%91%BD%E4%BB%A4"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.6 退出命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E6%89%A9%E5%B1%95"><span class="toc-number">1.3.4.</span> <span class="toc-text">3.7 扩展</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Phoenix-Java-API"><span class="toc-number">1.4.</span> <span class="toc-text">四、Phoenix Java API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%BC%95%E5%85%A5Phoenix-core-JAR%E5%8C%85"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 引入Phoenix core JAR包</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">2.</span> <span class="toc-text">参考资料</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Hbase的SQL中间层——Phoenix
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2021-03-13T10:31:55.000Z" itemprop="datePublished">2021-03-13</time>
+        
+        (Updated: <time datetime="2021-03-13T15:18:50.114Z" itemprop="dateModified">2021-03-13</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/HBase/" rel="tag">HBase</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="Hbase的SQL中间层——Phoenix"><a href="#Hbase的SQL中间层——Phoenix" class="headerlink" title="Hbase的SQL中间层——Phoenix"></a>Hbase的SQL中间层——Phoenix</h1><nav>
+<a href="#一Phoenix简介">一、Phoenix简介</a><br/>
+<a href="#二Phoenix安装">二、Phoenix安装</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#21-下载并解压">2.1 下载并解压</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#22-拷贝Jar包">2.2 拷贝Jar包</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#23-重启-Region-Servers">2.3 重启 Region Servers</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#24-启动Phoenix">2.4 启动Phoenix</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#25-启动结果">2.5 启动结果</a><br/>
+<a href="#三Phoenix-简单使用">三、Phoenix 简单使用</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#31-创建表">3.1 创建表</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#32-插入数据">3.2 插入数据</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#33-修改数据">3.3 修改数据</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#34-删除数据">3.4 删除数据</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#35-查询数据">3.5 查询数据</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#36-退出命令">3.6 退出命令</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#37-扩展">3.7 扩展</a><br/>
+<a href="#四Phoenix-Java-API">四、Phoenix Java API</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#41-引入Phoenix-core-JAR包">4.1 引入Phoenix core JAR包</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#42-简单的Java-API实例">4.2 简单的Java API实例</a><br/>
+</nav>
+
+<h2 id="一、Phoenix简介"><a href="#一、Phoenix简介" class="headerlink" title="一、Phoenix简介"></a>一、Phoenix简介</h2><p><code>Phoenix</code> 是 HBase 的开源 SQL 中间层，它允许你使用标准 JDBC 的方式来操作 HBase 上的数据。在 <code>Phoenix</code> 之前，如果你要访问 HBase，只能调用它的 Java API，但相比于使用一行 SQL 就能实现数据查询，HBase 的 API 还是过于复杂。<code>Phoenix</code> 的理念是 <code>we put sql SQL back in NOSQL</code>，即你可以使用标准的 SQL 就能完成对 HBase 上数据的操作。同时这也意味着你可以通过集成 <code>Spring Data  JPA</code> 或 <code>Mybatis</code> 等常用的持久层框架来操作 HBase。</p>
+<p>其次 <code>Phoenix</code> 的性能表现也非常优异，<code>Phoenix</code> 查询引擎会将 SQL 查询转换为一个或多个 HBase Scan，通过并行执行来生成标准的 JDBC 结果集。它通过直接使用 HBase API 以及协处理器和自定义过滤器，可以为小型数据查询提供毫秒级的性能，为千万行数据的查询提供秒级的性能。同时 Phoenix 还拥有二级索引等 HBase 不具备的特性，因为以上的优点，所以 <code>Phoenix</code> 成为了 HBase 最优秀的 SQL 中间层。</p>
+<div align="center"> <img width="600px"  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/Phoenix-hadoop.png"/> </div>
+
+
+<h2 id="二、Phoenix安装"><a href="#二、Phoenix安装" class="headerlink" title="二、Phoenix安装"></a>二、Phoenix安装</h2><blockquote>
+<p>我们可以按照官方安装说明进行安装，官方说明如下：</p>
+<ul>
+<li>download and expand our installation tar</li>
+<li>copy the phoenix server jar that is compatible with your HBase installation into the lib directory of every region server</li>
+<li>restart the region servers</li>
+<li>add the phoenix client jar to the classpath of your HBase client</li>
+<li>download and setup SQuirrel as your SQL client so you can issue adhoc SQL against your HBase cluster</li>
+</ul>
+</blockquote>
+<h3 id="2-1-下载并解压"><a href="#2-1-下载并解压" class="headerlink" title="2.1 下载并解压"></a>2.1 下载并解压</h3><p>官方针对 Apache 版本和 CDH 版本的 HBase 均提供了安装包，按需下载即可。官方下载地址: <a target="_blank" rel="noopener" href="http://phoenix.apache.org/download.html">http://phoenix.apache.org/download.html</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 下载</span></span><br><span class="line">wget http://mirror.bit.edu.cn/apache/phoenix/apache-phoenix-4.14.0-cdh5.14.2/bin/apache-phoenix-4.14.0-cdh5.14.2-bin.tar.gz</span><br><span class="line"><span class="meta">#</span><span class="bash"> 解压</span></span><br><span class="line">tar tar apache-phoenix-4.14.0-cdh5.14.2-bin.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-拷贝Jar包"><a href="#2-2-拷贝Jar包" class="headerlink" title="2.2 拷贝Jar包"></a>2.2 拷贝Jar包</h3><p>按照官方文档的说明，需要将 <code>phoenix server jar</code> 添加到所有 <code>Region Servers</code> 的安装目录的 <code>lib</code> 目录下。</p>
+<p>这里由于我搭建的是 HBase 伪集群，所以只需要拷贝到当前机器的 HBase 的 lib 目录下。如果是真实集群，则使用 scp 命令分发到所有 <code>Region Servers</code> 机器上。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/app/apache-phoenix-4.14.0-cdh5.14.2-bin/phoenix-4.14.0-cdh5.14.2-server.jar /usr/app/hbase-1.2.0-cdh5.15.2/lib</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-重启-Region-Servers"><a href="#2-3-重启-Region-Servers" class="headerlink" title="2.3 重启 Region Servers"></a>2.3 重启 Region Servers</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 停止Hbase</span></span><br><span class="line">stop-hbase.sh</span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动Hbase</span></span><br><span class="line">start-hbase.sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-启动Phoenix"><a href="#2-4-启动Phoenix" class="headerlink" title="2.4 启动Phoenix"></a>2.4 启动Phoenix</h3><p>在 Phoenix 解压目录下的 <code>bin</code> 目录下执行如下命令，需要指定 Zookeeper 的地址：</p>
+<ul>
+<li>如果 HBase 采用 Standalone 模式或者伪集群模式搭建，则默认采用内置的 Zookeeper 服务，端口为 2181；</li>
+<li>如果是 HBase 是集群模式并采用外置的 Zookeeper 集群，则按照自己的实际情况进行指定。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> ./sqlline.py hadoop001:2181</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-启动结果"><a href="#2-5-启动结果" class="headerlink" title="2.5 启动结果"></a>2.5 启动结果</h3><p>启动后则进入了 Phoenix 交互式 SQL 命令行，可以使用 <code>!table</code> 或 <code>!tables</code> 查看当前所有表的信息</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/phoenix-shell.png"/> </div>
+
+
+<h2 id="三、Phoenix-简单使用"><a href="#三、Phoenix-简单使用" class="headerlink" title="三、Phoenix 简单使用"></a>三、Phoenix 简单使用</h2><h3 id="3-1-创建表"><a href="#3-1-创建表" class="headerlink" title="3.1 创建表"></a>3.1 创建表</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> us_population (</span><br><span class="line">      state <span class="built_in">CHAR</span>(<span class="number">2</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">      city <span class="built_in">VARCHAR</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">      population <span class="built_in">BIGINT</span></span><br><span class="line">      <span class="keyword">CONSTRAINT</span> my_pk PRIMARY <span class="keyword">KEY</span> (state, city));</span><br></pre></td></tr></table></figure>
+
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/Phoenix-create-table.png"/> </div>
+新建的表会按照特定的规则转换为 HBase 上的表，关于表的信息，可以通过 Hbase Web UI 进行查看：
+
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/hbase-web-ui-phoenix.png"/> </div>
+### 3.2 插入数据
+
+<p>Phoenix 中插入数据采用的是 <code>UPSERT</code> 而不是 <code>INSERT</code>,因为 Phoenix 并没有更新操作，插入相同主键的数据就视为更新，所以 <code>UPSERT</code> 就相当于 <code>UPDATE</code>+<code>INSERT</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">UPSERT INTO us_population VALUES(&#x27;NY&#x27;,&#x27;New York&#x27;,8143197);</span><br><span class="line">UPSERT INTO us_population VALUES(&#x27;CA&#x27;,&#x27;Los Angeles&#x27;,3844829);</span><br><span class="line">UPSERT INTO us_population VALUES(&#x27;IL&#x27;,&#x27;Chicago&#x27;,2842518);</span><br><span class="line">UPSERT INTO us_population VALUES(&#x27;TX&#x27;,&#x27;Houston&#x27;,2016582);</span><br><span class="line">UPSERT INTO us_population VALUES(&#x27;PA&#x27;,&#x27;Philadelphia&#x27;,1463281);</span><br><span class="line">UPSERT INTO us_population VALUES(&#x27;AZ&#x27;,&#x27;Phoenix&#x27;,1461575);</span><br><span class="line">UPSERT INTO us_population VALUES(&#x27;TX&#x27;,&#x27;San Antonio&#x27;,1256509);</span><br><span class="line">UPSERT INTO us_population VALUES(&#x27;CA&#x27;,&#x27;San Diego&#x27;,1255540);</span><br><span class="line">UPSERT INTO us_population VALUES(&#x27;TX&#x27;,&#x27;Dallas&#x27;,1213825);</span><br><span class="line">UPSERT INTO us_population VALUES(&#x27;CA&#x27;,&#x27;San Jose&#x27;,912332);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-修改数据"><a href="#3-3-修改数据" class="headerlink" title="3.3 修改数据"></a>3.3 修改数据</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 插入主键相同的数据就视为更新</span></span><br><span class="line">UPSERT INTO us_population <span class="keyword">VALUES</span>(<span class="string">&#x27;NY&#x27;</span>,<span class="string">&#x27;New York&#x27;</span>,<span class="number">999999</span>);</span><br></pre></td></tr></table></figure>
+
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/Phoenix-update.png"/> </div>
+### 3.4 删除数据
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> us_population <span class="keyword">WHERE</span> city=<span class="string">&#x27;Dallas&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/Phoenix-delete.png"/> </div>
+### 3.5 查询数据
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> state <span class="keyword">as</span> <span class="string">&quot;州&quot;</span>,<span class="keyword">count</span>(city) <span class="keyword">as</span> <span class="string">&quot;市&quot;</span>,<span class="keyword">sum</span>(population) <span class="keyword">as</span> <span class="string">&quot;热度&quot;</span></span><br><span class="line"><span class="keyword">FROM</span> us_population</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> state</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="keyword">sum</span>(population) <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/Phoenix-select.png"/> </div>
+
+
+<h3 id="3-6-退出命令"><a href="#3-6-退出命令" class="headerlink" title="3.6 退出命令"></a>3.6 退出命令</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!quit</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-7-扩展"><a href="#3-7-扩展" class="headerlink" title="3.7 扩展"></a>3.7 扩展</h3><p>从上面的操作中可以看出，Phoenix 支持大多数标准的 SQL 语法。关于 Phoenix 支持的语法、数据类型、函数、序列等详细信息，因为涉及内容很多，可以参考其官方文档，官方文档上有详细的说明：</p>
+<ul>
+<li><p><strong>语法 (Grammar)</strong> ：<a target="_blank" rel="noopener" href="https://phoenix.apache.org/language/index.html">https://phoenix.apache.org/language/index.html</a></p>
+</li>
+<li><p><strong>函数 (Functions)</strong> ：<a target="_blank" rel="noopener" href="http://phoenix.apache.org/language/functions.html">http://phoenix.apache.org/language/functions.html</a></p>
+</li>
+<li><p><strong>数据类型 (Datatypes)</strong> ：<a target="_blank" rel="noopener" href="http://phoenix.apache.org/language/datatypes.html">http://phoenix.apache.org/language/datatypes.html</a></p>
+</li>
+<li><p><strong>序列 (Sequences)</strong> :<a target="_blank" rel="noopener" href="http://phoenix.apache.org/sequences.html">http://phoenix.apache.org/sequences.html</a></p>
+</li>
+<li><p><strong>联结查询 (Joins)</strong> ：<a target="_blank" rel="noopener" href="http://phoenix.apache.org/joins.html">http://phoenix.apache.org/joins.html</a></p>
+</li>
+</ul>
+<h2 id="四、Phoenix-Java-API"><a href="#四、Phoenix-Java-API" class="headerlink" title="四、Phoenix Java API"></a>四、Phoenix Java API</h2><p>因为 Phoenix 遵循 JDBC 规范，并提供了对应的数据库驱动 <code>PhoenixDriver</code>，这使得采用 Java 语言对其进行操作的时候，就如同对其他关系型数据库一样，下面给出基本的使用示例。</p>
+<h3 id="4-1-引入Phoenix-core-JAR包"><a href="#4-1-引入Phoenix-core-JAR包" class="headerlink" title="4.1 引入Phoenix core JAR包"></a>4.1 引入Phoenix core JAR包</h3><p>如果是 maven 项目，直接在 maven 中央仓库找到对应的版本，导入依赖即可：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.apache.phoenix/phoenix-core --&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.phoenix<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>phoenix-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.14.0-cdh5.14.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果是普通项目，则可以从 Phoenix 解压目录下找到对应的 JAR 包，然后手动引入：</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/phoenix-core-jar.png"/> </div>
+### 4.2 简单的Java API实例
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.sql.Connection;</span><br><span class="line"><span class="keyword">import</span> java.sql.DriverManager;</span><br><span class="line"><span class="keyword">import</span> java.sql.PreparedStatement;</span><br><span class="line"><span class="keyword">import</span> java.sql.ResultSet;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PhoenixJavaApi</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 加载数据库驱动</span></span><br><span class="line">        Class.forName(<span class="string">&quot;org.apache.phoenix.jdbc.PhoenixDriver&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * 指定数据库地址,格式为 jdbc:phoenix:Zookeeper 地址</span></span><br><span class="line"><span class="comment">         * 如果 HBase 采用 Standalone 模式或者伪集群模式搭建，则 HBase 默认使用内置的 Zookeeper，默认端口为 2181</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        Connection connection = DriverManager.getConnection(<span class="string">&quot;jdbc:phoenix:192.168.200.226:2181&quot;</span>);</span><br><span class="line"></span><br><span class="line">        PreparedStatement statement = connection.prepareStatement(<span class="string">&quot;SELECT * FROM us_population&quot;</span>);</span><br><span class="line"></span><br><span class="line">        ResultSet resultSet = statement.executeQuery();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (resultSet.next()) &#123;</span><br><span class="line">            System.out.println(resultSet.getString(<span class="string">&quot;city&quot;</span>) + <span class="string">&quot; &quot;</span></span><br><span class="line">                    + resultSet.getInt(<span class="string">&quot;population&quot;</span>));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        statement.close();</span><br><span class="line">        connection.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/Phoenix-java-api-result.png"/> </div>
+
+
+<p>实际的开发中我们通常都是采用第三方框架来操作数据库，如 <code>mybatis</code>，<code>Hibernate</code>，<code>Spring Data</code> 等。关于 Phoenix 与这些框架的整合步骤参见下一篇文章：<a target="_blank" rel="noopener" href="https://github.com/heibaiying/BigData-Notes/blob/master/notes/Spring+Mybtais+Phoenix整合.md">Spring/Spring Boot + Mybatis + Phoenix</a></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li><a target="_blank" rel="noopener" href="http://phoenix.apache.org/">http://phoenix.apache.org/</a></li>
+</ol>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82%E2%80%94%E2%80%94Phoenix"><span class="toc-number">1.</span> <span class="toc-text">Hbase的SQL中间层——Phoenix</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Phoenix%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">一、Phoenix简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Phoenix%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">二、Phoenix安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E4%B8%8B%E8%BD%BD%E5%B9%B6%E8%A7%A3%E5%8E%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 下载并解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%8B%B7%E8%B4%9DJar%E5%8C%85"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 拷贝Jar包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E9%87%8D%E5%90%AF-Region-Servers"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 重启 Region Servers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E5%90%AF%E5%8A%A8Phoenix"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.4 启动Phoenix</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E5%90%AF%E5%8A%A8%E7%BB%93%E6%9E%9C"><span class="toc-number">1.2.5.</span> <span class="toc-text">2.5 启动结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81Phoenix-%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">三、Phoenix 简单使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%88%9B%E5%BB%BA%E8%A1%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 创建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.3 修改数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E9%80%80%E5%87%BA%E5%91%BD%E4%BB%A4"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.6 退出命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E6%89%A9%E5%B1%95"><span class="toc-number">1.3.4.</span> <span class="toc-text">3.7 扩展</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Phoenix-Java-API"><span class="toc-number">1.4.</span> <span class="toc-text">四、Phoenix Java API</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%BC%95%E5%85%A5Phoenix-core-JAR%E5%8C%85"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 引入Phoenix core JAR包</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">2.</span> <span class="toc-text">参考资料</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&text=Hbase的SQL中间层——Phoenix"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&title=Hbase的SQL中间层——Phoenix"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&is_video=false&description=Hbase的SQL中间层——Phoenix"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Hbase的SQL中间层——Phoenix&body=Check out this article: https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&title=Hbase的SQL中间层——Phoenix"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&title=Hbase的SQL中间层——Phoenix"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&title=Hbase的SQL中间层——Phoenix"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&title=Hbase的SQL中间层——Phoenix"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&name=Hbase的SQL中间层——Phoenix&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/Hbase%E7%9A%84SQL%E4%B8%AD%E9%97%B4%E5%B1%82_Phoenix/&t=Hbase的SQL中间层——Phoenix"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank"></a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

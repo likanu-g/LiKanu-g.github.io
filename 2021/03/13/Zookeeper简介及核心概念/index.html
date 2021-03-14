@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="Zookeeper简介及核心概念 一、Zookeeper简介 二、Zookeeper设计目标 三、核心概念 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;3.1 集群角色 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;3.2 会话 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zookeeper简介及核心概念">
+<meta property="og:url" content="https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="Zookeeper简介及核心概念 一、Zookeeper简介 二、Zookeeper设计目标 三、核心概念 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;3.1 集群角色 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;3.2 会话 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbs">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/zookeeper-zknamespace.jpg">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/zookeeper-zkservice.jpg">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/zookeeper-zkcomponents.jpg">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/zookeeper-brocast.jpg">
+<meta property="article:published_time" content="2021-03-13T10:31:55.000Z">
+<meta property="article:modified_time" content="2021-03-13T15:27:19.677Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="Zookeeper">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/zookeeper-zknamespace.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Zookeeper简介及核心概念</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../Zookeeper%E5%B8%B8%E7%94%A8Shell%E5%91%BD%E4%BB%A4/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../Flink%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E4%B8%8E%E6%A3%80%E6%9F%A5%E7%82%B9%E6%9C%BA%E5%88%B6/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&text=Zookeeper简介及核心概念"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&title=Zookeeper简介及核心概念"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&is_video=false&description=Zookeeper简介及核心概念"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Zookeeper简介及核心概念&body=Check out this article: https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&title=Zookeeper简介及核心概念"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&title=Zookeeper简介及核心概念"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&title=Zookeeper简介及核心概念"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&title=Zookeeper简介及核心概念"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&name=Zookeeper简介及核心概念&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&t=Zookeeper简介及核心概念"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">Zookeeper简介及核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Zookeeper%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">一、Zookeeper简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Zookeeper%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="toc-number">1.2.</span> <span class="toc-text">二、Zookeeper设计目标</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%9B%AE%E6%A0%87%E4%B8%80%EF%BC%9A%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 目标一：简单的数据模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%9B%AE%E6%A0%87%E4%BA%8C%EF%BC%9A%E6%9E%84%E5%BB%BA%E9%9B%86%E7%BE%A4"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 目标二：构建集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E7%9B%AE%E6%A0%87%E4%B8%89%EF%BC%9A%E9%A1%BA%E5%BA%8F%E8%AE%BF%E9%97%AE"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 目标三：顺序访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E7%9B%AE%E6%A0%87%E5%9B%9B%EF%BC%9A%E9%AB%98%E6%80%A7%E8%83%BD%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.4 目标四：高性能高可用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">1.3.</span> <span class="toc-text">三、核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 集群角色</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E4%BC%9A%E8%AF%9D"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 会话</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%95%B0%E6%8D%AE%E8%8A%82%E7%82%B9"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.3 数据节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E8%8A%82%E7%82%B9%E4%BF%A1%E6%81%AF"><span class="toc-number">1.3.4.</span> <span class="toc-text">3.4 节点信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-Watcher"><span class="toc-number">1.3.5.</span> <span class="toc-text">3.5 Watcher</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-ACL"><span class="toc-number">1.3.6.</span> <span class="toc-text">3.6 ACL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81ZAB%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.4.</span> <span class="toc-text">四、ZAB协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-ZAB%E5%8D%8F%E8%AE%AE%E4%B8%8E%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 ZAB协议与数据一致性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-ZAB%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%86%85%E5%AE%B9"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2  ZAB协议的内容</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">1. 崩溃恢复</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD"><span class="toc-number">1.4.2.2.</span> <span class="toc-text">2. 消息广播</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81Zookeeper%E7%9A%84%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.5.</span> <span class="toc-text">五、Zookeeper的典型应用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8F%91%E5%B8%83-%E8%AE%A2%E9%98%85"><span class="toc-number">1.5.1.</span> <span class="toc-text">5.1 数据的发布&#x2F;订阅</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%91%BD%E5%90%8D%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.5.2.</span> <span class="toc-text">5.2 命名服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-Master%E9%80%89%E4%B8%BE"><span class="toc-number">1.5.3.</span> <span class="toc-text">5.3 Master选举</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-number">1.5.4.</span> <span class="toc-text">5.4 分布式锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86"><span class="toc-number">1.5.5.</span> <span class="toc-text">5.5 集群管理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">1.6.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Zookeeper简介及核心概念
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2021-03-13T10:31:55.000Z" itemprop="datePublished">2021-03-13</time>
+        
+        (Updated: <time datetime="2021-03-13T15:27:19.677Z" itemprop="dateModified">2021-03-13</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/Zookeeper/" rel="tag">Zookeeper</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="Zookeeper简介及核心概念"><a href="#Zookeeper简介及核心概念" class="headerlink" title="Zookeeper简介及核心概念"></a>Zookeeper简介及核心概念</h1><nav>
+<a href="#一Zookeeper简介">一、Zookeeper简介</a><br/>
+<a href="#二Zookeeper设计目标">二、Zookeeper设计目标</a><br/>
+<a href="#三核心概念">三、核心概念</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#31-集群角色">3.1 集群角色</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#32-会话">3.2 会话</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#33-数据节点">3.3 数据节点</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#34-节点信息">3.4 节点信息</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#35-Watcher">3.5 Watcher</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#36-ACL">3.6 ACL</a><br/>
+<a href="#四ZAB协议">四、ZAB协议</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#41-ZAB协议与数据一致性">4.1 ZAB协议与数据一致性</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#42--ZAB协议的内容">4.2  ZAB协议的内容</a><br/>
+<a href="#五Zookeeper的典型应用场景">五、Zookeeper的典型应用场景</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#51数据的发布订阅">5.1数据的发布/订阅</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#52-命名服务">5.2 命名服务</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#53-Master选举">5.3 Master选举</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#54-分布式锁">5.4 分布式锁</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#55-集群管理">5.5 集群管理</a><br/>
+</nav>
+
+
+<h2 id="一、Zookeeper简介"><a href="#一、Zookeeper简介" class="headerlink" title="一、Zookeeper简介"></a>一、Zookeeper简介</h2><p>Zookeeper 是一个开源的分布式协调服务，目前由 Apache 进行维护。Zookeeper 可以用于实现分布式系统中常见的发布/订阅、负载均衡、命令服务、分布式协调/通知、集群管理、Master 选举、分布式锁和分布式队列等功能。它具有以下特性：</p>
+<ul>
+<li><strong>顺序一致性</strong>：从一个客户端发起的事务请求，最终都会严格按照其发起顺序被应用到 Zookeeper 中；</li>
+<li><strong>原子性</strong>：所有事务请求的处理结果在整个集群中所有机器上都是一致的；不存在部分机器应用了该事务，而另一部分没有应用的情况；</li>
+<li><strong>单一视图</strong>：所有客户端看到的服务端数据模型都是一致的；</li>
+<li><strong>可靠性</strong>：一旦服务端成功应用了一个事务，则其引起的改变会一直保留，直到被另外一个事务所更改；</li>
+<li><strong>实时性</strong>：一旦一个事务被成功应用后，Zookeeper 可以保证客户端立即可以读取到这个事务变更后的最新状态的数据。</li>
+</ul>
+<h2 id="二、Zookeeper设计目标"><a href="#二、Zookeeper设计目标" class="headerlink" title="二、Zookeeper设计目标"></a>二、Zookeeper设计目标</h2><p>Zookeeper 致力于为那些高吞吐的大型分布式系统提供一个高性能、高可用、且具有严格顺序访问控制能力的分布式协调服务。它具有以下四个目标：</p>
+<h3 id="2-1-目标一：简单的数据模型"><a href="#2-1-目标一：简单的数据模型" class="headerlink" title="2.1 目标一：简单的数据模型"></a>2.1 目标一：简单的数据模型</h3><p>Zookeeper 通过树形结构来存储数据，它由一系列被称为 ZNode 的数据节点组成，类似于常见的文件系统。不过和常见的文件系统不同，Zookeeper 将数据全量存储在内存中，以此来实现高吞吐，减少访问延迟。</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/zookeeper-zknamespace.jpg"/> </div>
+
+<h3 id="2-2-目标二：构建集群"><a href="#2-2-目标二：构建集群" class="headerlink" title="2.2 目标二：构建集群"></a>2.2 目标二：构建集群</h3><p>可以由一组 Zookeeper 服务构成 Zookeeper 集群，集群中每台机器都会单独在内存中维护自身的状态，并且每台机器之间都保持着通讯，只要集群中有半数机器能够正常工作，那么整个集群就可以正常提供服务。</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/zookeeper-zkservice.jpg"/> </div>
+
+<h3 id="2-3-目标三：顺序访问"><a href="#2-3-目标三：顺序访问" class="headerlink" title="2.3 目标三：顺序访问"></a>2.3 目标三：顺序访问</h3><p>对于来自客户端的每个更新请求，Zookeeper 都会分配一个全局唯一的递增 ID，这个 ID 反映了所有事务请求的先后顺序。</p>
+<h3 id="2-4-目标四：高性能高可用"><a href="#2-4-目标四：高性能高可用" class="headerlink" title="2.4 目标四：高性能高可用"></a>2.4 目标四：高性能高可用</h3><p>ZooKeeper 将数据存全量储在内存中以保持高性能，并通过服务集群来实现高可用，由于 Zookeeper 的所有更新和删除都是基于事务的，所以其在读多写少的应用场景中有着很高的性能表现。</p>
+<h2 id="三、核心概念"><a href="#三、核心概念" class="headerlink" title="三、核心概念"></a>三、核心概念</h2><h3 id="3-1-集群角色"><a href="#3-1-集群角色" class="headerlink" title="3.1 集群角色"></a>3.1 集群角色</h3><p>Zookeeper 集群中的机器分为以下三种角色：</p>
+<ul>
+<li><strong>Leader</strong> ：为客户端提供读写服务，并维护集群状态，它是由集群选举所产生的；</li>
+<li><strong>Follower</strong> ：为客户端提供读写服务，并定期向 Leader 汇报自己的节点状态。同时也参与写操作“过半写成功”的策略和 Leader 的选举；</li>
+<li><strong>Observer</strong> ：为客户端提供读写服务，并定期向 Leader 汇报自己的节点状态，但不参与写操作“过半写成功”的策略和 Leader 的选举，因此 Observer 可以在不影响写性能的情况下提升集群的读性能。</li>
+</ul>
+<h3 id="3-2-会话"><a href="#3-2-会话" class="headerlink" title="3.2 会话"></a>3.2 会话</h3><p>Zookeeper 客户端通过 TCP 长连接连接到服务集群，会话 (Session) 从第一次连接开始就已经建立，之后通过心跳检测机制来保持有效的会话状态。通过这个连接，客户端可以发送请求并接收响应，同时也可以接收到 Watch 事件的通知。</p>
+<p>关于会话中另外一个核心的概念是 sessionTimeOut(会话超时时间)，当由于网络故障或者客户端主动断开等原因，导致连接断开，此时只要在会话超时时间之内重新建立连接，则之前创建的会话依然有效。</p>
+<h3 id="3-3-数据节点"><a href="#3-3-数据节点" class="headerlink" title="3.3 数据节点"></a>3.3 数据节点</h3><p>Zookeeper 数据模型是由一系列基本数据单元 <code>Znode</code>(数据节点) 组成的节点树，其中根节点为 <code>/</code>。每个节点上都会保存自己的数据和节点信息。Zookeeper 中节点可以分为两大类：</p>
+<ul>
+<li><strong>持久节点</strong> ：节点一旦创建，除非被主动删除，否则一直存在；</li>
+<li><strong>临时节点</strong> ：一旦创建该节点的客户端会话失效，则所有该客户端创建的临时节点都会被删除。</li>
+</ul>
+<p>临时节点和持久节点都可以添加一个特殊的属性：<code>SEQUENTIAL</code>，代表该节点是否具有递增属性。如果指定该属性，那么在这个节点创建时，Zookeeper 会自动在其节点名称后面追加一个由父节点维护的递增数字。</p>
+<h3 id="3-4-节点信息"><a href="#3-4-节点信息" class="headerlink" title="3.4 节点信息"></a>3.4 节点信息</h3><p>每个 ZNode 节点在存储数据的同时，都会维护一个叫做 <code>Stat</code> 的数据结构，里面存储了关于该节点的全部状态信息。如下：</p>
+<table>
+<thead>
+<tr>
+<th><strong>状态属性</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>czxid</td>
+<td>数据节点创建时的事务 ID</td>
+</tr>
+<tr>
+<td>ctime</td>
+<td>数据节点创建时的时间</td>
+</tr>
+<tr>
+<td>mzxid</td>
+<td>数据节点最后一次更新时的事务 ID</td>
+</tr>
+<tr>
+<td>mtime</td>
+<td>数据节点最后一次更新时的时间</td>
+</tr>
+<tr>
+<td>pzxid</td>
+<td>数据节点的子节点最后一次被修改时的事务 ID</td>
+</tr>
+<tr>
+<td>cversion</td>
+<td>子节点的更改次数</td>
+</tr>
+<tr>
+<td>version</td>
+<td>节点数据的更改次数</td>
+</tr>
+<tr>
+<td>aversion</td>
+<td>节点的 ACL 的更改次数</td>
+</tr>
+<tr>
+<td>ephemeralOwner</td>
+<td>如果节点是临时节点，则表示创建该节点的会话的 SessionID；如果节点是持久节点，则该属性值为 0</td>
+</tr>
+<tr>
+<td>dataLength</td>
+<td>数据内容的长度</td>
+</tr>
+<tr>
+<td>numChildren</td>
+<td>数据节点当前的子节点个数</td>
+</tr>
+</tbody></table>
+<h3 id="3-5-Watcher"><a href="#3-5-Watcher" class="headerlink" title="3.5 Watcher"></a>3.5 Watcher</h3><p>Zookeeper 中一个常用的功能是 Watcher(事件监听器)，它允许用户在指定节点上针对感兴趣的事件注册监听，当事件发生时，监听器会被触发，并将事件信息推送到客户端。该机制是 Zookeeper 实现分布式协调服务的重要特性。</p>
+<h3 id="3-6-ACL"><a href="#3-6-ACL" class="headerlink" title="3.6 ACL"></a>3.6 ACL</h3><p>Zookeeper 采用 ACL(Access Control Lists) 策略来进行权限控制，类似于 UNIX 文件系统的权限控制。它定义了如下五种权限：</p>
+<ul>
+<li><strong>CREATE</strong>：允许创建子节点；</li>
+<li><strong>READ</strong>：允许从节点获取数据并列出其子节点；</li>
+<li><strong>WRITE</strong>：允许为节点设置数据；</li>
+<li><strong>DELETE</strong>：允许删除子节点；</li>
+<li><strong>ADMIN</strong>：允许为节点设置权限。  </li>
+</ul>
+<h2 id="四、ZAB协议"><a href="#四、ZAB协议" class="headerlink" title="四、ZAB协议"></a>四、ZAB协议</h2><h3 id="4-1-ZAB协议与数据一致性"><a href="#4-1-ZAB协议与数据一致性" class="headerlink" title="4.1 ZAB协议与数据一致性"></a>4.1 ZAB协议与数据一致性</h3><p>ZAB 协议是 Zookeeper 专门设计的一种支持崩溃恢复的原子广播协议。通过该协议，Zookeeper 基于主从模式的系统架构来保持集群中各个副本之间数据的一致性。具体如下：</p>
+<p>Zookeeper 使用一个单一的主进程来接收并处理客户端的所有事务请求，并采用原子广播协议将数据状态的变更以事务 Proposal 的形式广播到所有的副本进程上去。如下图：</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/zookeeper-zkcomponents.jpg"/> </div>
+
+<p>具体流程如下：</p>
+<p>所有的事务请求必须由唯一的 Leader 服务来处理，Leader 服务将事务请求转换为事务 Proposal，并将该 Proposal 分发给集群中所有的 Follower 服务。如果有半数的 Follower 服务进行了正确的反馈，那么 Leader 就会再次向所有的 Follower 发出 Commit 消息，要求将前一个 Proposal 进行提交。</p>
+<h3 id="4-2-ZAB协议的内容"><a href="#4-2-ZAB协议的内容" class="headerlink" title="4.2  ZAB协议的内容"></a>4.2  ZAB协议的内容</h3><p>ZAB 协议包括两种基本的模式，分别是崩溃恢复和消息广播：</p>
+<h4 id="1-崩溃恢复"><a href="#1-崩溃恢复" class="headerlink" title="1. 崩溃恢复"></a>1. 崩溃恢复</h4><p>当整个服务框架在启动过程中，或者当 Leader 服务器出现异常时，ZAB 协议就会进入恢复模式，通过过半选举机制产生新的 Leader，之后其他机器将从新的 Leader 上同步状态，当有过半机器完成状态同步后，就退出恢复模式，进入消息广播模式。</p>
+<h4 id="2-消息广播"><a href="#2-消息广播" class="headerlink" title="2. 消息广播"></a>2. 消息广播</h4><p>ZAB 协议的消息广播过程使用的是原子广播协议。在整个消息的广播过程中，Leader 服务器会每个事物请求生成对应的 Proposal，并为其分配一个全局唯一的递增的事务 ID(ZXID)，之后再对其进行广播。具体过程如下：</p>
+<p>Leader 服务会为每一个 Follower 服务器分配一个单独的队列，然后将事务 Proposal 依次放入队列中，并根据 FIFO(先进先出) 的策略进行消息发送。Follower 服务在接收到 Proposal 后，会将其以事务日志的形式写入本地磁盘中，并在写入成功后反馈给 Leader 一个 Ack 响应。当 Leader 接收到超过半数 Follower 的 Ack 响应后，就会广播一个 Commit 消息给所有的 Follower 以通知其进行事务提交，之后 Leader 自身也会完成对事务的提交。而每一个 Follower 则在接收到 Commit 消息后，完成事务的提交。</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/zookeeper-brocast.jpg"/> </div>
+
+
+
+<h2 id="五、Zookeeper的典型应用场景"><a href="#五、Zookeeper的典型应用场景" class="headerlink" title="五、Zookeeper的典型应用场景"></a>五、Zookeeper的典型应用场景</h2><h3 id="5-1-数据的发布-订阅"><a href="#5-1-数据的发布-订阅" class="headerlink" title="5.1 数据的发布/订阅"></a>5.1 数据的发布/订阅</h3><p>数据的发布/订阅系统，通常也用作配置中心。在分布式系统中，你可能有成千上万个服务节点，如果想要对所有服务的某项配置进行更改，由于数据节点过多，你不可逐台进行修改，而应该在设计时采用统一的配置中心。之后发布者只需要将新的配置发送到配置中心，所有服务节点即可自动下载并进行更新，从而实现配置的集中管理和动态更新。</p>
+<p>Zookeeper 通过 Watcher 机制可以实现数据的发布和订阅。分布式系统的所有的服务节点可以对某个 ZNode 注册监听，之后只需要将新的配置写入该 ZNode，所有服务节点都会收到该事件。</p>
+<h3 id="5-2-命名服务"><a href="#5-2-命名服务" class="headerlink" title="5.2 命名服务"></a>5.2 命名服务</h3><p>在分布式系统中，通常需要一个全局唯一的名字，如生成全局唯一的订单号等，Zookeeper 可以通过顺序节点的特性来生成全局唯一 ID，从而可以对分布式系统提供命名服务。</p>
+<h3 id="5-3-Master选举"><a href="#5-3-Master选举" class="headerlink" title="5.3 Master选举"></a>5.3 Master选举</h3><p>分布式系统一个重要的模式就是主从模式 (Master/Salves)，Zookeeper 可以用于该模式下的 Matser 选举。可以让所有服务节点去竞争性地创建同一个 ZNode，由于 Zookeeper 不能有路径相同的 ZNode，必然只有一个服务节点能够创建成功，这样该服务节点就可以成为 Master 节点。</p>
+<h3 id="5-4-分布式锁"><a href="#5-4-分布式锁" class="headerlink" title="5.4 分布式锁"></a>5.4 分布式锁</h3><p>可以通过 Zookeeper 的临时节点和 Watcher 机制来实现分布式锁，这里以排它锁为例进行说明：</p>
+<p>分布式系统的所有服务节点可以竞争性地去创建同一个临时 ZNode，由于 Zookeeper 不能有路径相同的 ZNode，必然只有一个服务节点能够创建成功，此时可以认为该节点获得了锁。其他没有获得锁的服务节点通过在该 ZNode 上注册监听，从而当锁释放时再去竞争获得锁。锁的释放情况有以下两种：</p>
+<ul>
+<li>当正常执行完业务逻辑后，客户端主动将临时 ZNode 删除，此时锁被释放；</li>
+<li>当获得锁的客户端发生宕机时，临时 ZNode 会被自动删除，此时认为锁已经释放。</li>
+</ul>
+<p>当锁被释放后，其他服务节点则再次去竞争性地进行创建，但每次都只有一个服务节点能够获取到锁，这就是排他锁。</p>
+<h3 id="5-5-集群管理"><a href="#5-5-集群管理" class="headerlink" title="5.5 集群管理"></a>5.5 集群管理</h3><p>Zookeeper 还能解决大多数分布式系统中的问题：</p>
+<ul>
+<li>如可以通过创建临时节点来建立心跳检测机制。如果分布式系统的某个服务节点宕机了，则其持有的会话会超时，此时该临时节点会被删除，相应的监听事件就会被触发。</li>
+<li>分布式系统的每个服务节点还可以将自己的节点状态写入临时节点，从而完成状态报告或节点工作进度汇报。</li>
+<li>通过数据的订阅和发布功能，Zookeeper 还能对分布式系统进行模块的解耦和任务的调度。</li>
+<li>通过监听机制，还能对分布式系统的服务节点进行动态上下线，从而实现服务的动态扩容。</li>
+</ul>
+<br/>
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li>倪超 . 从 Paxos 到 Zookeeper——分布式一致性原理与实践 . 电子工业出版社 . 2015-02-01</li>
+</ol>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">Zookeeper简介及核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Zookeeper%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">一、Zookeeper简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Zookeeper%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="toc-number">1.2.</span> <span class="toc-text">二、Zookeeper设计目标</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%9B%AE%E6%A0%87%E4%B8%80%EF%BC%9A%E7%AE%80%E5%8D%95%E7%9A%84%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 目标一：简单的数据模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%9B%AE%E6%A0%87%E4%BA%8C%EF%BC%9A%E6%9E%84%E5%BB%BA%E9%9B%86%E7%BE%A4"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 目标二：构建集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E7%9B%AE%E6%A0%87%E4%B8%89%EF%BC%9A%E9%A1%BA%E5%BA%8F%E8%AE%BF%E9%97%AE"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 目标三：顺序访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E7%9B%AE%E6%A0%87%E5%9B%9B%EF%BC%9A%E9%AB%98%E6%80%A7%E8%83%BD%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.4 目标四：高性能高可用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">1.3.</span> <span class="toc-text">三、核心概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E9%9B%86%E7%BE%A4%E8%A7%92%E8%89%B2"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 集群角色</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E4%BC%9A%E8%AF%9D"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 会话</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%95%B0%E6%8D%AE%E8%8A%82%E7%82%B9"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.3 数据节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E8%8A%82%E7%82%B9%E4%BF%A1%E6%81%AF"><span class="toc-number">1.3.4.</span> <span class="toc-text">3.4 节点信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-Watcher"><span class="toc-number">1.3.5.</span> <span class="toc-text">3.5 Watcher</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-ACL"><span class="toc-number">1.3.6.</span> <span class="toc-text">3.6 ACL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81ZAB%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.4.</span> <span class="toc-text">四、ZAB协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-ZAB%E5%8D%8F%E8%AE%AE%E4%B8%8E%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 ZAB协议与数据一致性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-ZAB%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%86%85%E5%AE%B9"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2  ZAB协议的内容</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">1. 崩溃恢复</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%B6%88%E6%81%AF%E5%B9%BF%E6%92%AD"><span class="toc-number">1.4.2.2.</span> <span class="toc-text">2. 消息广播</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81Zookeeper%E7%9A%84%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.5.</span> <span class="toc-text">五、Zookeeper的典型应用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8F%91%E5%B8%83-%E8%AE%A2%E9%98%85"><span class="toc-number">1.5.1.</span> <span class="toc-text">5.1 数据的发布&#x2F;订阅</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%91%BD%E5%90%8D%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.5.2.</span> <span class="toc-text">5.2 命名服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-Master%E9%80%89%E4%B8%BE"><span class="toc-number">1.5.3.</span> <span class="toc-text">5.3 Master选举</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-number">1.5.4.</span> <span class="toc-text">5.4 分布式锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86"><span class="toc-number">1.5.5.</span> <span class="toc-text">5.5 集群管理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">1.6.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&text=Zookeeper简介及核心概念"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&title=Zookeeper简介及核心概念"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&is_video=false&description=Zookeeper简介及核心概念"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Zookeeper简介及核心概念&body=Check out this article: https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&title=Zookeeper简介及核心概念"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&title=Zookeeper简介及核心概念"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&title=Zookeeper简介及核心概念"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&title=Zookeeper简介及核心概念"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&name=Zookeeper简介及核心概念&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/Zookeeper%E7%AE%80%E4%BB%8B%E5%8F%8A%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/&t=Zookeeper简介及核心概念"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank"></a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

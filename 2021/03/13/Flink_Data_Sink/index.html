@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="Flink Sink 一、Data Sinks &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1.1 writeAsText &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1.2 writeAsCsv &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flink Sink">
+<meta property="og:url" content="https://blog.likanug.top/2021/03/13/Flink_Data_Sink/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="Flink Sink 一、Data Sinks &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1.1 writeAsText &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1.2 writeAsCsv &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/flink-kafka-producer-consumer.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/flink-richsink.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/flink-mysql-sink.png">
+<meta property="article:published_time" content="2021-03-13T10:31:55.000Z">
+<meta property="article:modified_time" content="2021-03-13T15:10:12.087Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="Flink">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/flink-kafka-producer-consumer.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Flink Sink</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../Azkaban%E7%AE%80%E4%BB%8B/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../Flink_Data_Source/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&text=Flink Sink"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&title=Flink Sink"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&is_video=false&description=Flink Sink"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Flink Sink&body=Check out this article: https://blog.likanug.top/2021/03/13/Flink_Data_Sink/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&title=Flink Sink"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&title=Flink Sink"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&title=Flink Sink"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&title=Flink Sink"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&name=Flink Sink&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&t=Flink Sink"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Flink-Sink"><span class="toc-number">1.</span> <span class="toc-text">Flink Sink</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Data-Sinks"><span class="toc-number">1.1.</span> <span class="toc-text">一、Data Sinks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-writeAsText"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 writeAsText</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-writeAsCsv"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2 writeAsCsv</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-print-printToErr"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.3 print \ printToErr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-writeUsingOutputFormat"><span class="toc-number">1.1.4.</span> <span class="toc-text">1.4 writeUsingOutputFormat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-writeToSocket"><span class="toc-number">1.1.5.</span> <span class="toc-text">1.5 writeToSocket</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Streaming-Connectors"><span class="toc-number">1.2.</span> <span class="toc-text">二、Streaming Connectors</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%95%B4%E5%90%88-Kafka-Sink"><span class="toc-number">1.3.</span> <span class="toc-text">三、整合 Kafka Sink</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-addSink"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 addSink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%88%9B%E5%BB%BA%E8%BE%93%E5%87%BA%E4%B8%BB%E9%A2%98"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 创建输出主题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%90%AF%E5%8A%A8%E6%B6%88%E8%B4%B9%E8%80%85"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.3 启动消费者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C"><span class="toc-number">1.3.4.</span> <span class="toc-text">3.4 测试结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89-Sink"><span class="toc-number">1.4.</span> <span class="toc-text">四、自定义 Sink</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%AF%BC%E5%85%A5%E4%BE%9D%E8%B5%96"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 导入依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E8%87%AA%E5%AE%9A%E4%B9%89-Sink"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 自定义 Sink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89-Sink"><span class="toc-number">1.4.3.</span> <span class="toc-text">4.3 使用自定义 Sink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C"><span class="toc-number">1.4.4.</span> <span class="toc-text">4.4 测试结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">1.5.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Flink Sink
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2021-03-13T10:31:55.000Z" itemprop="datePublished">2021-03-13</time>
+        
+        (Updated: <time datetime="2021-03-13T15:10:12.087Z" itemprop="dateModified">2021-03-13</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/Flink/" rel="tag">Flink</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="Flink-Sink"><a href="#Flink-Sink" class="headerlink" title="Flink Sink"></a>Flink Sink</h1><nav>
+<a href="#一Data-Sinks">一、Data Sinks</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#11-writeAsText">1.1 writeAsText</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#12-writeAsCsv">1.2 writeAsCsv</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#13-print--printToErr">1.3 print  printToErr</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#14-writeUsingOutputFormat">1.4 writeUsingOutputFormat</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#15-writeToSocket">1.5 writeToSocket</a><br/>
+<a href="#二Streaming-Connectors">二、Streaming Connectors</a><br/>
+<a href="#三整合-Kafka-Sink">三、整合 Kafka Sink</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#31-addSink">3.1 addSink</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#32-创建输出主题">3.2 创建输出主题</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#33-启动消费者">3.3 启动消费者</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#34-测试结果">3.4 测试结果</a><br/>
+<a href="#四自定义-Sink">四、自定义 Sink</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#41-导入依赖">4.1 导入依赖</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#42-自定义-Sink">4.2 自定义 Sink</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#43-使用自定义-Sink">4.3 使用自定义 Sink</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#44-测试结果">4.4 测试结果</a><br/>
+</nav>
+
+
+
+<h2 id="一、Data-Sinks"><a href="#一、Data-Sinks" class="headerlink" title="一、Data Sinks"></a>一、Data Sinks</h2><p>在使用 Flink 进行数据处理时，数据经 Data Source 流入，然后通过系列 Transformations 的转化，最终可以通过 Sink 将计算结果进行输出，Flink Data Sinks 就是用于定义数据流最终的输出位置。Flink 提供了几个较为简单的 Sink API 用于日常的开发，具体如下：</p>
+<h3 id="1-1-writeAsText"><a href="#1-1-writeAsText" class="headerlink" title="1.1 writeAsText"></a>1.1 writeAsText</h3><p><code>writeAsText</code> 用于将计算结果以文本的方式并行地写入到指定文件夹下，除了路径参数是必选外，该方法还可以通过指定第二个参数来定义输出模式，它有以下两个可选值：</p>
+<ul>
+<li><strong>WriteMode.NO_OVERWRITE</strong>：当指定路径上不存在任何文件时，才执行写出操作；</li>
+<li><strong>WriteMode.OVERWRITE</strong>：不论指定路径上是否存在文件，都执行写出操作；如果原来已有文件，则进行覆盖。</li>
+</ul>
+<p>使用示例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">streamSource.writeAsText(<span class="string">&quot;D:\\out&quot;</span>, FileSystem.WriteMode.OVERWRITE);</span><br></pre></td></tr></table></figure>
+
+<p>以上写出是以并行的方式写出到多个文件，如果想要将输出结果全部写出到一个文件，需要设置其并行度为 1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">streamSource.writeAsText(<span class="string">&quot;D:\\out&quot;</span>, FileSystem.WriteMode.OVERWRITE).setParallelism(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-writeAsCsv"><a href="#1-2-writeAsCsv" class="headerlink" title="1.2 writeAsCsv"></a>1.2 writeAsCsv</h3><p><code>writeAsCsv</code> 用于将计算结果以 CSV 的文件格式写出到指定目录，除了路径参数是必选外，该方法还支持传入输出模式，行分隔符，和字段分隔符三个额外的参数，其方法定义如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">writeAsCsv(String path, WriteMode writeMode, String rowDelimiter, String fieldDelimiter) </span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-print-printToErr"><a href="#1-3-print-printToErr" class="headerlink" title="1.3 print \ printToErr"></a>1.3 print \ printToErr</h3><p><code>print \ printToErr</code> 是测试当中最常用的方式，用于将计算结果以标准输出流或错误输出流的方式打印到控制台上。</p>
+<h3 id="1-4-writeUsingOutputFormat"><a href="#1-4-writeUsingOutputFormat" class="headerlink" title="1.4 writeUsingOutputFormat"></a>1.4 writeUsingOutputFormat</h3><p>采用自定义的输出格式将计算结果写出，上面介绍的 <code>writeAsText</code> 和 <code>writeAsCsv</code> 其底层调用的都是该方法，源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> DataStreamSink&lt;T&gt; <span class="title">writeAsText</span><span class="params">(String path, WriteMode writeMode)</span> </span>&#123;</span><br><span class="line">    TextOutputFormat&lt;T&gt; tof = <span class="keyword">new</span> TextOutputFormat&lt;&gt;(<span class="keyword">new</span> Path(path));</span><br><span class="line">    tof.setWriteMode(writeMode);</span><br><span class="line">    <span class="keyword">return</span> writeUsingOutputFormat(tof);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-5-writeToSocket"><a href="#1-5-writeToSocket" class="headerlink" title="1.5 writeToSocket"></a>1.5 writeToSocket</h3><p><code>writeToSocket</code> 用于将计算结果以指定的格式写出到 Socket 中，使用示例如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">streamSource.writeToSocket(&quot;192.168.0.226&quot;, 9999, new SimpleStringSchema());</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二、Streaming-Connectors"><a href="#二、Streaming-Connectors" class="headerlink" title="二、Streaming Connectors"></a>二、Streaming Connectors</h2><p>除了上述 API 外，Flink 中还内置了系列的 Connectors 连接器，用于将计算结果输入到常用的存储系统或者消息中间件中，具体如下：</p>
+<ul>
+<li>Apache Kafka (支持 source 和 sink)</li>
+<li>Apache Cassandra (sink)</li>
+<li>Amazon Kinesis Streams (source/sink)</li>
+<li>Elasticsearch (sink)</li>
+<li>Hadoop FileSystem (sink)</li>
+<li>RabbitMQ (source/sink)</li>
+<li>Apache NiFi (source/sink)</li>
+<li>Google PubSub (source/sink)</li>
+</ul>
+<p>除了内置的连接器外，你还可以通过 Apache Bahir 的连接器扩展 Flink。Apache Bahir 旨在为分布式数据分析系统 (如 Spark，Flink) 等提供功能上的扩展，当前其支持的与 Flink Sink 相关的连接器如下：</p>
+<ul>
+<li>Apache ActiveMQ (source/sink)</li>
+<li>Apache Flume (sink)</li>
+<li>Redis (sink)</li>
+<li>Akka (sink)</li>
+</ul>
+<p>这里接着在 Data Sources 章节介绍的整合 Kafka Source 的基础上，将 Kafka Sink 也一并进行整合，具体步骤如下。</p>
+<h2 id="三、整合-Kafka-Sink"><a href="#三、整合-Kafka-Sink" class="headerlink" title="三、整合 Kafka Sink"></a>三、整合 Kafka Sink</h2><h3 id="3-1-addSink"><a href="#3-1-addSink" class="headerlink" title="3.1 addSink"></a>3.1 addSink</h3><p>Flink 提供了 addSink 方法用来调用自定义的 Sink 或者第三方的连接器，想要将计算结果写出到 Kafka，需要使用该方法来调用 Kafka 的生产者 FlinkKafkaProducer，具体代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1.指定Kafka的相关配置属性</span></span><br><span class="line">Properties properties = <span class="keyword">new</span> Properties();</span><br><span class="line">properties.setProperty(<span class="string">&quot;bootstrap.servers&quot;</span>, <span class="string">&quot;192.168.200.0:9092&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2.接收Kafka上的数据</span></span><br><span class="line">DataStream&lt;String&gt; stream = env</span><br><span class="line">    .addSource(<span class="keyword">new</span> FlinkKafkaConsumer&lt;&gt;(<span class="string">&quot;flink-stream-in-topic&quot;</span>, <span class="keyword">new</span> SimpleStringSchema(), properties));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3.定义计算结果到 Kafka ProducerRecord 的转换</span></span><br><span class="line">KafkaSerializationSchema&lt;String&gt; kafkaSerializationSchema = <span class="keyword">new</span> KafkaSerializationSchema&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> ProducerRecord&lt;<span class="keyword">byte</span>[], <span class="keyword">byte</span>[]&gt; serialize(String element, <span class="meta">@Nullable</span> Long timestamp) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ProducerRecord&lt;&gt;(<span class="string">&quot;flink-stream-out-topic&quot;</span>, element.getBytes());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 4. 定义Flink Kafka生产者</span></span><br><span class="line">FlinkKafkaProducer&lt;String&gt; kafkaProducer = <span class="keyword">new</span> FlinkKafkaProducer&lt;&gt;(<span class="string">&quot;flink-stream-out-topic&quot;</span>,</span><br><span class="line">                                                                    kafkaSerializationSchema,</span><br><span class="line">                                                                    properties,</span><br><span class="line">                                               FlinkKafkaProducer.Semantic.AT_LEAST_ONCE, <span class="number">5</span>);</span><br><span class="line"><span class="comment">// 5. 将接收到输入元素*2后写出到Kafka</span></span><br><span class="line">stream.map((MapFunction&lt;String, String&gt;) value -&gt; value + value).addSink(kafkaProducer);</span><br><span class="line">env.execute(<span class="string">&quot;Flink Streaming&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-创建输出主题"><a href="#3-2-创建输出主题" class="headerlink" title="3.2 创建输出主题"></a>3.2 创建输出主题</h3><p>创建用于输出测试的主题：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-topics.sh --create \</span><br><span class="line">                    --bootstrap-server hadoop001:9092 \</span><br><span class="line">                    --replication-factor 1 \</span><br><span class="line">                    --partitions 1  \</span><br><span class="line">                    --topic flink-stream-out-topic</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看所有主题</span></span><br><span class="line"> bin/kafka-topics.sh --list --bootstrap-server hadoop001:9092</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-启动消费者"><a href="#3-3-启动消费者" class="headerlink" title="3.3 启动消费者"></a>3.3 启动消费者</h3><p>启动一个 Kafka 消费者，用于查看 Flink 程序的输出情况：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-consumer.sh --bootstrap-server hadoop001:<span class="number">9092</span> --topic flink-stream-out-topic</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-测试结果"><a href="#3-4-测试结果" class="headerlink" title="3.4 测试结果"></a>3.4 测试结果</h3><p>在 Kafka 生产者上发送消息到 Flink 程序，观察 Flink 程序转换后的输出情况，具体如下：</p>
+<div align="center"> <img src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/flink-kafka-producer-consumer.png"/> </div>
+
+
+<p>可以看到 Kafka 生成者发出的数据已经被 Flink 程序正常接收到，并经过转换后又输出到 Kafka 对应的 Topic 上。</p>
+<h2 id="四、自定义-Sink"><a href="#四、自定义-Sink" class="headerlink" title="四、自定义 Sink"></a>四、自定义 Sink</h2><p>除了使用内置的第三方连接器外，Flink 还支持使用自定义的 Sink 来满足多样化的输出需求。想要实现自定义的 Sink ，需要直接或者间接实现 SinkFunction 接口。通常情况下，我们都是实现其抽象类 RichSinkFunction，相比于 SinkFunction ，其提供了更多的与生命周期相关的方法。两者间的关系如下：</p>
+<div align="center"> <img src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/flink-richsink.png"/> </div>
+
+
+<p>这里我们以自定义一个 FlinkToMySQLSink 为例，将计算结果写出到 MySQL 数据库中，具体步骤如下：</p>
+<h3 id="4-1-导入依赖"><a href="#4-1-导入依赖" class="headerlink" title="4.1 导入依赖"></a>4.1 导入依赖</h3><p>首先需要导入 MySQL 相关的依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>8.0.16<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-自定义-Sink"><a href="#4-2-自定义-Sink" class="headerlink" title="4.2 自定义 Sink"></a>4.2 自定义 Sink</h3><p>继承自 RichSinkFunction，实现自定义的 Sink ：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FlinkToMySQLSink</span> <span class="keyword">extends</span> <span class="title">RichSinkFunction</span>&lt;<span class="title">Employee</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> PreparedStatement stmt;</span><br><span class="line">    <span class="keyword">private</span> Connection conn;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">(Configuration parameters)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Class.forName(<span class="string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>);</span><br><span class="line">        conn = DriverManager.getConnection(<span class="string">&quot;jdbc:mysql://192.168.0.229:3306/employees&quot;</span> +</span><br><span class="line">                                           <span class="string">&quot;?characterEncoding=UTF-8&amp;serverTimezone=UTC&amp;useSSL=false&quot;</span>, </span><br><span class="line">                                           <span class="string">&quot;root&quot;</span>, </span><br><span class="line">                                           <span class="string">&quot;123456&quot;</span>);</span><br><span class="line">        String sql = <span class="string">&quot;insert into emp(name, age, birthday) values(?, ?, ?)&quot;</span>;</span><br><span class="line">        stmt = conn.prepareStatement(sql);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">invoke</span><span class="params">(Employee value, Context context)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        stmt.setString(<span class="number">1</span>, value.getName());</span><br><span class="line">        stmt.setInt(<span class="number">2</span>, value.getAge());</span><br><span class="line">        stmt.setDate(<span class="number">3</span>, value.getBirthday());</span><br><span class="line">        stmt.executeUpdate();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.close();</span><br><span class="line">        <span class="keyword">if</span> (stmt != <span class="keyword">null</span>) &#123;</span><br><span class="line">            stmt.close();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (conn != <span class="keyword">null</span>) &#123;</span><br><span class="line">            conn.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-使用自定义-Sink"><a href="#4-3-使用自定义-Sink" class="headerlink" title="4.3 使用自定义 Sink"></a>4.3 使用自定义 Sink</h3><p>想要使用自定义的 Sink，同样是需要调用 addSink 方法，具体如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">Date date = <span class="keyword">new</span> Date(System.currentTimeMillis());</span><br><span class="line">DataStreamSource&lt;Employee&gt; streamSource = env.fromElements(</span><br><span class="line">    <span class="keyword">new</span> Employee(<span class="string">&quot;hei&quot;</span>, <span class="number">10</span>, date),</span><br><span class="line">    <span class="keyword">new</span> Employee(<span class="string">&quot;bai&quot;</span>, <span class="number">20</span>, date),</span><br><span class="line">    <span class="keyword">new</span> Employee(<span class="string">&quot;ying&quot;</span>, <span class="number">30</span>, date));</span><br><span class="line">streamSource.addSink(<span class="keyword">new</span> FlinkToMySQLSink());</span><br><span class="line">env.execute();</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-测试结果"><a href="#4-4-测试结果" class="headerlink" title="4.4 测试结果"></a>4.4 测试结果</h3><p>启动程序，观察数据库写入情况：</p>
+<div align="center"> <img src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/flink-mysql-sink.png"/> </div>
+
+
+<p>数据库成功写入，代表自定义 Sink 整合成功。</p>
+<blockquote>
+<p>以上所有用例的源码见本仓库：<a target="_blank" rel="noopener" href="https://github.com/heibaiying/BigData-Notes/tree/master/code/Flink/flink-kafka-integration">flink-kafka-integration</a></p>
+</blockquote>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li>data-sinks： <a target="_blank" rel="noopener" href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/datastream_api.html#data-sinks">https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/datastream_api.html#data-sinks</a> </li>
+<li>Streaming Connectors：<a target="_blank" rel="noopener" href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/connectors/index.html">https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/connectors/index.html</a></li>
+<li>Apache Kafka Connector： <a target="_blank" rel="noopener" href="https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/connectors/kafka.html">https://ci.apache.org/projects/flink/flink-docs-release-1.9/dev/connectors/kafka.html</a> </li>
+</ol>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Flink-Sink"><span class="toc-number">1.</span> <span class="toc-text">Flink Sink</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Data-Sinks"><span class="toc-number">1.1.</span> <span class="toc-text">一、Data Sinks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-writeAsText"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 writeAsText</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-writeAsCsv"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2 writeAsCsv</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-print-printToErr"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.3 print \ printToErr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-writeUsingOutputFormat"><span class="toc-number">1.1.4.</span> <span class="toc-text">1.4 writeUsingOutputFormat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-writeToSocket"><span class="toc-number">1.1.5.</span> <span class="toc-text">1.5 writeToSocket</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Streaming-Connectors"><span class="toc-number">1.2.</span> <span class="toc-text">二、Streaming Connectors</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%95%B4%E5%90%88-Kafka-Sink"><span class="toc-number">1.3.</span> <span class="toc-text">三、整合 Kafka Sink</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-addSink"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 addSink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%88%9B%E5%BB%BA%E8%BE%93%E5%87%BA%E4%B8%BB%E9%A2%98"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 创建输出主题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%90%AF%E5%8A%A8%E6%B6%88%E8%B4%B9%E8%80%85"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.3 启动消费者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C"><span class="toc-number">1.3.4.</span> <span class="toc-text">3.4 测试结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89-Sink"><span class="toc-number">1.4.</span> <span class="toc-text">四、自定义 Sink</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%AF%BC%E5%85%A5%E4%BE%9D%E8%B5%96"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 导入依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E8%87%AA%E5%AE%9A%E4%B9%89-Sink"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 自定义 Sink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89-Sink"><span class="toc-number">1.4.3.</span> <span class="toc-text">4.3 使用自定义 Sink</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C"><span class="toc-number">1.4.4.</span> <span class="toc-text">4.4 测试结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">1.5.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&text=Flink Sink"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&title=Flink Sink"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&is_video=false&description=Flink Sink"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Flink Sink&body=Check out this article: https://blog.likanug.top/2021/03/13/Flink_Data_Sink/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&title=Flink Sink"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&title=Flink Sink"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&title=Flink Sink"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&title=Flink Sink"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&name=Flink Sink&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/Flink_Data_Sink/&t=Flink Sink"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank"></a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

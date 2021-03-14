@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="Hbase 过滤器详解 一、HBase过滤器简介 二、过滤器基础 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.1  Filter接口和FilterBase抽象类 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.2 过滤器分类 三、比较过滤器 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hbase 过滤器详解">
+<meta property="og:url" content="https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="Hbase 过滤器详解 一、HBase过滤器简介 二、过滤器基础 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.1  Filter接口和FilterBase抽象类 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.2 过滤器分类 三、比较过滤器 &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/hbase-fliter.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/hbase-filterbase-subclass.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/hbase-bytearraycomparable.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/hbase-compareFilter.png">
+<meta property="article:published_time" content="2021-03-13T10:31:55.000Z">
+<meta property="article:modified_time" content="2021-03-13T15:20:20.057Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="HBase">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/hbase-fliter.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Hbase 过滤器详解</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../Hbase%E5%8D%8F%E5%A4%84%E7%90%86%E5%99%A8%E8%AF%A6%E8%A7%A3/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../Kafka%E6%B6%88%E8%B4%B9%E8%80%85%E8%AF%A6%E8%A7%A3/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&text=Hbase 过滤器详解"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&title=Hbase 过滤器详解"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&is_video=false&description=Hbase 过滤器详解"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Hbase 过滤器详解&body=Check out this article: https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&title=Hbase 过滤器详解"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&title=Hbase 过滤器详解"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&title=Hbase 过滤器详解"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&title=Hbase 过滤器详解"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&name=Hbase 过滤器详解&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&t=Hbase 过滤器详解"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hbase-%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.</span> <span class="toc-text">Hbase 过滤器详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81HBase%E8%BF%87%E6%BB%A4%E5%99%A8%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">一、HBase过滤器简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%BF%87%E6%BB%A4%E5%99%A8%E5%9F%BA%E7%A1%80"><span class="toc-number">1.2.</span> <span class="toc-text">二、过滤器基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Filter%E6%8E%A5%E5%8F%A3%E5%92%8CFilterBase%E6%8A%BD%E8%B1%A1%E7%B1%BB"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1  Filter接口和FilterBase抽象类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E8%BF%87%E6%BB%A4%E5%99%A8%E5%88%86%E7%B1%BB"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 过滤器分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%AF%94%E8%BE%83%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">1.3.</span> <span class="toc-text">三、比较过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 比较运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%AF%94%E8%BE%83%E5%99%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 比较器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%AF%94%E8%BE%83%E8%BF%87%E6%BB%A4%E5%99%A8%E7%A7%8D%E7%B1%BB"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.3 比较过滤器种类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-DependentColumnFilter"><span class="toc-number">1.3.4.</span> <span class="toc-text">3.4 DependentColumnFilter</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%B8%93%E7%94%A8%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">1.4.</span> <span class="toc-text">四、专用过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%8D%95%E5%88%97%E5%88%97%E5%80%BC%E8%BF%87%E6%BB%A4%E5%99%A8-SingleColumnValueFilter"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 单列列值过滤器 (SingleColumnValueFilter)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%8D%95%E5%88%97%E5%88%97%E5%80%BC%E6%8E%92%E9%99%A4%E5%99%A8-SingleColumnValueExcludeFilter"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 单列列值排除器 (SingleColumnValueExcludeFilter)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E8%A1%8C%E9%94%AE%E5%89%8D%E7%BC%80%E8%BF%87%E6%BB%A4%E5%99%A8-PrefixFilter"><span class="toc-number">1.4.3.</span> <span class="toc-text">4.3 行键前缀过滤器 (PrefixFilter)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%88%97%E5%90%8D%E5%89%8D%E7%BC%80%E8%BF%87%E6%BB%A4%E5%99%A8-ColumnPrefixFilter"><span class="toc-number">1.4.4.</span> <span class="toc-text">4.4 列名前缀过滤器 (ColumnPrefixFilter)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E5%88%86%E9%A1%B5%E8%BF%87%E6%BB%A4%E5%99%A8-PageFilter"><span class="toc-number">1.4.5.</span> <span class="toc-text">4.5 分页过滤器 (PageFilter)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-%E6%97%B6%E9%97%B4%E6%88%B3%E8%BF%87%E6%BB%A4%E5%99%A8-TimestampsFilter"><span class="toc-number">1.4.6.</span> <span class="toc-text">4.6 时间戳过滤器 (TimestampsFilter)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-%E9%A6%96%E6%AC%A1%E8%A1%8C%E9%94%AE%E8%BF%87%E6%BB%A4%E5%99%A8-FirstKeyOnlyFilter"><span class="toc-number">1.4.7.</span> <span class="toc-text">4.7 首次行键过滤器 (FirstKeyOnlyFilter)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%8C%85%E8%A3%85%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">1.5.</span> <span class="toc-text">五、包装过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-SkipFilter%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">1.5.1.</span> <span class="toc-text">5.1 SkipFilter过滤器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-WhileMatchFilter%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">1.5.2.</span> <span class="toc-text">5.2 WhileMatchFilter过滤器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81FilterList"><span class="toc-number">1.6.</span> <span class="toc-text">六、FilterList</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">1.7.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Hbase 过滤器详解
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2021-03-13T10:31:55.000Z" itemprop="datePublished">2021-03-13</time>
+        
+        (Updated: <time datetime="2021-03-13T15:20:20.057Z" itemprop="dateModified">2021-03-13</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/HBase/" rel="tag">HBase</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="Hbase-过滤器详解"><a href="#Hbase-过滤器详解" class="headerlink" title="Hbase 过滤器详解"></a>Hbase 过滤器详解</h1><nav>
+<a href="#一HBase过滤器简介">一、HBase过滤器简介</a><br/>
+<a href="#二过滤器基础">二、过滤器基础</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#21--Filter接口和FilterBase抽象类">2.1  Filter接口和FilterBase抽象类</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#22-过滤器分类">2.2 过滤器分类</a><br/>
+<a href="#三比较过滤器">三、比较过滤器</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#31-比较运算符">3.1 比较运算符</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#32-比较器">3.2 比较器</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#33-比较过滤器种类">3.3 比较过滤器种类</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#34-DependentColumnFilter">3.4 DependentColumnFilter </a><br/>
+<a href="#四专用过滤器">四、专用过滤器</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#41-单列列值过滤器-SingleColumnValueFilter">4.1 单列列值过滤器 (SingleColumnValueFilter)</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#42-单列列值排除器-SingleColumnValueExcludeFilter">4.2 单列列值排除器 (SingleColumnValueExcludeFilter) </a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#43-行键前缀过滤器-PrefixFilter">4.3 行键前缀过滤器 (PrefixFilter)</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#44-列名前缀过滤器-ColumnPrefixFilter">4.4 列名前缀过滤器 (ColumnPrefixFilter)</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#45-分页过滤器-PageFilter">4.5 分页过滤器 (PageFilter)</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#46-时间戳过滤器-TimestampsFilter">4.6 时间戳过滤器 (TimestampsFilter)</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#47-首次行键过滤器-FirstKeyOnlyFilter">4.7 首次行键过滤器 (FirstKeyOnlyFilter)</a><br/>
+<a href="#五包装过滤器">五、包装过滤器</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#51-SkipFilter过滤器">5.1 SkipFilter过滤器</a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#52-WhileMatchFilter过滤器">5.2 WhileMatchFilter过滤器</a><br/>
+<a href="#六FilterList">六、FilterList</a><br/>
+</nav>
+
+
+
+<h2 id="一、HBase过滤器简介"><a href="#一、HBase过滤器简介" class="headerlink" title="一、HBase过滤器简介"></a>一、HBase过滤器简介</h2><p>Hbase 提供了种类丰富的过滤器（filter）来提高数据处理的效率，用户可以通过内置或自定义的过滤器来对数据进行过滤，所有的过滤器都在服务端生效，即谓词下推（predicate push down）。这样可以保证过滤掉的数据不会被传送到客户端，从而减轻网络传输和客户端处理的压力。</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/hbase-fliter.png"/> </div>
+
+
+
+<h2 id="二、过滤器基础"><a href="#二、过滤器基础" class="headerlink" title="二、过滤器基础"></a>二、过滤器基础</h2><h3 id="2-1-Filter接口和FilterBase抽象类"><a href="#2-1-Filter接口和FilterBase抽象类" class="headerlink" title="2.1  Filter接口和FilterBase抽象类"></a>2.1  Filter接口和FilterBase抽象类</h3><p>Filter 接口中定义了过滤器的基本方法，FilterBase 抽象类实现了 Filter 接口。所有内置的过滤器则直接或者间接继承自 FilterBase 抽象类。用户只需要将定义好的过滤器通过 <code>setFilter</code> 方法传递给 <code>Scan</code> 或 <code>put</code> 的实例即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setFilter(Filter filter)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Scan 中定义的 setFilter</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> Scan <span class="title">setFilter</span><span class="params">(Filter filter)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">super</span>.setFilter(filter);</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// Get 中定义的 setFilter</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> Get <span class="title">setFilter</span><span class="params">(Filter filter)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">super</span>.setFilter(filter);</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>FilterBase 的所有子类过滤器如下：<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/hbase-filterbase-subclass.png"/> </div></p>
+<blockquote>
+<p>说明：上图基于当前时间点（2019.4）最新的 Hbase-2.1.4 ，下文所有说明均基于此版本。</p>
+</blockquote>
+<h3 id="2-2-过滤器分类"><a href="#2-2-过滤器分类" class="headerlink" title="2.2 过滤器分类"></a>2.2 过滤器分类</h3><p>HBase 内置过滤器可以分为三类：分别是比较过滤器，专用过滤器和包装过滤器。分别在下面的三个小节中做详细的介绍。</p>
+<h2 id="三、比较过滤器"><a href="#三、比较过滤器" class="headerlink" title="三、比较过滤器"></a>三、比较过滤器</h2><p>所有比较过滤器均继承自 <code>CompareFilter</code>。创建一个比较过滤器需要两个参数，分别是<strong>比较运算符</strong>和<strong>比较器实例</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CompareFilter</span><span class="params">(<span class="keyword">final</span> CompareOp compareOp,<span class="keyword">final</span> ByteArrayComparable comparator)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">this</span>.compareOp = compareOp;</span><br><span class="line">   <span class="keyword">this</span>.comparator = comparator;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-1-比较运算符"><a href="#3-1-比较运算符" class="headerlink" title="3.1 比较运算符"></a>3.1 比较运算符</h3><ul>
+<li>LESS (&lt;)</li>
+<li>LESS_OR_EQUAL (&lt;=)</li>
+<li>EQUAL (=)</li>
+<li>NOT_EQUAL (!=)</li>
+<li>GREATER_OR_EQUAL (&gt;=)</li>
+<li>GREATER (&gt;)</li>
+<li>NO_OP (排除所有符合条件的值)</li>
+</ul>
+<p>比较运算符均定义在枚举类 <code>CompareOperator</code> 中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@InterfaceAudience</span>.Public</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> CompareOperator &#123;</span><br><span class="line">  LESS,</span><br><span class="line">  LESS_OR_EQUAL,</span><br><span class="line">  EQUAL,</span><br><span class="line">  NOT_EQUAL,</span><br><span class="line">  GREATER_OR_EQUAL,</span><br><span class="line">  GREATER,</span><br><span class="line">  NO_OP,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：在 1.x 版本的 HBase 中，比较运算符定义在 <code>CompareFilter.CompareOp</code> 枚举类中，但在 2.0 之后这个类就被标识为 @deprecated ，并会在 3.0 移除。所以 2.0 之后版本的 HBase 需要使用 <code>CompareOperator</code> 这个枚举类。</p>
+</blockquote>
+<h3 id="3-2-比较器"><a href="#3-2-比较器" class="headerlink" title="3.2 比较器"></a>3.2 比较器</h3><p>所有比较器均继承自 <code>ByteArrayComparable</code> 抽象类，常用的有以下几种：</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/hbase-bytearraycomparable.png"/> </div>
+
+<ul>
+<li><strong>BinaryComparator</strong>  : 使用 <code>Bytes.compareTo(byte []，byte [])</code> 按字典序比较指定的字节数组。</li>
+<li><strong>BinaryPrefixComparator</strong> : 按字典序与指定的字节数组进行比较，但只比较到这个字节数组的长度。</li>
+<li><strong>RegexStringComparator</strong> :  使用给定的正则表达式与指定的字节数组进行比较。仅支持 <code>EQUAL</code> 和 <code>NOT_EQUAL</code> 操作。</li>
+<li><strong>SubStringComparator</strong> : 测试给定的子字符串是否出现在指定的字节数组中，比较不区分大小写。仅支持 <code>EQUAL</code> 和 <code>NOT_EQUAL</code> 操作。</li>
+<li><strong>NullComparator</strong> ：判断给定的值是否为空。</li>
+<li><strong>BitComparator</strong> ：按位进行比较。</li>
+</ul>
+<p><code>BinaryPrefixComparator</code> 和 <code>BinaryComparator</code> 的区别不是很好理解，这里举例说明一下：</p>
+<p>在进行 <code>EQUAL</code> 的比较时，如果比较器传入的是 <code>abcd</code> 的字节数组，但是待比较数据是 <code>abcdefgh</code>：</p>
+<ul>
+<li>如果使用的是 <code>BinaryPrefixComparator</code> 比较器，则比较以 <code>abcd</code> 字节数组的长度为准，即 <code>efgh</code> 不会参与比较，这时候认为 <code>abcd</code> 与 <code>abcdefgh</code> 是满足 <code>EQUAL</code> 条件的；</li>
+<li>如果使用的是 <code>BinaryComparator</code> 比较器，则认为其是不相等的。</li>
+</ul>
+<h3 id="3-3-比较过滤器种类"><a href="#3-3-比较过滤器种类" class="headerlink" title="3.3 比较过滤器种类"></a>3.3 比较过滤器种类</h3><p>比较过滤器共有五个（Hbase 1.x 版本和 2.x 版本相同），见下图：</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/hbase-compareFilter.png"/> </div>
+
+<ul>
+<li><strong>RowFilter</strong> ：基于行键来过滤数据；</li>
+<li><strong>FamilyFilterr</strong> ：基于列族来过滤数据；</li>
+<li><strong>QualifierFilterr</strong> ：基于列限定符（列名）来过滤数据；</li>
+<li><strong>ValueFilterr</strong> ：基于单元格 (cell) 的值来过滤数据；</li>
+<li><strong>DependentColumnFilter</strong> ：指定一个参考列来过滤其他列的过滤器，过滤的原则是基于参考列的时间戳来进行筛选 。</li>
+</ul>
+<p>前四种过滤器的使用方法相同，均只要传递比较运算符和运算器实例即可构建，然后通过 <code>setFilter</code> 方法传递给 <code>scan</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Filter filter  = <span class="keyword">new</span> RowFilter(CompareOperator.LESS_OR_EQUAL,</span><br><span class="line">                               <span class="keyword">new</span> BinaryComparator(Bytes.toBytes(<span class="string">&quot;xxx&quot;</span>)));</span><br><span class="line"> scan.setFilter(filter);    </span><br></pre></td></tr></table></figure>
+
+<p><code>DependentColumnFilter</code> 的使用稍微复杂一点，这里单独做下说明。</p>
+<h3 id="3-4-DependentColumnFilter"><a href="#3-4-DependentColumnFilter" class="headerlink" title="3.4 DependentColumnFilter"></a>3.4 DependentColumnFilter</h3><p>可以把 <code>DependentColumnFilter</code> 理解为<strong>一个 valueFilter 和一个时间戳过滤器的组合</strong>。<code>DependentColumnFilter</code> 有三个带参构造器，这里选择一个参数最全的进行说明：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DependentColumnFilter(<span class="keyword">final</span> <span class="keyword">byte</span> [] family, <span class="keyword">final</span> <span class="keyword">byte</span>[] qualifier,</span><br><span class="line">                               <span class="keyword">final</span> <span class="keyword">boolean</span> dropDependentColumn, <span class="keyword">final</span> CompareOperator op,</span><br><span class="line">                               <span class="keyword">final</span> ByteArrayComparable valueComparator)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>family</strong>  ：列族</li>
+<li><strong>qualifier</strong> ：列限定符（列名）</li>
+<li><strong>dropDependentColumn</strong> ：决定参考列是否被包含在返回结果内，为 true 时表示参考列被返回，为 false 时表示被丢弃</li>
+<li><strong>op</strong> ：比较运算符</li>
+<li><strong>valueComparator</strong> ：比较器</li>
+</ul>
+<p>这里举例进行说明：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DependentColumnFilter dependentColumnFilter = <span class="keyword">new</span> DependentColumnFilter( </span><br><span class="line">    Bytes.toBytes(<span class="string">&quot;student&quot;</span>),</span><br><span class="line">    Bytes.toBytes(<span class="string">&quot;name&quot;</span>),</span><br><span class="line">    <span class="keyword">false</span>,</span><br><span class="line">    CompareOperator.EQUAL, </span><br><span class="line">    <span class="keyword">new</span> BinaryPrefixComparator(Bytes.toBytes(<span class="string">&quot;xiaolan&quot;</span>)));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>首先会去查找 <code>student:name</code> 中值以 <code>xiaolan</code> 开头的所有数据获得 <code>参考数据集</code>，这一步等同于 valueFilter 过滤器；</p>
+</li>
+<li><p>其次再用参考数据集中所有数据的时间戳去检索其他列，获得时间戳相同的其他列的数据作为 <code>结果数据集</code>，这一步等同于时间戳过滤器；</p>
+</li>
+<li><p>最后如果 <code>dropDependentColumn</code> 为 true，则返回 <code>参考数据集</code>+<code>结果数据集</code>，若为 false，则抛弃参考数据集，只返回 <code>结果数据集</code>。</p>
+</li>
+</ul>
+<h2 id="四、专用过滤器"><a href="#四、专用过滤器" class="headerlink" title="四、专用过滤器"></a>四、专用过滤器</h2><p>专用过滤器通常直接继承自 <code>FilterBase</code>，适用于范围更小的筛选规则。</p>
+<h3 id="4-1-单列列值过滤器-SingleColumnValueFilter"><a href="#4-1-单列列值过滤器-SingleColumnValueFilter" class="headerlink" title="4.1 单列列值过滤器 (SingleColumnValueFilter)"></a>4.1 单列列值过滤器 (SingleColumnValueFilter)</h3><p>基于某列（参考列）的值决定某行数据是否被过滤。其实例有以下方法：</p>
+<ul>
+<li><strong>setFilterIfMissing(boolean filterIfMissing)</strong> ：默认值为 false，即如果该行数据不包含参考列，其依然被包含在最后的结果中；设置为 true 时，则不包含；</li>
+<li><strong>setLatestVersionOnly(boolean latestVersionOnly)</strong> ：默认为 true，即只检索参考列的最新版本数据；设置为 false，则检索所有版本数据。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SingleColumnValueFilter singleColumnValueFilter = new SingleColumnValueFilter(</span><br><span class="line">                &quot;student&quot;.getBytes(), </span><br><span class="line">                &quot;name&quot;.getBytes(), </span><br><span class="line">                CompareOperator.EQUAL, </span><br><span class="line">                new SubstringComparator(&quot;xiaolan&quot;));</span><br><span class="line">singleColumnValueFilter.setFilterIfMissing(true);</span><br><span class="line">scan.setFilter(singleColumnValueFilter);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-单列列值排除器-SingleColumnValueExcludeFilter"><a href="#4-2-单列列值排除器-SingleColumnValueExcludeFilter" class="headerlink" title="4.2 单列列值排除器 (SingleColumnValueExcludeFilter)"></a>4.2 单列列值排除器 (SingleColumnValueExcludeFilter)</h3><p><code>SingleColumnValueExcludeFilter</code> 继承自上面的 <code>SingleColumnValueFilter</code>，过滤行为与其相反。</p>
+<h3 id="4-3-行键前缀过滤器-PrefixFilter"><a href="#4-3-行键前缀过滤器-PrefixFilter" class="headerlink" title="4.3 行键前缀过滤器 (PrefixFilter)"></a>4.3 行键前缀过滤器 (PrefixFilter)</h3><p>基于 RowKey 值决定某行数据是否被过滤。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PrefixFilter prefixFilter = <span class="keyword">new</span> PrefixFilter(Bytes.toBytes(<span class="string">&quot;xxx&quot;</span>));</span><br><span class="line">scan.setFilter(prefixFilter);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-列名前缀过滤器-ColumnPrefixFilter"><a href="#4-4-列名前缀过滤器-ColumnPrefixFilter" class="headerlink" title="4.4 列名前缀过滤器 (ColumnPrefixFilter)"></a>4.4 列名前缀过滤器 (ColumnPrefixFilter)</h3><p>基于列限定符（列名）决定某行数据是否被过滤。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ColumnPrefixFilter columnPrefixFilter = <span class="keyword">new</span> ColumnPrefixFilter(Bytes.toBytes(<span class="string">&quot;xxx&quot;</span>));</span><br><span class="line"> scan.setFilter(columnPrefixFilter);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-5-分页过滤器-PageFilter"><a href="#4-5-分页过滤器-PageFilter" class="headerlink" title="4.5 分页过滤器 (PageFilter)"></a>4.5 分页过滤器 (PageFilter)</h3><p>可以使用这个过滤器实现对结果按行进行分页，创建 PageFilter 实例的时候需要传入每页的行数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">PageFilter</span><span class="params">(<span class="keyword">final</span> <span class="keyword">long</span> pageSize)</span> </span>&#123;</span><br><span class="line">    Preconditions.checkArgument(pageSize &gt;= <span class="number">0</span>, <span class="string">&quot;must be positive %s&quot;</span>, pageSize);</span><br><span class="line">    <span class="keyword">this</span>.pageSize = pageSize;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面的代码体现了客户端实现分页查询的主要逻辑，这里对其进行一下解释说明：</p>
+<p>客户端进行分页查询，需要传递 <code>startRow</code>(起始 RowKey)，知道起始 <code>startRow</code> 后，就可以返回对应的 pageSize 行数据。这里唯一的问题就是，对于第一次查询，显然 <code>startRow</code> 就是表格的第一行数据，但是之后第二次、第三次查询我们并不知道 <code>startRow</code>，只能知道上一次查询的最后一条数据的 RowKey（简单称之为 <code>lastRow</code>）。</p>
+<p>我们不能将 <code>lastRow</code> 作为新一次查询的 <code>startRow</code> 传入，因为 scan 的查询区间是[startRow，endRow) ，即前开后闭区间，这样 <code>startRow</code> 在新的查询也会被返回，这条数据就重复了。</p>
+<p>同时在不使用第三方数据库存储 RowKey 的情况下，我们是无法通过知道 <code>lastRow</code> 的下一个 RowKey 的，因为 RowKey 的设计可能是连续的也有可能是不连续的。</p>
+<p>由于 Hbase 的 RowKey 是按照字典序进行排序的。这种情况下，就可以在 <code>lastRow</code> 后面加上 <code>0</code> ，作为 <code>startRow</code> 传入，因为按照字典序的规则，某个值加上 <code>0</code> 后的新值，在字典序上一定是这个值的下一个值，对于 HBase 来说下一个 RowKey 在字典序上一定也是等于或者大于这个新值的。</p>
+<p>所以最后传入 <code>lastRow</code>+<code>0</code>，如果等于这个值的 RowKey 存在就从这个值开始 scan,否则从字典序的下一个 RowKey 开始 scan。</p>
+<blockquote>
+<p>25 个字母以及数字字符，字典排序如下:</p>
+<p><code>&#39;0&#39; &lt; &#39;1&#39; &lt; &#39;2&#39; &lt; ... &lt; &#39;9&#39; &lt; &#39;a&#39; &lt; &#39;b&#39; &lt; ... &lt; &#39;z&#39;</code></p>
+</blockquote>
+<p>分页查询主要实现逻辑：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] POSTFIX = <span class="keyword">new</span> <span class="keyword">byte</span>[] &#123; <span class="number">0x00</span> &#125;;</span><br><span class="line">Filter filter = <span class="keyword">new</span> PageFilter(<span class="number">15</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> totalRows = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">byte</span>[] lastRow = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">    Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">    scan.setFilter(filter);</span><br><span class="line">    <span class="keyword">if</span> (lastRow != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// 如果不是首行 则 lastRow + 0</span></span><br><span class="line">        <span class="keyword">byte</span>[] startRow = Bytes.add(lastRow, POSTFIX);</span><br><span class="line">        System.out.println(<span class="string">&quot;start row: &quot;</span> +</span><br><span class="line">                           Bytes.toStringBinary(startRow));</span><br><span class="line">        scan.withStartRow(startRow);</span><br><span class="line">    &#125;</span><br><span class="line">    ResultScanner scanner = table.getScanner(scan);</span><br><span class="line">    <span class="keyword">int</span> localRows = <span class="number">0</span>;</span><br><span class="line">    Result result;</span><br><span class="line">    <span class="keyword">while</span> ((result = scanner.next()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        System.out.println(localRows++ + <span class="string">&quot;: &quot;</span> + result);</span><br><span class="line">        totalRows++;</span><br><span class="line">        lastRow = result.getRow();</span><br><span class="line">    &#125;</span><br><span class="line">    scanner.close();</span><br><span class="line">    <span class="comment">//最后一页，查询结束  </span></span><br><span class="line">    <span class="keyword">if</span> (localRows == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(<span class="string">&quot;total rows: &quot;</span> + totalRows);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>需要注意的是在多台 Regin Services 上执行分页过滤的时候，由于并行执行的过滤器不能共享它们的状态和边界，所以有可能每个过滤器都会在完成扫描前获取了 PageCount 行的结果，这种情况下会返回比分页条数更多的数据，分页过滤器就有失效的可能。</p>
+</blockquote>
+<h3 id="4-6-时间戳过滤器-TimestampsFilter"><a href="#4-6-时间戳过滤器-TimestampsFilter" class="headerlink" title="4.6 时间戳过滤器 (TimestampsFilter)"></a>4.6 时间戳过滤器 (TimestampsFilter)</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Long&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1554975573000L</span>);</span><br><span class="line">TimestampsFilter timestampsFilter = <span class="keyword">new</span> TimestampsFilter(list);</span><br><span class="line">scan.setFilter(timestampsFilter);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-7-首次行键过滤器-FirstKeyOnlyFilter"><a href="#4-7-首次行键过滤器-FirstKeyOnlyFilter" class="headerlink" title="4.7 首次行键过滤器 (FirstKeyOnlyFilter)"></a>4.7 首次行键过滤器 (FirstKeyOnlyFilter)</h3><p><code>FirstKeyOnlyFilter</code> 只扫描每行的第一列，扫描完第一列后就结束对当前行的扫描，并跳转到下一行。相比于全表扫描，其性能更好，通常用于行数统计的场景，因为如果某一行存在，则行中必然至少有一列。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FirstKeyOnlyFilter firstKeyOnlyFilter = <span class="keyword">new</span> FirstKeyOnlyFilter();</span><br><span class="line">scan.set(firstKeyOnlyFilter);</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、包装过滤器"><a href="#五、包装过滤器" class="headerlink" title="五、包装过滤器"></a>五、包装过滤器</h2><p>包装过滤器就是通过包装其他过滤器以实现某些拓展的功能。</p>
+<h3 id="5-1-SkipFilter过滤器"><a href="#5-1-SkipFilter过滤器" class="headerlink" title="5.1 SkipFilter过滤器"></a>5.1 SkipFilter过滤器</h3><p><code>SkipFilter</code> 包装一个过滤器，当被包装的过滤器遇到一个需要过滤的 KeyValue 实例时，则拓展过滤整行数据。下面是一个使用示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义 ValueFilter 过滤器</span></span><br><span class="line">Filter filter1 = <span class="keyword">new</span> ValueFilter(CompareOperator.NOT_EQUAL,</span><br><span class="line">      <span class="keyword">new</span> BinaryComparator(Bytes.toBytes(<span class="string">&quot;xxx&quot;</span>)));</span><br><span class="line"><span class="comment">// 使用 SkipFilter 进行包装</span></span><br><span class="line">Filter filter2 = <span class="keyword">new</span> SkipFilter(filter1);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-2-WhileMatchFilter过滤器"><a href="#5-2-WhileMatchFilter过滤器" class="headerlink" title="5.2 WhileMatchFilter过滤器"></a>5.2 WhileMatchFilter过滤器</h3><p><code>WhileMatchFilter</code> 包装一个过滤器，当被包装的过滤器遇到一个需要过滤的 KeyValue 实例时，<code>WhileMatchFilter</code> 则结束本次扫描，返回已经扫描到的结果。下面是其使用示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Filter filter1 = <span class="keyword">new</span> RowFilter(CompareOperator.NOT_EQUAL,</span><br><span class="line">                               <span class="keyword">new</span> BinaryComparator(Bytes.toBytes(<span class="string">&quot;rowKey4&quot;</span>)));</span><br><span class="line"></span><br><span class="line">Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">scan.setFilter(filter1);</span><br><span class="line">ResultScanner scanner1 = table.getScanner(scan);</span><br><span class="line"><span class="keyword">for</span> (Result result : scanner1) &#123;</span><br><span class="line">    <span class="keyword">for</span> (Cell cell : result.listCells()) &#123;</span><br><span class="line">        System.out.println(cell);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">scanner1.close();</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;--------------------&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 WhileMatchFilter 进行包装</span></span><br><span class="line">Filter filter2 = <span class="keyword">new</span> WhileMatchFilter(filter1);</span><br><span class="line"></span><br><span class="line">scan.setFilter(filter2);</span><br><span class="line">ResultScanner scanner2 = table.getScanner(scan);</span><br><span class="line"><span class="keyword">for</span> (Result result : scanner1) &#123;</span><br><span class="line">    <span class="keyword">for</span> (Cell cell : result.listCells()) &#123;</span><br><span class="line">        System.out.println(cell);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">scanner2.close();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">rowKey0/student</span>:<span class="string">name/1555035006994/Put/vlen=8/seqid=0</span></span><br><span class="line"><span class="meta">rowKey1/student</span>:<span class="string">name/1555035007019/Put/vlen=8/seqid=0</span></span><br><span class="line"><span class="meta">rowKey2/student</span>:<span class="string">name/1555035007025/Put/vlen=8/seqid=0</span></span><br><span class="line"><span class="meta">rowKey3/student</span>:<span class="string">name/1555035007037/Put/vlen=8/seqid=0</span></span><br><span class="line"><span class="meta">rowKey5/student</span>:<span class="string">name/1555035007051/Put/vlen=8/seqid=0</span></span><br><span class="line"><span class="meta">rowKey6/student</span>:<span class="string">name/1555035007057/Put/vlen=8/seqid=0</span></span><br><span class="line"><span class="meta">rowKey7/student</span>:<span class="string">name/1555035007062/Put/vlen=8/seqid=0</span></span><br><span class="line"><span class="meta">rowKey8/student</span>:<span class="string">name/1555035007068/Put/vlen=8/seqid=0</span></span><br><span class="line"><span class="meta">rowKey9/student</span>:<span class="string">name/1555035007073/Put/vlen=8/seqid=0</span></span><br><span class="line"><span class="attr">--------------------</span></span><br><span class="line"><span class="meta">rowKey0/student</span>:<span class="string">name/1555035006994/Put/vlen=8/seqid=0</span></span><br><span class="line"><span class="meta">rowKey1/student</span>:<span class="string">name/1555035007019/Put/vlen=8/seqid=0</span></span><br><span class="line"><span class="meta">rowKey2/student</span>:<span class="string">name/1555035007025/Put/vlen=8/seqid=0</span></span><br><span class="line"><span class="meta">rowKey3/student</span>:<span class="string">name/1555035007037/Put/vlen=8/seqid=0</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到被包装后，只返回了 <code>rowKey4</code> 之前的数据。</p>
+<h2 id="六、FilterList"><a href="#六、FilterList" class="headerlink" title="六、FilterList"></a>六、FilterList</h2><p>以上都是讲解单个过滤器的作用，当需要多个过滤器共同作用于一次查询的时候，就需要使用 <code>FilterList</code>。<code>FilterList</code> 支持通过构造器或者 <code>addFilter</code> 方法传入多个过滤器。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造器传入</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">FilterList</span><span class="params">(<span class="keyword">final</span> Operator operator, <span class="keyword">final</span> List&lt;Filter&gt; filters)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">FilterList</span><span class="params">(<span class="keyword">final</span> List&lt;Filter&gt; filters)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">FilterList</span><span class="params">(<span class="keyword">final</span> Filter... filters)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// 方法传入</span></span></span><br><span class="line"><span class="function"> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFilter</span><span class="params">(List&lt;Filter&gt; filters)</span></span></span><br><span class="line"><span class="function"> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addFilter</span><span class="params">(Filter filter)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>多个过滤器组合的结果由 <code>operator</code> 参数定义 ，其可选参数定义在 <code>Operator</code> 枚举类中。只有 <code>MUST_PASS_ALL</code> 和 <code>MUST_PASS_ONE</code> 两个可选的值：</p>
+<ul>
+<li><strong>MUST_PASS_ALL</strong> ：相当于 AND，必须所有的过滤器都通过才认为通过；</li>
+<li><strong>MUST_PASS_ONE</strong> ：相当于 OR，只有要一个过滤器通过则认为通过。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@InterfaceAudience</span>.Public</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">enum</span> Operator &#123;</span><br><span class="line">    <span class="comment">/** !AND */</span></span><br><span class="line">    MUST_PASS_ALL,</span><br><span class="line">    <span class="comment">/** !OR */</span></span><br><span class="line">    MUST_PASS_ONE</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用示例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Filter&gt; filters = <span class="keyword">new</span> ArrayList&lt;Filter&gt;();</span><br><span class="line"></span><br><span class="line">Filter filter1 = <span class="keyword">new</span> RowFilter(CompareOperator.GREATER_OR_EQUAL,</span><br><span class="line">                               <span class="keyword">new</span> BinaryComparator(Bytes.toBytes(<span class="string">&quot;XXX&quot;</span>)));</span><br><span class="line">filters.add(filter1);</span><br><span class="line"></span><br><span class="line">Filter filter2 = <span class="keyword">new</span> RowFilter(CompareOperator.LESS_OR_EQUAL,</span><br><span class="line">                               <span class="keyword">new</span> BinaryComparator(Bytes.toBytes(<span class="string">&quot;YYY&quot;</span>)));</span><br><span class="line">filters.add(filter2);</span><br><span class="line"></span><br><span class="line">Filter filter3 = <span class="keyword">new</span> QualifierFilter(CompareOperator.EQUAL,</span><br><span class="line">                                     <span class="keyword">new</span> RegexStringComparator(<span class="string">&quot;ZZZ&quot;</span>));</span><br><span class="line">filters.add(filter3);</span><br><span class="line"></span><br><span class="line">FilterList filterList = <span class="keyword">new</span> FilterList(filters);</span><br><span class="line"></span><br><span class="line">Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">scan.setFilter(filterList);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://www.oreilly.com/library/view/hbase-the-definitive/9781449314682/ch04.html">HBase: The Definitive Guide _&gt;  Chapter 4. Client API: Advanced Features</a></p>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hbase-%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.</span> <span class="toc-text">Hbase 过滤器详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81HBase%E8%BF%87%E6%BB%A4%E5%99%A8%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">一、HBase过滤器简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%BF%87%E6%BB%A4%E5%99%A8%E5%9F%BA%E7%A1%80"><span class="toc-number">1.2.</span> <span class="toc-text">二、过滤器基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Filter%E6%8E%A5%E5%8F%A3%E5%92%8CFilterBase%E6%8A%BD%E8%B1%A1%E7%B1%BB"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1  Filter接口和FilterBase抽象类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E8%BF%87%E6%BB%A4%E5%99%A8%E5%88%86%E7%B1%BB"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 过滤器分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%AF%94%E8%BE%83%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">1.3.</span> <span class="toc-text">三、比较过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 比较运算符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%AF%94%E8%BE%83%E5%99%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 比较器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%AF%94%E8%BE%83%E8%BF%87%E6%BB%A4%E5%99%A8%E7%A7%8D%E7%B1%BB"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.3 比较过滤器种类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-DependentColumnFilter"><span class="toc-number">1.3.4.</span> <span class="toc-text">3.4 DependentColumnFilter</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%B8%93%E7%94%A8%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">1.4.</span> <span class="toc-text">四、专用过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%8D%95%E5%88%97%E5%88%97%E5%80%BC%E8%BF%87%E6%BB%A4%E5%99%A8-SingleColumnValueFilter"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 单列列值过滤器 (SingleColumnValueFilter)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%8D%95%E5%88%97%E5%88%97%E5%80%BC%E6%8E%92%E9%99%A4%E5%99%A8-SingleColumnValueExcludeFilter"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 单列列值排除器 (SingleColumnValueExcludeFilter)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E8%A1%8C%E9%94%AE%E5%89%8D%E7%BC%80%E8%BF%87%E6%BB%A4%E5%99%A8-PrefixFilter"><span class="toc-number">1.4.3.</span> <span class="toc-text">4.3 行键前缀过滤器 (PrefixFilter)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%88%97%E5%90%8D%E5%89%8D%E7%BC%80%E8%BF%87%E6%BB%A4%E5%99%A8-ColumnPrefixFilter"><span class="toc-number">1.4.4.</span> <span class="toc-text">4.4 列名前缀过滤器 (ColumnPrefixFilter)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E5%88%86%E9%A1%B5%E8%BF%87%E6%BB%A4%E5%99%A8-PageFilter"><span class="toc-number">1.4.5.</span> <span class="toc-text">4.5 分页过滤器 (PageFilter)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-%E6%97%B6%E9%97%B4%E6%88%B3%E8%BF%87%E6%BB%A4%E5%99%A8-TimestampsFilter"><span class="toc-number">1.4.6.</span> <span class="toc-text">4.6 时间戳过滤器 (TimestampsFilter)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-%E9%A6%96%E6%AC%A1%E8%A1%8C%E9%94%AE%E8%BF%87%E6%BB%A4%E5%99%A8-FirstKeyOnlyFilter"><span class="toc-number">1.4.7.</span> <span class="toc-text">4.7 首次行键过滤器 (FirstKeyOnlyFilter)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%8C%85%E8%A3%85%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">1.5.</span> <span class="toc-text">五、包装过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-SkipFilter%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">1.5.1.</span> <span class="toc-text">5.1 SkipFilter过滤器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-WhileMatchFilter%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">1.5.2.</span> <span class="toc-text">5.2 WhileMatchFilter过滤器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81FilterList"><span class="toc-number">1.6.</span> <span class="toc-text">六、FilterList</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">1.7.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&text=Hbase 过滤器详解"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&title=Hbase 过滤器详解"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&is_video=false&description=Hbase 过滤器详解"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Hbase 过滤器详解&body=Check out this article: https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&title=Hbase 过滤器详解"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&title=Hbase 过滤器详解"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&title=Hbase 过滤器详解"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&title=Hbase 过滤器详解"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&name=Hbase 过滤器详解&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/Hbase%E8%BF%87%E6%BB%A4%E5%99%A8%E8%AF%A6%E8%A7%A3/&t=Hbase 过滤器详解"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank"></a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

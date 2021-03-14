@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="Azkaban Flow 2.0的使用 一、Flow 2.0 简介 二、YAML语法 三、简单任务调度 四、多任务调度 五、内嵌流    一、Flow 2.0 简介1.1 Flow 2.0 的产生Azkaban 目前同时支持 Flow 1.0 和 Flow2.0 ，但是官方文档上更推荐使用 Flow 2.0，因为 Flow 1.0 会在将来的版本被移除。Flow 2.0 的主要设计思想是提供 1.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Azkaban Flow 2.0的使用">
+<meta property="og:url" content="https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="Azkaban Flow 2.0的使用 一、Flow 2.0 简介 二、YAML语法 三、简单任务调度 四、多任务调度 五、内嵌流    一、Flow 2.0 简介1.1 Flow 2.0 的产生Azkaban 目前同时支持 Flow 1.0 和 Flow2.0 ，但是官方文档上更推荐使用 Flow 2.0，因为 Flow 1.0 会在将来的版本被移除。Flow 2.0 的主要设计思想是提供 1.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/azkaban-simple.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/azkaban-simle-result.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/azkaban-embeded-flow.png">
+<meta property="og:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/azkaban-embeded-success.png">
+<meta property="article:published_time" content="2021-03-13T10:31:55.000Z">
+<meta property="article:modified_time" content="2021-03-13T15:36:34.323Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="Azkaban">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/azkaban-simple.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Azkaban Flow 2.0的使用</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../Azkaban_Flow_1.0_%E7%9A%84%E4%BD%BF%E7%94%A8/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../Azkaban%E7%AE%80%E4%BB%8B/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&text=Azkaban Flow 2.0的使用"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&title=Azkaban Flow 2.0的使用"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&is_video=false&description=Azkaban Flow 2.0的使用"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Azkaban Flow 2.0的使用&body=Check out this article: https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&title=Azkaban Flow 2.0的使用"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&title=Azkaban Flow 2.0的使用"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&title=Azkaban Flow 2.0的使用"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&title=Azkaban Flow 2.0的使用"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&name=Azkaban Flow 2.0的使用&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&t=Azkaban Flow 2.0的使用"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Azkaban-Flow-2-0%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">Azkaban Flow 2.0的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Flow-2-0-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">一、Flow 2.0 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-Flow-2-0-%E7%9A%84%E4%BA%A7%E7%94%9F"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 Flow 2.0 的产生</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2 基本结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81YAML%E8%AF%AD%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">二、YAML语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%9F%BA%E6%9C%AC%E8%A7%84%E5%88%99"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 基本规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%99%E6%B3%95"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 对象的写法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-map%E7%9A%84%E5%86%99%E6%B3%95"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 map的写法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%95%B0%E7%BB%84%E7%9A%84%E5%86%99%E6%B3%95"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.3 数组的写法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E5%8D%95%E5%8F%8C%E5%BC%95%E5%8F%B7"><span class="toc-number">1.2.5.</span> <span class="toc-text">2.5 单双引号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7"><span class="toc-number">1.2.6.</span> <span class="toc-text">2.6 特殊符号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-%E9%85%8D%E7%BD%AE%E5%BC%95%E7%94%A8"><span class="toc-number">1.2.7.</span> <span class="toc-text">2.7 配置引用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%AE%80%E5%8D%95%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="toc-number">1.3.</span> <span class="toc-text">三、简单任务调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E4%BB%BB%E5%8A%A1%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 任务配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%89%93%E5%8C%85%E4%B8%8A%E4%BC%A0"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 打包上传</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.3 执行结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%A4%9A%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="toc-number">1.4.</span> <span class="toc-text">四、多任务调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%86%85%E5%B5%8C%E6%B5%81"><span class="toc-number">1.5.</span> <span class="toc-text">五、内嵌流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">1.6.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Azkaban Flow 2.0的使用
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2021-03-13T10:31:55.000Z" itemprop="datePublished">2021-03-13</time>
+        
+        (Updated: <time datetime="2021-03-13T15:36:34.323Z" itemprop="dateModified">2021-03-13</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/Azkaban/" rel="tag">Azkaban</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="Azkaban-Flow-2-0的使用"><a href="#Azkaban-Flow-2-0的使用" class="headerlink" title="Azkaban Flow 2.0的使用"></a>Azkaban Flow 2.0的使用</h1><nav>
+<a href="#一Flow-20-简介">一、Flow 2.0 简介</a><br/>
+<a href="#二YAML语法">二、YAML语法</a><br/>
+<a href="#三简单任务调度">三、简单任务调度</a><br/>
+<a href="#四多任务调度">四、多任务调度</a><br/>
+<a href="#五内嵌流">五、内嵌流</a><br/>
+</nav>
+
+
+<h2 id="一、Flow-2-0-简介"><a href="#一、Flow-2-0-简介" class="headerlink" title="一、Flow 2.0 简介"></a>一、Flow 2.0 简介</h2><h3 id="1-1-Flow-2-0-的产生"><a href="#1-1-Flow-2-0-的产生" class="headerlink" title="1.1 Flow 2.0 的产生"></a>1.1 Flow 2.0 的产生</h3><p>Azkaban 目前同时支持 Flow 1.0 和 Flow2.0 ，但是官方文档上更推荐使用 Flow 2.0，因为 Flow 1.0 会在将来的版本被移除。Flow 2.0 的主要设计思想是提供 1.0 所没有的流级定义。用户可以将属于给定流的所有 <code>job / properties</code> 文件合并到单个流定义文件中，其内容采用 YAML 语法进行定义，同时还支持在流中再定义流，称为为嵌入流或子流。</p>
+<h3 id="1-2-基本结构"><a href="#1-2-基本结构" class="headerlink" title="1.2 基本结构"></a>1.2 基本结构</h3><p>项目 zip 将包含多个流 YAML 文件，一个项目 YAML 文件以及可选库和源代码。Flow YAML 文件的基本结构如下：</p>
+<ul>
+<li>每个 Flow 都在单个 YAML 文件中定义；</li>
+<li>流文件以流名称命名，如：<code>my-flow-name.flow</code>；</li>
+<li>包含 DAG 中的所有节点；</li>
+<li>每个节点可以是作业或流程；</li>
+<li>每个节点 可以拥有 name, type, config, dependsOn 和 nodes sections 等属性；</li>
+<li>通过列出 dependsOn 列表中的父节点来指定节点依赖性；</li>
+<li>包含与流相关的其他配置；</li>
+<li>当前 properties 文件中流的所有常见属性都将迁移到每个流 YAML 文件中的 config 部分。</li>
+</ul>
+<p>官方提供了一个比较完善的配置样例，如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">config:</span></span><br><span class="line">  <span class="attr">user.to.proxy:</span> <span class="string">azktest</span></span><br><span class="line">  <span class="attr">param.hadoopOutData:</span> <span class="string">/tmp/wordcounthadoopout</span></span><br><span class="line">  <span class="attr">param.inData:</span> <span class="string">/tmp/wordcountpigin</span></span><br><span class="line">  <span class="attr">param.outData:</span> <span class="string">/tmp/wordcountpigout</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># This section defines the list of jobs</span></span><br><span class="line"><span class="comment"># A node can be a job or a flow</span></span><br><span class="line"><span class="comment"># In this example, all nodes are jobs</span></span><br><span class="line"><span class="attr">nodes:</span></span><br><span class="line"> <span class="comment"># Job definition</span></span><br><span class="line"> <span class="comment"># The job definition is like a YAMLified version of properties file</span></span><br><span class="line"> <span class="comment"># with one major difference. All custom properties are now clubbed together</span></span><br><span class="line"> <span class="comment"># in a config section in the definition.</span></span><br><span class="line"> <span class="comment"># The first line describes the name of the job</span></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">AZTest</span></span><br><span class="line">   <span class="attr">type:</span> <span class="string">noop</span></span><br><span class="line">   <span class="comment"># The dependsOn section contains the list of parent nodes the current</span></span><br><span class="line">   <span class="comment"># node depends on</span></span><br><span class="line">   <span class="attr">dependsOn:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">hadoopWC1</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">NoOpTest1</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">hive2</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">java1</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">jobCommand2</span></span><br><span class="line"></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">pigWordCount1</span></span><br><span class="line">   <span class="attr">type:</span> <span class="string">pig</span></span><br><span class="line">   <span class="comment"># The config section contains custom arguments or parameters which are</span></span><br><span class="line">   <span class="comment"># required by the job</span></span><br><span class="line">   <span class="attr">config:</span></span><br><span class="line">     <span class="attr">pig.script:</span> <span class="string">src/main/pig/wordCountText.pig</span></span><br><span class="line"></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">hadoopWC1</span></span><br><span class="line">   <span class="attr">type:</span> <span class="string">hadoopJava</span></span><br><span class="line">   <span class="attr">dependsOn:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">pigWordCount1</span></span><br><span class="line">   <span class="attr">config:</span></span><br><span class="line">     <span class="attr">classpath:</span> <span class="string">./*</span></span><br><span class="line">     <span class="attr">force.output.overwrite:</span> <span class="literal">true</span></span><br><span class="line">     <span class="attr">input.path:</span> <span class="string">$&#123;param.inData&#125;</span></span><br><span class="line">     <span class="attr">job.class:</span> <span class="string">com.linkedin.wordcount.WordCount</span></span><br><span class="line">     <span class="attr">main.args:</span> <span class="string">$&#123;param.inData&#125;</span> <span class="string">$&#123;param.hadoopOutData&#125;</span></span><br><span class="line">     <span class="attr">output.path:</span> <span class="string">$&#123;param.hadoopOutData&#125;</span></span><br><span class="line"></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">hive1</span></span><br><span class="line">   <span class="attr">type:</span> <span class="string">hive</span></span><br><span class="line">   <span class="attr">config:</span></span><br><span class="line">     <span class="attr">hive.script:</span> <span class="string">src/main/hive/showdb.q</span></span><br><span class="line"></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">NoOpTest1</span></span><br><span class="line">   <span class="attr">type:</span> <span class="string">noop</span></span><br><span class="line"></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">hive2</span></span><br><span class="line">   <span class="attr">type:</span> <span class="string">hive</span></span><br><span class="line">   <span class="attr">dependsOn:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">hive1</span></span><br><span class="line">   <span class="attr">config:</span></span><br><span class="line">     <span class="attr">hive.script:</span> <span class="string">src/main/hive/showTables.sql</span></span><br><span class="line"></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">java1</span></span><br><span class="line">   <span class="attr">type:</span> <span class="string">javaprocess</span></span><br><span class="line">   <span class="attr">config:</span></span><br><span class="line">     <span class="attr">Xms:</span> <span class="string">96M</span></span><br><span class="line">     <span class="attr">java.class:</span> <span class="string">com.linkedin.foo.HelloJavaProcessJob</span></span><br><span class="line"></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jobCommand1</span></span><br><span class="line">   <span class="attr">type:</span> <span class="string">command</span></span><br><span class="line">   <span class="attr">config:</span></span><br><span class="line">     <span class="attr">command:</span> <span class="string">echo</span> <span class="string">&quot;hello world from job_command_1&quot;</span></span><br><span class="line"></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jobCommand2</span></span><br><span class="line">   <span class="attr">type:</span> <span class="string">command</span></span><br><span class="line">   <span class="attr">dependsOn:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">jobCommand1</span></span><br><span class="line">   <span class="attr">config:</span></span><br><span class="line">     <span class="attr">command:</span> <span class="string">echo</span> <span class="string">&quot;hello world from job_command_2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="二、YAML语法"><a href="#二、YAML语法" class="headerlink" title="二、YAML语法"></a>二、YAML语法</h2><p>想要使用 Flow 2.0 进行工作流的配置，首先需要了解 YAML 。YAML 是一种简洁的非标记语言，有着严格的格式要求的，如果你的格式配置失败，上传到 Azkaban 的时候就会抛出解析异常。</p>
+<h3 id="2-1-基本规则"><a href="#2-1-基本规则" class="headerlink" title="2.1 基本规则"></a>2.1 基本规则</h3><ol>
+<li>大小写敏感 ；</li>
+<li>使用缩进表示层级关系 ；</li>
+<li>缩进长度没有限制，只要元素对齐就表示这些元素属于一个层级； </li>
+<li>使用#表示注释 ；</li>
+<li>字符串默认不用加单双引号，但单引号和双引号都可以使用，双引号表示不需要对特殊字符进行转义；</li>
+<li>YAML 中提供了多种常量结构，包括：整数，浮点数，字符串，NULL，日期，布尔，时间。</li>
+</ol>
+<h3 id="2-2-对象的写法"><a href="#2-2-对象的写法" class="headerlink" title="2.2 对象的写法"></a>2.2 对象的写法</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># value 与 ： 符号之间必须要有一个空格</span></span><br><span class="line"><span class="attr">key:</span> <span class="string">value</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-map的写法"><a href="#2-3-map的写法" class="headerlink" title="2.3 map的写法"></a>2.3 map的写法</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 写法一 同一缩进的所有键值对属于一个map</span></span><br><span class="line"><span class="attr">key:</span> </span><br><span class="line">    <span class="attr">key1:</span> <span class="string">value1</span></span><br><span class="line">    <span class="attr">key2:</span> <span class="string">value2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 写法二</span></span><br><span class="line">&#123;<span class="attr">key1:</span> <span class="string">value1</span>, <span class="attr">key2:</span> <span class="string">value2</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-数组的写法"><a href="#2-3-数组的写法" class="headerlink" title="2.3 数组的写法"></a>2.3 数组的写法</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 写法一 使用一个短横线加一个空格代表一个数组项</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">a</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">b</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">c</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 写法二</span></span><br><span class="line">[<span class="string">a</span>,<span class="string">b</span>,<span class="string">c</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-单双引号"><a href="#2-5-单双引号" class="headerlink" title="2.5 单双引号"></a>2.5 单双引号</h3><p>支持单引号和双引号，但双引号不会对特殊字符进行转义：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">s1:</span> <span class="string">&#x27;内容\n 字符串&#x27;</span></span><br><span class="line"><span class="attr">s2:</span> <span class="string">&quot;内容\n 字符串&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="string">转换后：</span></span><br><span class="line">&#123; <span class="attr">s1:</span> <span class="string">&#x27;内容\\n 字符串&#x27;</span>, <span class="attr">s2:</span> <span class="string">&#x27;内容\n 字符串&#x27;</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-6-特殊符号"><a href="#2-6-特殊符号" class="headerlink" title="2.6 特殊符号"></a>2.6 特殊符号</h3><p>一个 YAML 文件中可以包括多个文档，使用 <code>---</code> 进行分割。</p>
+<h3 id="2-7-配置引用"><a href="#2-7-配置引用" class="headerlink" title="2.7 配置引用"></a>2.7 配置引用</h3><p>Flow 2.0 建议将公共参数定义在 <code>config</code> 下，并通过 <code>$&#123;&#125;</code> 进行引用。</p>
+<h2 id="三、简单任务调度"><a href="#三、简单任务调度" class="headerlink" title="三、简单任务调度"></a>三、简单任务调度</h2><h3 id="3-1-任务配置"><a href="#3-1-任务配置" class="headerlink" title="3.1 任务配置"></a>3.1 任务配置</h3><p>新建 <code>flow</code> 配置文件：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">nodes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jobA</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">command</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">command:</span> <span class="string">echo</span> <span class="string">&quot;Hello Azkaban Flow 2.0.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>在当前的版本中，Azkaban 同时支持 Flow 1.0 和 Flow 2.0，如果你希望以 2.0 的方式运行，则需要新建一个 <code>project</code> 文件，指明是使用的是 Flow 2.0：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">azkaban-flow-version: 2.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-打包上传"><a href="#3-2-打包上传" class="headerlink" title="3.2 打包上传"></a>3.2 打包上传</h3><div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/azkaban-simple.png"/> </div>
+
+
+
+<h3 id="3-3-执行结果"><a href="#3-3-执行结果" class="headerlink" title="3.3 执行结果"></a>3.3 执行结果</h3><p>由于在 1.0 版本中已经介绍过 Web UI 的使用，这里就不再赘述。对于 1.0 和 2.0 版本，只有配置方式有所不同，其他上传执行的方式都是相同的。执行结果如下：</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/azkaban-simle-result.png"/> </div>
+
+<h2 id="四、多任务调度"><a href="#四、多任务调度" class="headerlink" title="四、多任务调度"></a>四、多任务调度</h2><p>和 1.0 给出的案例一样，这里假设我们有五个任务（jobA——jobE）, D 任务需要在 A，B，C 任务执行完成后才能执行，而 E 任务则需要在 D 任务执行完成后才能执行，相关配置文件应如下。可以看到在 1.0 中我们需要分别定义五个配置文件，而在 2.0 中我们只需要一个配置文件即可完成配置。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">nodes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jobE</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">command</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">command:</span> <span class="string">echo</span> <span class="string">&quot;This is job E&quot;</span></span><br><span class="line">    <span class="comment"># jobE depends on jobD</span></span><br><span class="line">    <span class="attr">dependsOn:</span> </span><br><span class="line">      <span class="bullet">-</span> <span class="string">jobD</span></span><br><span class="line">    </span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jobD</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">command</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">command:</span> <span class="string">echo</span> <span class="string">&quot;This is job D&quot;</span></span><br><span class="line">    <span class="comment"># jobD depends on jobA、jobB、jobC</span></span><br><span class="line">    <span class="attr">dependsOn:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">jobA</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">jobB</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">jobC</span></span><br><span class="line"></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jobA</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">command</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">command:</span> <span class="string">echo</span> <span class="string">&quot;This is job A&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jobB</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">command</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">command:</span> <span class="string">echo</span> <span class="string">&quot;This is job B&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jobC</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">command</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">command:</span> <span class="string">echo</span> <span class="string">&quot;This is job C&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="五、内嵌流"><a href="#五、内嵌流" class="headerlink" title="五、内嵌流"></a>五、内嵌流</h2><p>Flow2.0 支持在一个 Flow 中定义另一个 Flow，称为内嵌流或者子流。这里给出一个内嵌流的示例，其 <code>Flow</code> 配置如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">nodes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jobC</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">command</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">command:</span> <span class="string">echo</span> <span class="string">&quot;This is job C&quot;</span></span><br><span class="line">    <span class="attr">dependsOn:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">embedded_flow</span></span><br><span class="line"></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">embedded_flow</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">flow</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">prop:</span> <span class="string">value</span></span><br><span class="line">    <span class="attr">nodes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jobB</span></span><br><span class="line">        <span class="attr">type:</span> <span class="string">command</span></span><br><span class="line">        <span class="attr">config:</span></span><br><span class="line">          <span class="attr">command:</span> <span class="string">echo</span> <span class="string">&quot;This is job B&quot;</span></span><br><span class="line">        <span class="attr">dependsOn:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="string">jobA</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jobA</span></span><br><span class="line">        <span class="attr">type:</span> <span class="string">command</span></span><br><span class="line">        <span class="attr">config:</span></span><br><span class="line">          <span class="attr">command:</span> <span class="string">echo</span> <span class="string">&quot;This is job A&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>内嵌流的 DAG 图如下：</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/azkaban-embeded-flow.png"/> </div>
+
+<p>执行情况如下：</p>
+<div align="center"> <img  src="https://gitee.com/heibaiying/BigData-Notes/raw/master/pictures/azkaban-embeded-success.png"/> </div>
+
+
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/azkaban/azkaban/wiki/Azkaban-Flow-2.0-Design">Azkaban Flow 2.0 Design</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/azkaban/azkaban/wiki/Getting-started-with-Azkaban-Flow-2.0">Getting started with Azkaban Flow 2.0</a></li>
+</ol>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Azkaban-Flow-2-0%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">Azkaban Flow 2.0的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Flow-2-0-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">一、Flow 2.0 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-Flow-2-0-%E7%9A%84%E4%BA%A7%E7%94%9F"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 Flow 2.0 的产生</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2 基本结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81YAML%E8%AF%AD%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">二、YAML语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%9F%BA%E6%9C%AC%E8%A7%84%E5%88%99"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 基本规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%99%E6%B3%95"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 对象的写法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-map%E7%9A%84%E5%86%99%E6%B3%95"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 map的写法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%95%B0%E7%BB%84%E7%9A%84%E5%86%99%E6%B3%95"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.3 数组的写法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E5%8D%95%E5%8F%8C%E5%BC%95%E5%8F%B7"><span class="toc-number">1.2.5.</span> <span class="toc-text">2.5 单双引号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7"><span class="toc-number">1.2.6.</span> <span class="toc-text">2.6 特殊符号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-%E9%85%8D%E7%BD%AE%E5%BC%95%E7%94%A8"><span class="toc-number">1.2.7.</span> <span class="toc-text">2.7 配置引用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%AE%80%E5%8D%95%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="toc-number">1.3.</span> <span class="toc-text">三、简单任务调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E4%BB%BB%E5%8A%A1%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 任务配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%89%93%E5%8C%85%E4%B8%8A%E4%BC%A0"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 打包上传</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.3 执行结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%A4%9A%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="toc-number">1.4.</span> <span class="toc-text">四、多任务调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%86%85%E5%B5%8C%E6%B5%81"><span class="toc-number">1.5.</span> <span class="toc-text">五、内嵌流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">1.6.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&text=Azkaban Flow 2.0的使用"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&title=Azkaban Flow 2.0的使用"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&is_video=false&description=Azkaban Flow 2.0的使用"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Azkaban Flow 2.0的使用&body=Check out this article: https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&title=Azkaban Flow 2.0的使用"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&title=Azkaban Flow 2.0的使用"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&title=Azkaban Flow 2.0的使用"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&title=Azkaban Flow 2.0的使用"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&name=Azkaban Flow 2.0的使用&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2021/03/13/Azkaban_Flow_2.0_%E7%9A%84%E4%BD%BF%E7%94%A8/&t=Azkaban Flow 2.0的使用"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2021 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank"></a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>
