@@ -75,7 +75,7 @@
 <link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
 
 
-<meta name="generator" content="Hexo 5.0.0"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
     
@@ -262,7 +262,7 @@
 <p><img src="/image-20200617135225231.png" alt="image-20200617135225231"></p>
 </li>
 <li><p>开放远程连接</p>
-  <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt;use mysql;</span><br><span class="line">msyql&gt;update<span class="built_in"> user </span><span class="builtin-name">set</span> user.<span class="attribute">Host</span>=<span class="string">&#x27;%&#x27;</span> where user.<span class="attribute">User</span>=<span class="string">&#x27;root&#x27;</span>;</span><br><span class="line">mysql&gt;flush privileges;</span><br></pre></td></tr></table></figure>
+  <figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt;use mysql;</span><br><span class="line">msyql&gt;<span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> <span class="keyword">user</span>.Host=<span class="string">&#x27;%&#x27;</span> <span class="keyword">where</span> <span class="keyword">user</span>.<span class="keyword">User</span>=<span class="string">&#x27;root&#x27;</span>;</span><br><span class="line">mysql&gt;flush <span class="keyword">privileges</span>;</span><br></pre></td></tr></table></figure>
 
 <p>  <img src="/image-20200617135533174.png" alt="image-20200617135533174"></p>
 </li>

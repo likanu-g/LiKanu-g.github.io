@@ -11,12 +11,12 @@
 	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
 	<script type="text/javascript" src="/js/pace.min.js"></script> 
 	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
-    <meta name="description" content="Common Lisp2.1 形式12&gt; (+ 2 3)5  在表达式 (+ 2 3) 里， + 称为操作符，而数字 2 跟 3 称为实参。 12&gt; (+ 2 3 4 5)14  ​    表示 2+3+4+5 由于操作符可接受不定数量的实参，我们需要用括号来标明表达式的开始与结束。 表达式可以嵌套。即表达式里的实参，可以是另一个复杂的表达式： 12&gt; (&#x2F; (- 7">
+    <meta name="description" content="Common Lisp2.1 形式12&gt; (+ 2 3)5  在表达式 (+ 2 3) 里， + 称为操作符，而数字 2 跟 3 称为实参。 12&gt; (+ 2 3 4 5)14  ​    表示 2+3+4+5 由于操作符可接受不定数量的实参，我们需要用括号来标明表达式的开始与结束。 表达式可以嵌套。即表达式里的实参，可以是另一个复杂的表达式： 12&gt; (&#x2F; (- 7 1) (-">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Common Lisp基础">
 <meta property="og:url" content="https://blog.likanug.top/2019/12/30/Common-Lisp%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="Likanug&#39;s Blog">
-<meta property="og:description" content="Common Lisp2.1 形式12&gt; (+ 2 3)5  在表达式 (+ 2 3) 里， + 称为操作符，而数字 2 跟 3 称为实参。 12&gt; (+ 2 3 4 5)14  ​    表示 2+3+4+5 由于操作符可接受不定数量的实参，我们需要用括号来标明表达式的开始与结束。 表达式可以嵌套。即表达式里的实参，可以是另一个复杂的表达式： 12&gt; (&#x2F; (- 7">
+<meta property="og:description" content="Common Lisp2.1 形式12&gt; (+ 2 3)5  在表达式 (+ 2 3) 里， + 称为操作符，而数字 2 跟 3 称为实参。 12&gt; (+ 2 3 4 5)14  ​    表示 2+3+4+5 由于操作符可接受不定数量的实参，我们需要用括号来标明表达式的开始与结束。 表达式可以嵌套。即表达式里的实参，可以是另一个复杂的表达式： 12&gt; (&#x2F; (- 7 1) (-">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2019-12-30T05:35:00.000Z">
 <meta property="article:modified_time" content="2019-12-30T05:35:50.000Z">
@@ -64,7 +64,7 @@
 <link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
 
 
-<meta name="generator" content="Hexo 5.0.0"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
     
@@ -179,12 +179,12 @@
     <h1 id="Common-Lisp"><a href="#Common-Lisp" class="headerlink" title="Common Lisp"></a>Common Lisp</h1><h5 id="2-1-形式"><a href="#2-1-形式" class="headerlink" title="2.1 形式"></a>2.1 形式</h5><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>)</span><br><span class="line"><span class="number">5</span></span><br></pre></td></tr></table></figure>
 
 <p>在表达式 <code>(+ 2 3)</code> 里， <code>+</code> 称为操作符，而数字 <code>2</code> 跟 <code>3</code> 称为实参。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (+ 2 3 4 5)</span><br><span class="line">14</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (+ 2 3 4 5)</span><br><span class="line">14</span><br></pre></td></tr></table></figure>
 
 <p>​    表示 2+3+4+5</p>
 <p>由于操作符可接受不定数量的实参，我们需要用括号来标明表达式的开始与结束。</p>
 <p>表达式可以嵌套。即表达式里的实参，可以是另一个复杂的表达式：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (&#x2F; (- 7 1) (- 4 2))</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (/ (- 7 1) (- 4 2))</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
 
 <p>表示   <code>(七减一) 除以 (四减二)</code></p>
 <h5 id="2-2-求值"><a href="#2-2-求值" class="headerlink" title="2.2 求值"></a>2.2 求值</h5><p>在 Lisp 里， <code>+</code> 是函数，然而如 <code>(+ 2 3)</code> 的表达式，是函数调用。</p>
@@ -205,65 +205,65 @@
 </blockquote>
 <p>但不是所有的 Common Lisp 操作符都是函数，不过大部分是。函数调用都是这么求值。由左至右对实参求值，将它们的数值传入函数，来返回整个表达式的值。这称为 Common Lisp 的求值规则。</p>
 <h5 id="2-3-数据"><a href="#2-3-数据" class="headerlink" title="2.3 数据"></a>2.3 数据</h5><p>有两个通常在别的语言所找不到的 Lisp 数据类型是<em>符号</em>（symbol）与<em>列表</em>（lists），<em>符号</em>是英语的单词 (words)。无论你怎么输入，通常会被转换为大写：</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="symbol">&#x27;Artichoke</span></span><br><span class="line">ARTICHOKE</span><br></pre></td></tr></table></figure>
+<figure class="highlight node-repl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> <span class="javascript"><span class="string">&#x27;Artichoke</span></span></span><br><span class="line">ARTICHOKE</span><br></pre></td></tr></table></figure>
 
 <p>符号（通常）不对自身求值，所以要是想引用符号，应该像上例那样用 <code>&#39;</code> 引用它。</p>
 <p><em>列表</em>是由被括号包住的零个或多个元素来表示。元素可以是任何类型，包含列表本身。使用列表必须要引用，不然 Lisp 会以为这是个函数调用：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#39;(my 3 &quot;Sons&quot;)</span><br><span class="line">(MY 3 &quot;Sons&quot;)</span><br><span class="line">&gt; &#39;(the list (a b c) has 3 elements)</span><br><span class="line">(THE LIST (A B C) HAS 3 ELEMENTS)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;(my 3 &quot;Sons&quot;)</span><br><span class="line">(MY 3 &quot;Sons&quot;)</span><br><span class="line">&gt; &#x27;(the list (a b c) has 3 elements)</span><br><span class="line">(THE LIST (A B C) HAS 3 ELEMENTS)</span><br></pre></td></tr></table></figure>
 
 <p>注意引号保护了整个表达式（包含内部的子表达式）被求值。</p>
 <p>你可以调用 <code>list</code> 来创建列表。由于 <code>list</code> 是函数，所以它的实参会被求值。这里我们看一个在函数 <code>list</code> 调用里面，调用 <code>+</code> 函数的例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (list &#39;my (+ 2 1) &quot;Sons&quot;)</span><br><span class="line">(MY 3 &quot;Sons&quot;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (list &#x27;my (+ 2 1) &quot;Sons&quot;)</span><br><span class="line">(MY 3 &quot;Sons&quot;)</span><br></pre></td></tr></table></figure>
 
 <h5 id="2-4-列表操作"><a href="#2-4-列表操作" class="headerlink" title="2.4 列表操作"></a>2.4 列表操作</h5><p>用函数 <code>cons</code> 来构造列表。如果传入的第二个实参是列表，则返回由两个实参所构成的新列表，新列表为第一个实参加上第二个实参：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (cons &#39;a &#39;(b c d))</span><br><span class="line">(A B C D)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (cons &#x27;a &#x27;(b c d))</span><br><span class="line">(A B C D)</span><br></pre></td></tr></table></figure>
 
 <p>可以通过把新元素建立在空表之上，来构造一个新列表。上一节所看到的函数 <code>list</code> ，不过就是一个把几个元素加到 <code>nil</code> 上的快捷方式：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; (cons &#39;a (cons &#39;b nil))</span><br><span class="line">(A B)</span><br><span class="line">&gt; (list &#39;a &#39;b)</span><br><span class="line">(A B)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; (cons &#x27;a (cons &#x27;b nil))</span><br><span class="line">(A B)</span><br><span class="line">&gt; (list &#x27;a &#x27;b)</span><br><span class="line">(A B)</span><br></pre></td></tr></table></figure>
 
 <p>取出列表元素的基本函数是 <code>car</code> 和 <code>cdr</code> 。对列表取 <code>car</code> 返回第一个元素，而对列表取 <code>cdr</code> 返回第一个元素之后的所有元素：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; (car &#39;(a b c))</span><br><span class="line">A</span><br><span class="line">&gt; (cdr &#39;(a b c))</span><br><span class="line">(B C)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; (car &#x27;(a b c))</span><br><span class="line">A</span><br><span class="line">&gt; (cdr &#x27;(a b c))</span><br><span class="line">(B C)</span><br></pre></td></tr></table></figure>
 
 <p>你可以把 <code>car</code> 与 <code>cdr</code> 混合使用来取得列表中的任何元素。如果我们想要取得第三个元素，我们可以：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (car (cdr (cdr &#39;(a b c d))))</span><br><span class="line">C</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (car (cdr (cdr &#x27;(a b c d))))</span><br><span class="line">C</span><br></pre></td></tr></table></figure>
 
 <p>不过，你可以用更简单的 <code>third</code> 来做到同样的事情：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (third &#39;(a b c d))</span><br><span class="line">C</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (third &#x27;(a b c d))</span><br><span class="line">C</span><br></pre></td></tr></table></figure>
 
 <h5 id="2-5-真与假"><a href="#2-5-真与假" class="headerlink" title="2.5 真与假"></a>2.5 真与假</h5><p>在 Common Lisp 里，符号 <code>t</code> 是表示逻辑 <code>真</code> 的缺省值。与 <code>nil</code> 相同， <code>t</code> 也是对自身求值的。如果实参是一个列表，则函数 <code>listp</code>返回 <code>真</code> ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (listp &#39;(a b c))</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (listp &#x27;(a b c))</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
 
 <p>函数的返回值将会被解释成逻辑 <code>真</code> 或逻辑 <code>假</code> 时，则称此函数为谓词（<em>predicate</em>）。在 Common Lisp 里，谓词的名字通常以 <code>p</code>结尾。</p>
 <p>逻辑 <code>假</code> 在 Common Lisp 里，用 <code>nil</code> ，即空表来表示。如果我们传给 <code>listp</code> 的实参不是列表，则返回 <code>nil</code> 。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (listp 27)</span><br><span class="line">NIL</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (listp 27)</span><br><span class="line">NIL</span><br></pre></td></tr></table></figure>
 
 <p>由于 <code>nil</code> 在 Common Lisp 里扮演两个角色，如果实参是一个空表，则函数 <code>null</code> 返回 <code>真</code> 。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (null nil)</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (null nil)</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
 
 <p>而如果实参是逻辑 <code>假</code> ，则函数 <code>not</code> 返回 <code>真</code> ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (not nil)</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (not nil)</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
 
 <p><code>null</code> 与 <code>not</code> 做的是一样的事情。</p>
 <h5 id="2-6-函数"><a href="#2-6-函数" class="headerlink" title="2.6 函数"></a>2.6 函数</h5><p>你可以用 <code>defun</code> 来定义新函数。通常接受三个以上的实参：一个名字，一组用列表表示的实参，以及一个或多个组成函数体的表达式。我们可能会这样定义 <code>third</code> ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; (defun our-third (x)</span><br><span class="line">   (car (cdr (cdr x))))</span><br><span class="line">OUR-THIRD</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; (defun our-third (x)</span><br><span class="line">   (car (cdr (cdr x))))</span><br><span class="line">OUR-THIRD</span><br></pre></td></tr></table></figure>
 
 <p>第一个实参说明此函数的名称将是 <code>our-third</code> 。第二个实参，一个列表 <code>(x)</code> ，说明这个函数会接受一个形参： <code>x</code> 。这样使用的占位符符号叫做<em>变量</em>。当变量代表了传入函数的实参时，如这里的 <code>x</code> ，又被叫做<em>形参</em>。</p>
 <p>定义的剩余部分， <code>(car (cdr (cdr x)))</code> ，即所谓的函数主体。它告诉 Lisp 该怎么计算此函数的返回值。所以调用一个 <code>our-third</code> 函数，对于我们作为实参传入的任何 <code>x</code> ，会返回 <code>(car (cdr (cdr x)))</code> ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (our-third &#39;(a b c d))</span><br><span class="line">C</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (our-third &#x27;(a b c d))</span><br><span class="line">C</span><br></pre></td></tr></table></figure>
 
 <p>既然我们已经讨论过了变量，理解符号是什么就更简单了。符号是变量的名字，符号本身就是以对象的方式存在。这也是为什么符号，必须像列表一样被引用。列表必须被引用，不然会被视为代码。符号必须要被引用，不然会被当作变量。</p>
 <p>你可以把函数定义想成广义版的 Lisp 表达式。下面的表达式测试 <code>1</code> 和 <code>4</code> 的和是否大于 <code>3</code> ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (&gt; (+ 1 4) 3)</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (&gt; (+ 1 4) 3)</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
 
 <p>通过将这些数字替换为变量，我们可以写个函数，测试任两数之和是否大于第三个数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; (defun sum-greater (x y z)</span><br><span class="line">   (&gt; (+ x y) z))</span><br><span class="line">SUM-GREATER</span><br><span class="line">&gt; (sum-greater 1 4 3)</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; (defun sum-greater (x y z)</span><br><span class="line">   (&gt; (+ x y) z))</span><br><span class="line">SUM-GREATER</span><br><span class="line">&gt; (sum-greater 1 4 3)</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
 
 <p>Lisp 不对程序、过程以及函数作区别。函数做了所有的事情（事实上，函数是语言的主要部分）。如果你想要把你的函数之一作为主函数（<em>main</em> function），可以这么做，但平常你就能在顶层中调用任何函数。这表示当你编程时，你可以把程序拆分成一小块一小块地来做调试。</p>
 <h5 id="2-7-递归"><a href="#2-7-递归" class="headerlink" title="2.7 递归"></a>2.7 递归</h5><p>上一节我们所定义的函数，调用了别的函数来帮它们做事。比如 <code>sum-greater</code> 调用了 <code>+</code> 和 <code>&gt;</code> 。函数可以调用任何函数，包括自己。自己调用自己的函数是<em>递归</em>的。 Common Lisp 函数 <code>member</code> ，测试某个东西是否为列表的成员。下面是定义成递归函数的简化版：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; (defun our-member (obj lst)</span><br><span class="line">   (if (null lst)</span><br><span class="line">       nil</span><br><span class="line">   (if (eql (car lst) obj)</span><br><span class="line">       lst</span><br><span class="line">       (our-member obj (cdr lst)))))</span><br><span class="line">OUR-MEMBER</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; (defun our-member (obj lst)</span><br><span class="line">   (if (null lst)</span><br><span class="line">       nil</span><br><span class="line">   (if (eql (car lst) obj)</span><br><span class="line">       lst</span><br><span class="line">       (our-member obj (cdr lst)))))</span><br><span class="line">OUR-MEMBER</span><br></pre></td></tr></table></figure>
 
 <p>谓词 <code>eql</code> 测试它的两个实参是否相等；此外，这个定义的所有东西我们之前都学过了。下面是运行的情形：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; (our-member &#39;b &#39;(a b c))</span><br><span class="line">(B C)</span><br><span class="line">&gt; (our-member &#39;z &#39;(a b c))</span><br><span class="line">NIL</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; (our-member &#x27;b &#x27;(a b c))</span><br><span class="line">(B C)</span><br><span class="line">&gt; (our-member &#x27;z &#x27;(a b c))</span><br><span class="line">NIL</span><br></pre></td></tr></table></figure>
 
 <p>下面是 <code>our-member</code> 的定义对应到英语的描述。为了知道一个对象 <code>obj</code> 是否为列表 <code>lst</code> 的成员，我们</p>
 <blockquote>
@@ -274,18 +274,18 @@
 </ol>
 </blockquote>
 <h5 id="2-9-输入输出"><a href="#2-9-输入输出" class="headerlink" title="2.9 输入输出"></a>2.9 输入输出</h5><p>最普遍的 Common Lisp 输出函数是 <code>format</code> 。接受两个或两个以上的实参，第一个实参决定输出要打印到哪里，第二个实参是字符串模版，而剩余的实参，通常是要插入到字符串模版，用打印表示法（printed representation）所表示的对象。下面是一个典型的例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; (format t &quot;~A plus ~A equals ~A. ~%&quot; 2 3 (+ 2 3))</span><br><span class="line">2 plus 3 equals 5.</span><br><span class="line">NIL</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; (format t &quot;~A plus ~A equals ~A. ~%&quot; 2 3 (+ 2 3))</span><br><span class="line">2 plus 3 equals 5.</span><br><span class="line">NIL</span><br></pre></td></tr></table></figure>
 
 <p>注意到有两个东西被打印出来。第一行是 <code>format</code> 印出来的。第二行是调用 <code>format</code> 函数的返回值，就像平常顶层会打印出来的一样。通常像 <code>format</code> 这种函数不会直接在顶层调用，而是在程序内部里使用，所以返回值不会被看到。</p>
 <p><code>format</code> 的第一个实参 <code>t</code> ，表示输出被送到缺省的地方去。通常是顶层。第二个实参是一个用作输出模版的字符串。在这字符串里，每一个 <code>~A</code> 表示了被填入的位置，而 <code>~%</code> 表示一个换行。这些被填入的位置依序由后面的实参填入。</p>
 <p>标准的输入函数是 <code>read</code> 。当没有实参时，会读取缺省的位置，通常是顶层。下面这个函数，提示使用者输入，并返回任何输入的东西：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(defun askem (string)</span><br><span class="line"> (format t &quot;~A&quot; string)</span><br><span class="line"> (read))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(defun askem (string)</span><br><span class="line"> (format t &quot;~A&quot; string)</span><br><span class="line"> (read))</span><br></pre></td></tr></table></figure>
 
 <p>它的行为如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; (askem &quot;How old are you?&quot;)</span><br><span class="line">How old are you?29</span><br><span class="line"></span><br><span class="line">29</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; (askem &quot;How old are you?&quot;)</span><br><span class="line">How old are you?29</span><br><span class="line"></span><br><span class="line">29</span><br></pre></td></tr></table></figure>
 
 <h5 id="2-10-变量"><a href="#2-10-变量" class="headerlink" title="2.10 变量"></a>2.10 变量</h5><p><code>let</code> 是一个最常用的 Common Lisp 的操作符之一，它让你引入新的局部变量（local variable）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; (let ((x 1) (y 2))</span><br><span class="line">     (+ x y))</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; (let ((x 1) (y 2))</span><br><span class="line">     (+ x y))</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
 
 <p>一个 <code>let</code> 表达式有两个部分。第一个部分是一组创建新变量的指令，指令的形式为 <em>(variable expression)</em> 。每一个变量会被赋予相对应表达式的值。上述的例子中，我们创造了两个变量， <code>x</code> 和 <code>y</code> ，分别被赋予初始值 <code>1</code> 和 <code>2</code> 。这些变量只在 <code>let</code> 的函数体内有效。</p>
 <p>另外还有一种变量叫做全局变量（global variable），是在任何地方都是可视的。 <a target="_blank" rel="noopener" href="http://acl.readthedocs.org/en/latest/zhCN/ch2-cn.html#id6">[2]</a></p>
@@ -294,10 +294,10 @@
 
 <p>全局变量在任何地方都可以存取，除了在定义了相同名字的区域变量的表达式里。为了避免这种情形发生，通常我们在给全局变量命名时，以星号作开始与结束。刚才我们创造的变量可以念作 “星-glob-星” (star-glob-star)。</p>
 <p>你也可以用 <code>defconstant</code> 来定义一个全局的常量：</p>
-<figure class="highlight clojure"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defconstant</span> limit (<span class="name"><span class="builtin-name">+</span></span> *glob* <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight hy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defconstant</span> limit (<span class="name"><span class="builtin-name">+</span></span> *glob* <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
 
 <p>我们不需要给常量一个独一无二的名字，因为如果有相同名字存在，就会有错误产生 (error)。如果你想要检查某些符号，是否为一个全局变量或常量，使用 <code>boundp</code> 函数：</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; (<span class="name">boundp</span> &#x27;*glob*)</span><br><span class="line">T</span><br></pre></td></tr></table></figure>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="quote">&gt; (boundp &#x27;<span class="emphasis">*glob*</span>)</span></span><br><span class="line">T</span><br></pre></td></tr></table></figure>
 
 <hr>
 

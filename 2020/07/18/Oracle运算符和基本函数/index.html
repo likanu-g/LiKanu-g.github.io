@@ -11,12 +11,12 @@
 	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
 	<script type="text/javascript" src="/js/pace.min.js"></script> 
 	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
-    <meta name="description" content="Oracle算术运算符Oracle算术运算符包括+、-、*、&#x2F;四个，其中&#x2F;获得的结果是浮点数 12345select b.coursename, sum(a.score) &#x2F; count(1)  from score a, course b where a.courseid &#x3D; b.courseid   and a.courseid &#x3D; &#39;R20180101&amp;">
+    <meta name="description" content="Oracle算术运算符Oracle算术运算符包括+、-、*、&#x2F;四个，其中&#x2F;获得的结果是浮点数 12345select b.coursename, sum(a.score) &#x2F; count(1)  from score a, course b where a.courseid &#x3D; b.courseid   and a.courseid &#x3D; &amp;#x27;R20180101&amp;#x27; group by">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Oracle运算符和基本字符函数">
 <meta property="og:url" content="https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="Likanug&#39;s Blog">
-<meta property="og:description" content="Oracle算术运算符Oracle算术运算符包括+、-、*、&#x2F;四个，其中&#x2F;获得的结果是浮点数 12345select b.coursename, sum(a.score) &#x2F; count(1)  from score a, course b where a.courseid &#x3D; b.courseid   and a.courseid &#x3D; &#39;R20180101&amp;">
+<meta property="og:description" content="Oracle算术运算符Oracle算术运算符包括+、-、*、&#x2F;四个，其中&#x2F;获得的结果是浮点数 12345select b.coursename, sum(a.score) &#x2F; count(1)  from score a, course b where a.courseid &#x3D; b.courseid   and a.courseid &#x3D; &amp;#x27;R20180101&amp;#x27; group by">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.likanug.top/2020/07/18/Oracle%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8C%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0/image-20200718234041328.png">
 <meta property="article:published_time" content="2020-07-18T15:31:52.000Z">
@@ -66,7 +66,7 @@
 <link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
 
 
-<meta name="generator" content="Hexo 5.0.0"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
     
@@ -179,7 +179,7 @@
 
   <div class="content" itemprop="articleBody">
     <h3 id="Oracle算术运算符"><a href="#Oracle算术运算符" class="headerlink" title="Oracle算术运算符"></a>Oracle算术运算符</h3><p>Oracle算术运算符包括+、-、*、/四个，其中/获得的结果是浮点数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select b.coursename, sum(a.score) &#x2F; count(1)</span><br><span class="line">  from score a, course b</span><br><span class="line"> where a.courseid &#x3D; b.courseid</span><br><span class="line">   and a.courseid &#x3D; &#39;R20180101&#39;</span><br><span class="line"> group by b.coursename;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select b.coursename, sum(a.score) / count(1)</span><br><span class="line">  from score a, course b</span><br><span class="line"> where a.courseid = b.courseid</span><br><span class="line">   and a.courseid = &#x27;R20180101&#x27;</span><br><span class="line"> group by b.coursename;</span><br></pre></td></tr></table></figure>
 
 <h3 id="Oracle关系运算符"><a href="#Oracle关系运算符" class="headerlink" title="Oracle关系运算符"></a>Oracle关系运算符</h3><p>Oracle关系运算符在where条件语句当中经常使用到，常用的关系如下：</p>
 <table>
@@ -211,13 +211,13 @@
 </tr>
 </tbody></table>
 <h3 id="Oracle逻辑运算符"><a href="#Oracle逻辑运算符" class="headerlink" title="Oracle逻辑运算符"></a>Oracle逻辑运算符</h3><p>Oracle的逻辑运算符有三个：AND、OR、NOT</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">select a.*, b.coursename, c.stuname</span><br><span class="line">  from score a, course b, stuinfo c</span><br><span class="line"> where a.courseid &#x3D; b.courseid</span><br><span class="line">   and a.stuid &#x3D; c.stuid</span><br><span class="line">   and a.score &gt;&#x3D; &#39;85&#39;</span><br><span class="line">   and a.score &lt;&#x3D; &#39;95&#39;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">select a.*, b.coursename, c.stuname</span><br><span class="line">  from score a, course b, stuinfo c</span><br><span class="line"> where a.courseid = b.courseid</span><br><span class="line">   and a.stuid = c.stuid</span><br><span class="line">   and a.score &gt;= &#x27;85&#x27;</span><br><span class="line">   and a.score &lt;= &#x27;95&#x27;</span><br></pre></td></tr></table></figure>
 
-<h3 id="Oracle字符串连接符"><a href="#Oracle字符串连接符" class="headerlink" title="Oracle字符串连接符||"></a>Oracle字符串连接符||</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select &#39;姓名：&#39; || c.stuname || &#39;, 课程：&#39; || b.coursename || &#39;, 成绩：&#39; || a.score || &#39;分。&#39; as sxcj</span><br><span class="line">  from score a, course b, stuinfo c</span><br><span class="line"> where a.courseid &#x3D; b.courseid</span><br><span class="line">   and a.stuid &#x3D; c.stuid</span><br></pre></td></tr></table></figure>
+<h3 id="Oracle字符串连接符"><a href="#Oracle字符串连接符" class="headerlink" title="Oracle字符串连接符||"></a>Oracle字符串连接符||</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select &#x27;姓名：&#x27; || c.stuname || &#x27;, 课程：&#x27; || b.coursename || &#x27;, 成绩：&#x27; || a.score || &#x27;分。&#x27; as sxcj</span><br><span class="line">  from score a, course b, stuinfo c</span><br><span class="line"> where a.courseid = b.courseid</span><br><span class="line">   and a.stuid = c.stuid</span><br></pre></td></tr></table></figure>
 
 <p><img src="image-20200718234041328.png" alt="image-20200718234041328"></p>
 <h3 id="Oracle-DISTINCT"><a href="#Oracle-DISTINCT" class="headerlink" title="Oracle DISTINCT"></a>Oracle DISTINCT</h3><p>DISTINCT语法结构:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT&#96; &#96;DISTINCT&#96; &#96;列1,列2,列3... &#96;&#96;from&#96; &#96;表名;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT` `DISTINCT` `列1,列2,列3... ``from` `表名;</span><br></pre></td></tr></table></figure>
 
 <p>当关键字DISTINCT后面只有一个列1时，表示的是单个字段查询结果的不重复数据，当后面跟着多个列值时，表示的是多个字段组成的查询结果的所有唯一值，进行的是多个字段的分组消除</p>
 <h3 id="Oracle字符型函数"><a href="#Oracle字符型函数" class="headerlink" title="Oracle字符型函数"></a>Oracle字符型函数</h3><table>
