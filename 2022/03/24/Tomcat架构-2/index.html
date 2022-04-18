@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="1、Tomcat的总体设计Tomcat是一款应用服务器，从最基本的功能来讲，服务器可以被描述为这样一个应用（软件）： 它接收其他计算机(客户端)发来的请求数据并进行解析，完成相关业务处理，然后把处理结果作为响应返回给请求计算机(客户端)。 1.1 、服务器v1.0版本通常情况下，我们通过使用Socket监听服务器指定端口来实现功能。按照该描述，一个最简单的服务器1.0设计如下图所示  我们通过st">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat架构-2">
+<meta property="og:url" content="https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="1、Tomcat的总体设计Tomcat是一款应用服务器，从最基本的功能来讲，服务器可以被描述为这样一个应用（软件）： 它接收其他计算机(客户端)发来的请求数据并进行解析，完成相关业务处理，然后把处理结果作为响应返回给请求计算机(客户端)。 1.1 、服务器v1.0版本通常情况下，我们通过使用Socket监听服务器指定端口来实现功能。按照该描述，一个最简单的服务器1.0设计如下图所示  我们通过st">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-2/server.png">
+<meta property="og:image" content="https://blog.likanug.top/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-2/server2.png">
+<meta property="og:image" content="https://blog.likanug.top/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-2/server3.png">
+<meta property="og:image" content="https://blog.likanug.top/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-2/server4.png">
+<meta property="article:published_time" content="2022-03-24T12:06:01.000Z">
+<meta property="article:modified_time" content="2022-04-01T08:45:10.200Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-2/server.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Tomcat架构-2</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../../../04/01/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-1/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../Tomcat%E6%9E%B6%E6%9E%84-1/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&text=Tomcat架构-2"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&title=Tomcat架构-2"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&is_video=false&description=Tomcat架构-2"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tomcat架构-2&body=Check out this article: https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&title=Tomcat架构-2"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&title=Tomcat架构-2"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&title=Tomcat架构-2"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&title=Tomcat架构-2"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&name=Tomcat架构-2&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&t=Tomcat架构-2"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81Tomcat%E7%9A%84%E6%80%BB%E4%BD%93%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.</span> <span class="toc-text">1、Tomcat的总体设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E3%80%81%E6%9C%8D%E5%8A%A1%E5%99%A8v1-0%E7%89%88%E6%9C%AC"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 、服务器v1.0版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E3%80%81%E6%9C%8D%E5%8A%A1%E5%99%A8v1-1%E7%89%88%E6%9C%AC"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 、服务器v1.1版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E3%80%81%E6%9C%8D%E5%8A%A1%E5%99%A8v2-0%E7%89%88%E6%9C%AC"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 、服务器v2.0版本</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Tomcat架构-2
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2022-03-24T12:06:01.000Z" itemprop="datePublished">2022-03-24</time>
+        
+        (Updated: <time datetime="2022-04-01T08:45:10.200Z" itemprop="dateModified">2022-04-01</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/Tomcat/">Tomcat</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/Java/" rel="tag">Java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="1、Tomcat的总体设计"><a href="#1、Tomcat的总体设计" class="headerlink" title="1、Tomcat的总体设计"></a>1、Tomcat的总体设计</h2><p>Tomcat是一款应用服务器，从最基本的功能来讲，服务器可以被描述为这样一个应用（软件）：</p>
+<p><em>它接收其他计算机(客户端)发来的请求数据并进行解析，完成相关业务处理，然后把处理结果作为响应返回给请求计算机(客户端)</em>。</p>
+<h3 id="1-1-、服务器v1-0版本"><a href="#1-1-、服务器v1-0版本" class="headerlink" title="1.1 、服务器v1.0版本"></a>1.1 、服务器v1.0版本</h3><p>通常情况下，我们通过使用Socket监听服务器指定端口来实现功能。按照该描述，一个最简单的服务器1.0设计如下图所示</p>
+<p><img src="/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-2/server.png" alt="image-20220326164447913"></p>
+<p>我们通过start()方法启动服务器，打开Socket链接，监听服务器端口，并负责在接受到客户端请求时进行处理并返回响应。同时提供一个stop()方法来停止服务器并释放网络资源。</p>
+<h3 id="1-2-、服务器v1-1版本"><a href="#1-2-、服务器v1-1版本" class="headerlink" title="1.2 、服务器v1.1版本"></a>1.2 、服务器v1.1版本</h3><p>使用服务器1.0版本后，突然有一天，我们业务需求，要使用Apache搭建服务器集群，我们的web应用在独立部署时需要使用http协议为客户端提供服务；当通过Apache进行集群部署时，我们使用AJP协议与Apache进行链接，服务器在两种模式下切换时，我们原来的web应用不需要做任何修改。</p>
+<p>那么我们如何解决这个问题呢，最自然的想法就是将网络协议与请求处理进行分离。于是有了我们的服务器1.1版本，我们做了如下图所示的改动：</p>
+<p><img src="/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-2/server2.png" alt="image-20220401153450946"></p>
+<p>一个Server可以包含多个Connector和Container。其中Connector负责开启Socket并监听客户端的请求、返回响应数据；Container负责具体的请求处理。Connector和Container分别拥有自己的start()和stop()方法来加载和释放自己维护的资源。</p>
+<p>为了使服务器的结构更加清晰，和更加符合Tomcat的命名，我们又做了如下的抽象和重命名</p>
+<p><img src="/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-2/server3.png" alt="image-20220401154014196"></p>
+<p>一个Server包含多个Service（它们互相独立，只是共享一个JVM以及系统类库），然后每个Service负责维护多个Connector和一个Engine，Engine由先前的Container重命名而来。</p>
+<h3 id="1-3-、服务器v2-0版本"><a href="#1-3-、服务器v2-0版本" class="headerlink" title="1.3 、服务器v2.0版本"></a>1.3 、服务器v2.0版本</h3><p>前面1.x版本已经解决了网络协议和容器的解耦，但是我们的服务器是用来部署并运行Web应用的，是一个运行环境，因此我们需要在Engine容器中支持管理Web应用，当接受到Connector的处理请求时，Engine容器能够找到一个合适的Web应用来处理业务逻辑。</p>
+<p>于是我们对对服务器做了如下更新。</p>
+<p><img src="/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-2/server4.png" alt="image-20220401162130435"></p>
+<p>我们使用Context表示我们的Web应用，Engine里面应该包含多个Context。现在这种设计感觉已经很合理了，但是真的合理吗，设想一下，如果我们的主机有多个二级域名要处理，例如，news.myweb.com、video.myweb.com…等，现在这种服务器设计自然无法支持。</p>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81Tomcat%E7%9A%84%E6%80%BB%E4%BD%93%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.</span> <span class="toc-text">1、Tomcat的总体设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E3%80%81%E6%9C%8D%E5%8A%A1%E5%99%A8v1-0%E7%89%88%E6%9C%AC"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 、服务器v1.0版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E3%80%81%E6%9C%8D%E5%8A%A1%E5%99%A8v1-1%E7%89%88%E6%9C%AC"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 、服务器v1.1版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E3%80%81%E6%9C%8D%E5%8A%A1%E5%99%A8v2-0%E7%89%88%E6%9C%AC"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 、服务器v2.0版本</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&text=Tomcat架构-2"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&title=Tomcat架构-2"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&is_video=false&description=Tomcat架构-2"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tomcat架构-2&body=Check out this article: https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&title=Tomcat架构-2"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&title=Tomcat架构-2"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&title=Tomcat架构-2"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&title=Tomcat架构-2"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&name=Tomcat架构-2&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-2/&t=Tomcat架构-2"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2022 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank"></a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>

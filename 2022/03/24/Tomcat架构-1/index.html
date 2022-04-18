@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	<!--script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script-->
+	<!--link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"-->
+	<script type="text/javascript" src="/js/pace.min.js"></script> 
+	<!--script async src="/js/busuanzi.pure.mini.js"></script-->
+    <meta name="description" content="1 简介1.1 Tomcat版本历史Tomcat是全世界最著名的基于Java语言的轻量级应用服务器，是一款完全开源免费的Servlet容器实现。 Tomcat存在5个主要版本，分别支持不同版本的规范，其对规范及JDK的版本支持(至本文编写为止)如下表所示    版本 6.x(6.0.47) 7.x(7.0.72) 8.x(8.0.38) 8.5.x(8.5.6) 9.x(9.0.60) 10.x(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat架构-1">
+<meta property="og:url" content="https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/index.html">
+<meta property="og:site_name" content="Likanug&#39;s Blog">
+<meta property="og:description" content="1 简介1.1 Tomcat版本历史Tomcat是全世界最著名的基于Java语言的轻量级应用服务器，是一款完全开源免费的Servlet容器实现。 Tomcat存在5个主要版本，分别支持不同版本的规范，其对规范及JDK的版本支持(至本文编写为止)如下表所示    版本 6.x(6.0.47) 7.x(7.0.72) 8.x(8.0.38) 8.5.x(8.5.6) 9.x(9.0.60) 10.x(">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.likanug.top/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-1/image-20220324181754955.png">
+<meta property="og:image" content="https://blog.likanug.top/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-1/image-20220324182043094.png">
+<meta property="og:image" content="https://blog.likanug.top/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-1/image-20220324182440093.png">
+<meta property="og:image" content="https://blog.likanug.top/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-1/image-20220324183219792.png">
+<meta property="og:image" content="https://blog.likanug.top/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-1/Tomcat%E9%A6%96%E9%A1%B5.png">
+<meta property="article:published_time" content="2022-03-24T03:09:38.000Z">
+<meta property="article:modified_time" content="2022-03-25T06:20:22.304Z">
+<meta property="article:author" content="Likanug">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.likanug.top/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-1/image-20220324181754955.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="../../../../images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="../../../../images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="../../../../images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Tomcat架构-1</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="../../../../css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="../../../../css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+    <!-- styles -->
+
+<link rel="stylesheet" href="../../../../lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="../../../../lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="../Tomcat%E6%9E%B6%E6%9E%84-2/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="../../../02/04/%E6%95%B0%E5%AD%97%E9%80%BB%E8%BE%91/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&text=Tomcat架构-1"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&title=Tomcat架构-1"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&is_video=false&description=Tomcat架构-1"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tomcat架构-1&body=Check out this article: https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&title=Tomcat架构-1"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&title=Tomcat架构-1"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&title=Tomcat架构-1"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&title=Tomcat架构-1"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&name=Tomcat架构-1&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&t=Tomcat架构-1"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-Tomcat%E7%89%88%E6%9C%AC%E5%8E%86%E5%8F%B2"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 Tomcat版本历史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-Tomcat%E5%BC%80%E6%BA%90%E8%AE%B8%E5%8F%AF"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Tomcat开源许可</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%AE%89%E8%A3%85%E4%B8%8E%E5%90%AF%E5%8A%A8"><span class="toc-number">2.</span> <span class="toc-text">2、安装与启动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E4%B8%8B%E8%BD%BDTomcat%EF%BC%8C%E5%AE%89%E8%A3%85"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 下载Tomcat，安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%90%AF%E5%8A%A8Tomcat"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 启动Tomcat</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-%E6%B7%BB%E5%8A%A0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 添加环境变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-%E5%90%AF%E5%8A%A8Tomcat"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 启动Tomcat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.2.3 启动配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E9%AA%8C%E8%AF%81%E5%90%AF%E5%8A%A8"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 验证启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E9%83%A8%E7%BD%B2%E5%BA%94%E7%94%A8"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 部署应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Tomcat%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">3 Tomcat目录结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-Tomcat-8-5%E5%90%8E%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 Tomcat 8.5后的新特性</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Tomcat架构-1
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Likanug's Blog</span>
+      </span>
+            |&nbsp; -->
+    <i class="fas fa-eye"></i>
+      <span id="busuanzi_container_page_pv" class="article-count-a-span">
+          <span id="busuanzi_value_page_pv">
+          </span>
+      </span>&nbsp;|
+	
+    <div class="postdate">
+      
+        <time datetime="2022-03-24T03:09:38.000Z" itemprop="datePublished">2022-03-24</time>
+        
+        (Updated: <time datetime="2022-03-25T06:20:22.304Z" itemprop="dateModified">2022-03-25</time>)
+        
+      
+    </div>
+
+  
+    
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="../../../../categories/Tomcat/">Tomcat</a>
+    </div>
+
+
+    
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="../../../../tags/Java/" rel="tag">Java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><h3 id="1-1-Tomcat版本历史"><a href="#1-1-Tomcat版本历史" class="headerlink" title="1.1 Tomcat版本历史"></a>1.1 Tomcat版本历史</h3><p>Tomcat是全世界最著名的基于Java语言的轻量级应用服务器，是一款完全开源免费的Servlet容器实现。</p>
+<p>Tomcat存在5个主要版本，分别支持不同版本的规范，其对规范及JDK的版本支持(至本文编写为止)如下表所示</p>
+<table>
+<thead>
+<tr>
+<th align="center">版本</th>
+<th align="center">6.x(6.0.47)</th>
+<th align="center">7.x(7.0.72)</th>
+<th align="center">8.x(8.0.38)</th>
+<th align="center">8.5.x(8.5.6)</th>
+<th align="center">9.x(9.0.60)</th>
+<th align="center">10.x(10.0.6)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">JDK</td>
+<td align="center">&gt;= 5.0</td>
+<td align="center">&gt;= 6.0</td>
+<td align="center">&gt;= 7.0</td>
+<td align="center">&gt;= 7.0</td>
+<td align="center">&gt;= 8.0</td>
+<td align="center">&gt;=8.0</td>
+</tr>
+<tr>
+<td align="center">Servlet</td>
+<td align="center">2.5</td>
+<td align="center">3.0</td>
+<td align="center">3.1</td>
+<td align="center">3.1</td>
+<td align="center">4.0</td>
+<td align="center">5.0</td>
+</tr>
+<tr>
+<td align="center">JSP</td>
+<td align="center">2.1</td>
+<td align="center">2.2</td>
+<td align="center">2.3</td>
+<td align="center">2.3</td>
+<td align="center">2.3</td>
+<td align="center">3.0</td>
+</tr>
+<tr>
+<td align="center">EL</td>
+<td align="center">2.1</td>
+<td align="center">2.2</td>
+<td align="center">3.0</td>
+<td align="center">3.0</td>
+<td align="center">3.0</td>
+<td align="center">4.0</td>
+</tr>
+<tr>
+<td align="center">WebSocket</td>
+<td align="center">N/A</td>
+<td align="center">1.1</td>
+<td align="center">1.1</td>
+<td align="center">1.1</td>
+<td align="center">1.1</td>
+<td align="center">2.0</td>
+</tr>
+</tbody></table>
+<p>Tomcat的最后两个版本并不是顺序发布的。2015年11月，Tomcat发布了重要的里程碑版本9.0。在该版本中，Tomcat依赖最新的JDK8，使用了JDK8最新的语法特性，支持新的Servlet规范(4.0)，并增加了对HTTP/2的支持。2016年3月，考虑到9.0版本的主体变更范围以及发布进度，Tomcat在8.0的基础上又发布了一个中间版本——8.5，它的主体架构延续自8.0，同时又实现了部分9.0的主要特性，以使用来取代8.0版本。</p>
+<h3 id="1-2-Tomcat开源许可"><a href="#1-2-Tomcat开源许可" class="headerlink" title="1.2 Tomcat开源许可"></a>1.2 Tomcat开源许可</h3><p>Tomcat以Apache License许可的方式进行发布，具体许可内容参见<a target="_blank" rel="noopener" href="https://apache.org/licenses/LICENSE-2.0">Apache Licenses</a>，主要内容概括如下：</p>
+<ul>
+<li><p>Tomcat完全免费，可用于任何商业或者非商业产品，而不必支付任何费用。</p>
+</li>
+<li><p>修改Tomcat并发布变更版本的用户不必公开修改部分的源代码。</p>
+</li>
+<li><p>修改Tomcat的用户不必将其变更捐献给Apache软件基金会。</p>
+</li>
+<li><p>所有针对Tomcat源代码或者二进制文件的重新发布均须包含Apache许可。</p>
+</li>
+<li><p>任何重新发布所包含的资料必须经过Apache软件基金会批准。</p>
+</li>
+<li><p>无Apache基金会的许可，派生自Tomcat源代码的产品不能命名为“Tomcat”，“Jakarta”，“Apache”。</p>
+</li>
+</ul>
+<h2 id="2、安装与启动"><a href="#2、安装与启动" class="headerlink" title="2、安装与启动"></a>2、安装与启动</h2><h3 id="2-1-下载Tomcat，安装"><a href="#2-1-下载Tomcat，安装" class="headerlink" title="2.1 下载Tomcat，安装"></a>2.1 下载<a target="_blank" rel="noopener" href="https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.77/bin/apache-tomcat-8.5.77.tar.gz">Tomcat</a>，安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 复制tomcat到安装路径</span></span><br><span class="line">cp apache-tomcat-8.5.77.tar.gz /Users/likanug</span><br><span class="line"><span class="comment"># 解压安装 tomcat</span></span><br><span class="line">tar -zxvf /Users/likanug/apache-tomcat-8.5.77.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-启动Tomcat"><a href="#2-2-启动Tomcat" class="headerlink" title="2.2 启动Tomcat"></a>2.2 启动Tomcat</h3><h4 id="2-2-1-添加环境变量"><a href="#2-2-1-添加环境变量" class="headerlink" title="2.2.1 添加环境变量"></a>2.2.1 添加环境变量</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加环境变量</span></span><br><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="comment"># 编辑环境变量配置文件</span></span><br><span class="line">vim .profile</span><br><span class="line"><span class="comment"># 文件末尾添加如下内容</span></span><br><span class="line"><span class="built_in">export</span> CATALINA_HOME=/Users/likanug/apache-tomcat-8.5.77</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$CATALINA_HOME</span>/bin</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-2-启动Tomcat"><a href="#2-2-2-启动Tomcat" class="headerlink" title="2.2.2 启动Tomcat"></a>2.2.2 启动Tomcat</h4><p>常规启动停止方式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动</span></span><br><span class="line"><span class="variable">$CATALINA_HOME</span>/bin/catalina.sh start</span><br></pre></td></tr></table></figure>
+
+<p><img src="/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-1/image-20220324181754955.png" alt="image-20220324181754955"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 停止</span></span><br><span class="line"><span class="variable">$CATALINA_HOME</span>/bin/catalina.sh stop</span><br></pre></td></tr></table></figure>
+
+<p><img src="/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-1/image-20220324182043094.png" alt="image-20220324182043094"></p>
+<p>测试启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动</span></span><br><span class="line"><span class="variable">$CATALINA_HOME</span>/bin/startup.sh</span><br></pre></td></tr></table></figure>
+
+<p><img src="/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-1/image-20220324182440093.png" alt="image-20220324182440093"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 停止</span></span><br><span class="line"><span class="variable">$CATALINA_HOME</span>/bin/shutdown.sh</span><br></pre></td></tr></table></figure>
+
+<p><img src="/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-1/image-20220324183219792.png" alt="image-20220324183219792"></p>
+<h4 id="2-2-3-启动配置"><a href="#2-2-3-启动配置" class="headerlink" title="2.2.3 启动配置"></a>2.2.3 启动配置</h4><p>修改 <code>$CATALINA_HOME/bin/catalina.sh</code>启动脚本，可以调整Tomcat的启动配置</p>
+<p>例如修改如下配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">JAVA_OPTS=-server -Xms1024m -XX:PerSize=256m -XX:MaxPermSize=512m</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-验证启动"><a href="#2-3-验证启动" class="headerlink" title="2.3 验证启动"></a>2.3 验证启动</h3><p>启动Tomcat 后，通过浏览器访问<a href="http://localhost:8080，看到如下页面说明启动成功。">http://localhost:8080，看到如下页面说明启动成功。</a></p>
+<p><img src="/Users/likanug/Documents/LiKanu.github.io/source/_posts/Tomcat%E6%9E%B6%E6%9E%84-1/Tomcat%E9%A6%96%E9%A1%B5.png" alt="image-20220324184050338"></p>
+<h3 id="2-4-部署应用"><a href="#2-4-部署应用" class="headerlink" title="2.4 部署应用"></a>2.4 部署应用</h3><p>访问地址<a target="_blank" rel="noopener" href="http://localhost:8080/examples/">example</a></p>
+<p>这个地址就是我们tomcat中内置的应用</p>
+<p>如果要部署项目通常我们会把项目放在<code>$CATALINA_HOME/webapps/</code>目录下，在这个目录下我们可以查看到许多项目，将项目放置完毕后重启tomcat，项目即部署完毕</p>
+<h2 id="3-Tomcat目录结构"><a href="#3-Tomcat目录结构" class="headerlink" title="3 Tomcat目录结构"></a>3 Tomcat目录结构</h2><p>Tomcat的目录结构及主要文件如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th align="center">目录及文件</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>bin</strong></td>
+<td align="center">用于存放Tomcat的启动、停止相关的脚本</td>
+</tr>
+<tr>
+<td align="center">bin/startup.bat</td>
+<td align="center">Windows下的Tomcat的启动脚本</td>
+</tr>
+<tr>
+<td align="center">bin/startup.sh</td>
+<td align="center">Linux/Mac下的Tomcat启动脚本</td>
+</tr>
+<tr>
+<td align="center">bin/shutdown.bat</td>
+<td align="center">Windows下的Tomcat的停止脚本</td>
+</tr>
+<tr>
+<td align="center">bin/shutdown.sh</td>
+<td align="center">Linux/Mac下的Tomcat停止脚本</td>
+</tr>
+<tr>
+<td align="center"><strong>conf</strong></td>
+<td align="center">用于存放Tomcat的相关配置文件</td>
+</tr>
+<tr>
+<td align="center">conf/Catalina</td>
+<td align="center">用于存放每个虚拟机的Context配置</td>
+</tr>
+<tr>
+<td align="center">conf/context.xml</td>
+<td align="center">用于定义所有Web应用均需要加载的Context配置，如果Web应用指定呢自己的context.xml，那么该文件的配置将被覆盖</td>
+</tr>
+<tr>
+<td align="center">conf/catalina.properties</td>
+<td align="center">Tomcat环境变量配置</td>
+</tr>
+<tr>
+<td align="center">conf/catalina.policy</td>
+<td align="center">Tomcat安全模式运行下的默认安全策略</td>
+</tr>
+<tr>
+<td align="center">conf/logging.properties</td>
+<td align="center">Tomcat日志配置文件，可以修改Tomcat日子级别以及日志路径</td>
+</tr>
+<tr>
+<td align="center">conf/server.xml</td>
+<td align="center">Tomcat服务器的核心配置文件，用于配置Tomcat的链接器、监听端口、处理请求的虚拟主机等。可以说，Tomcat主要根据该文件的配置信息创建服务器实例。</td>
+</tr>
+<tr>
+<td align="center">conf/tomcat-users.xml</td>
+<td align="center">用于定义Tomcat默认用户角色映射信息，Tomcat的Manage模块即用该文件中定义的用户进行安全认证</td>
+</tr>
+<tr>
+<td align="center">conf/web.xml</td>
+<td align="center">Tomcat中所有应用默认的部署描述文件，主要定义了基础Servlet和MIME映射。如果应用中不包含Web.xml，那么Tomcat将使用此文件初始化部署描述，反之，Tomcat会在启动时将默认部署描述与自定义配置合并</td>
+</tr>
+<tr>
+<td align="center"><strong>lib</strong></td>
+<td align="center">Tomcat服务器依赖库目录，包含Tomcat服务器运行环境依赖jar包</td>
+</tr>
+<tr>
+<td align="center"><strong>logs</strong></td>
+<td align="center">Tomcat默认日志存放路径</td>
+</tr>
+<tr>
+<td align="center"><strong>webapps</strong></td>
+<td align="center">Tomcat默认的Web应用部署目录</td>
+</tr>
+<tr>
+<td align="center"><strong>work</strong></td>
+<td align="center">Web应用JSP代码生成和编译的临时目录</td>
+</tr>
+</tbody></table>
+<h3 id="3-1-Tomcat-8-5后的新特性"><a href="#3-1-Tomcat-8-5后的新特性" class="headerlink" title="3.1 Tomcat 8.5后的新特性"></a>3.1 Tomcat 8.5后的新特性</h3><ul>
+<li>自 8.0版本开始，Tomcat支持Servlet 3.1、JSP 2.3、EL 3.0、WebSocket 1.1; 并且自 9.0版本开始支持Servlet 4.0。</li>
+<li>为了让用户提前体验Servlet 4.0的新特性，在8.5版本中，Tomcat提供了一套Servlet 4.0预览API。</li>
+<li>自8.0 版本开始，默认的HTTP、AJP链接器采用NIO，而非Tomcat 7 以及之前版本的BIO；并且自8.5开始，Tomcat移除了对BIO的支持。</li>
+<li>自8.0版本中，Tomcat提供了一套全新的资源实现，采用单独、一致的方法配置Web应用的附加资源，以替代原有的Aliases、VirtualLoader、VirtualDirContext，JAR。新的资源方案可以用于实现覆盖。例如可以将一个WAR作为多个Web应用的基础，同时这些Web应用各自拥有自己的定制功能。</li>
+<li>自8.0版本开始，链接器新增支持JDK7的NIO2。</li>
+<li>自8.0版本开始，链接器新增支持HTTP/2协议。</li>
+<li>默认采用异步日志处理方式。</li>
+</ul>
+
+  </div>
+  <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+</article>
+
+    <div class="blog-post-comments">
+        
+            
+            <div class="vcomment"></div>
+        
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-Tomcat%E7%89%88%E6%9C%AC%E5%8E%86%E5%8F%B2"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 Tomcat版本历史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-Tomcat%E5%BC%80%E6%BA%90%E8%AE%B8%E5%8F%AF"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Tomcat开源许可</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%AE%89%E8%A3%85%E4%B8%8E%E5%90%AF%E5%8A%A8"><span class="toc-number">2.</span> <span class="toc-text">2、安装与启动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E4%B8%8B%E8%BD%BDTomcat%EF%BC%8C%E5%AE%89%E8%A3%85"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 下载Tomcat，安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%90%AF%E5%8A%A8Tomcat"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 启动Tomcat</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-%E6%B7%BB%E5%8A%A0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 添加环境变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-%E5%90%AF%E5%8A%A8Tomcat"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 启动Tomcat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-%E5%90%AF%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.2.3 启动配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E9%AA%8C%E8%AF%81%E5%90%AF%E5%8A%A8"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 验证启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E9%83%A8%E7%BD%B2%E5%BA%94%E7%94%A8"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 部署应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Tomcat%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">3 Tomcat目录结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-Tomcat-8-5%E5%90%8E%E7%9A%84%E6%96%B0%E7%89%B9%E6%80%A7"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 Tomcat 8.5后的新特性</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&text=Tomcat架构-1"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&title=Tomcat架构-1"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&is_video=false&description=Tomcat架构-1"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tomcat架构-1&body=Check out this article: https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&title=Tomcat架构-1"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&title=Tomcat架构-1"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&title=Tomcat架构-1"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&title=Tomcat架构-1"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&name=Tomcat架构-1&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.likanug.top/2022/03/24/Tomcat%E6%9E%B6%E6%9E%84-1/&t=Tomcat架构-1"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2022 Likanug
+    <a href="http://www.beian.miit.gov.cn" rel="external nofollow noopener noreferrer" target="_blank"></a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="../../../../index.html">Home</a></li>
+         
+          <li><a href="../../../../archives/">Writing</a></li>
+         
+          <li><a href="../../../../about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+        <!-- jquery -->
+
+<script src="../../../../lib/jquery/jquery.min.js"></script>
+
+
+<script src="../../../../lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="../../../../lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="../../../../js/main.js"></script>
+
+<!-- search -->
+
+<!-- Valine Comments -->
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
+  <script type="text/javascript">
+      var notify = 'false' == true ? true : false;
+      var verify = 'false' == true ? true : false;
+      var GUEST_INFO = ['nick','mail','link'];
+      var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+        return GUEST_INFO.indexOf(item) > -1
+      });
+      guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+      new Valine({
+          el: '.vcomment',
+          notify: notify,
+          verify: verify,
+          appId: "lJPojt39F66YItEiORkKhHp1-9Nh9j0Va",
+          appKey: "L3RsjYdcE6GdDUciAgeyjlfn",
+          avatar:"mm",
+          placeholder: "Just go go",
+          guest_info:guest_info,
+          pageSize:"10"
+      })
+  </script>
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2e6da3c375c8a87f5b664cea6d4cb29c";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+    </div>
+</body>
+</html>
